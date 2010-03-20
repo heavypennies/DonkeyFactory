@@ -1,0 +1,221 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/DonkeyFactory/!svn/ver/1/src/free/util
+END
+ArrayEnumeration.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/DonkeyFactory/!svn/ver/1/src/free/util/ArrayEnumeration.java
+END
+AWTUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/AWTUtilities.java
+END
+EventListenerList.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/util/EventListenerList.java
+END
+StringEncoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/util/StringEncoder.java
+END
+RawTelnet.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/RawTelnet.java
+END
+IOUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/DonkeyFactory/!svn/ver/1/src/free/util/IOUtilities.java
+END
+BeanProperties.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/util/BeanProperties.java
+END
+WindowDisposingListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/util/WindowDisposingListener.java
+END
+GraphicsUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/util/GraphicsUtilities.java
+END
+Connection.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/util/Connection.java
+END
+UnsupportedOperationException.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/util/UnsupportedOperationException.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/util/package.html
+END
+BlockingQueue.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/util/BlockingQueue.java
+END
+Pair.java
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/DonkeyFactory/!svn/ver/1/src/free/util/Pair.java
+END
+FormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/DonkeyFactory/!svn/ver/1/src/free/util/FormatException.java
+END
+TableLayout.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/DonkeyFactory/!svn/ver/1/src/free/util/TableLayout.java
+END
+PipedOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/util/PipedOutputStream.java
+END
+PipedInputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/DonkeyFactory/!svn/ver/1/src/free/util/PipedInputStream.java
+END
+ApplyLicense.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/ApplyLicense.java
+END
+PumpThread.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/util/PumpThread.java
+END
+StringParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/StringParser.java
+END
+ImageUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/util/ImageUtilities.java
+END
+AppKiller.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/AppKiller.java
+END
+SingleItemEnumeration.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/free/util/SingleItemEnumeration.java
+END
+SafeRunnable.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/SafeRunnable.java
+END
+Utilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/Utilities.java
+END
+Bounce.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/DonkeyFactory/!svn/ver/1/src/free/util/Bounce.java
+END
+SquareLayout.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/SquareLayout.java
+END
+PaintHook.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/PaintHook.java
+END
+ExtensionFilenameFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/util/ExtensionFilenameFilter.java
+END
+MemoryFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/util/MemoryFile.java
+END
+PipedStreams.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/PipedStreams.java
+END
+TextUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/util/TextUtilities.java
+END
+MultiOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/util/MultiOutputStream.java
+END
+BrowserControl.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/util/BrowserControl.java
+END
+Struct.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/DonkeyFactory/!svn/ver/1/src/free/util/Struct.java
+END

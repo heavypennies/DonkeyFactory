@@ -1,0 +1,84 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/seek
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+SoughtGraph.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+19bf881034877570ca9ec1088df01581
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+SoughtGraphPlugin.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+c2df923f447eff78d8ce2a2b6f86f112
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+event
+dir
+
+images
+dir
+
+seek.gif
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+de642a6c427009892e788f2428d669e6
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+has-props
+
+seek_bg.gif
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+f060c7a45226529df6574446f1d5e799
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+has-props
+

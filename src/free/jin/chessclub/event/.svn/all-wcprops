@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event
+END
+ChessEventEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event/ChessEventEvent.java
+END
+ChessEventListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event/ChessEventListener.java
+END
+ChessclubGameListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event/ChessclubGameListener.java
+END
+CircleEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event/CircleEvent.java
+END
+ArrowEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/event/ArrowEvent.java
+END

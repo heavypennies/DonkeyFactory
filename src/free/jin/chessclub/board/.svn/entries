@@ -1,0 +1,151 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/chessclub/board
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+BookupPiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+c1445a3118ed9c5ec72f53e213d855fb
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubBoardManager.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+115738ef1096b0c2baf18715b337ac8e
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubBoardPanel.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+f9c7894152a9d09daea022410c99fb5e
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubJBoard.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+0f2dcf83289073e02c89e9fa122936ec
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubVectorPiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+962e993e726469d203f7558d2991a8cf
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+Dyche1PiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+6146e3cfcd89b5d7aeee956d8181d50f
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+Dyche2PiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+d62826cc9cbdbe79e12ca9fdc69b6652
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+Dyche3PiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+b9916003d734d256abbfc4c8d49ffc38
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+WoodenBoardPainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+f4aa539378618ecfd0ab4c30b42b7696
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+bookup
+dir
+
+dyche1
+dir
+
+dyche2
+dir
+
+dyche3
+dir
+
+wooden
+dir
+

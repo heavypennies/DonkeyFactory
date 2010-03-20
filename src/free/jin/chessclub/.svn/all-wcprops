@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub
+END
+ChessclubJinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/ChessclubJinListenerManager.java
+END
+UserImageInternalFrame.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/UserImageInternalFrame.java
+END
+ChessclubLoginDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/ChessclubLoginDialog.java
+END
+ChessEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/ChessEvent.java
+END
+ChessclubServer.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/ChessclubServer.java
+END
+JinChessclubConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/JinChessclubConnection.java
+END
+NoSuchGameException.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/NoSuchGameException.java
+END

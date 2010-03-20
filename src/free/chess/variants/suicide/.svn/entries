@@ -1,0 +1,52 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/chess/variants/suicide
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+Suicide.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+011297b0c8d7b9406576f6c4ac2ece14
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+package.html
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+1bdeaae52492892e4eef9d24542f955a
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+

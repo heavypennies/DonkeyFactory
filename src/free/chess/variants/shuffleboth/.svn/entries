@@ -1,0 +1,52 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/chess/variants/shuffleboth
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+ShuffleBoth.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+2992634cfade02a839431e1d8a25e0ed
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+package.html
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+424500b28aab930bb7fc7346908dbf6f
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+

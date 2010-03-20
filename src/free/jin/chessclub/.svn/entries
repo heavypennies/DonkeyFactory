@@ -1,0 +1,124 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/chessclub
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+ChessEvent.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+c24efadae64bd9daf26abe67a7befefb
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubJinListenerManager.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+03abf990939c3c0cea8cb65a7d8e0e0d
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubLoginDialog.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+89480cfaaeb89897f4525e9648dc88cf
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ChessclubServer.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+7140774fca843111fe24f63426c1bb4d
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+JinChessclubConnection.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+7fce7de896af71012052034e497a9099
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+NoSuchGameException.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+cd8b08de5d048313fd3fc7d8be89dd79
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+UserImageInternalFrame.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+940f52df0085b713b2ec4ff549fd0c36
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+board
+dir
+
+console
+dir
+
+event
+dir
+
+scripter
+dir
+

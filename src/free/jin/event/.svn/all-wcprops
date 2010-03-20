@@ -1,0 +1,179 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/DonkeyFactory/!svn/ver/1/src/free/jin/event
+END
+PositionChangedEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/PositionChangedEvent.java
+END
+ChatListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/ChatListener.java
+END
+SeekListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/SeekListener.java
+END
+TakebackEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/TakebackEvent.java
+END
+JinEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/JinEvent.java
+END
+PlainTextListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/PlainTextListener.java
+END
+GameListEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameListEvent.java
+END
+GameStartEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameStartEvent.java
+END
+JinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/JinListenerManager.java
+END
+FriendsListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/FriendsListener.java
+END
+GameEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameEvent.java
+END
+BoardFlipEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/BoardFlipEvent.java
+END
+GameListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameListener.java
+END
+FriendsEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/FriendsEvent.java
+END
+GameListListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameListListener.java
+END
+PlainTextEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/PlainTextEvent.java
+END
+ChatEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/ChatEvent.java
+END
+SeekEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/SeekEvent.java
+END
+SeekJinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/SeekJinListenerManager.java
+END
+FlipBoardEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/FlipBoardEvent.java
+END
+ClockAdjustmentEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/ClockAdjustmentEvent.java
+END
+FriendsJinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/FriendsJinListenerManager.java
+END
+ConnectionEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/ConnectionEvent.java
+END
+GameListJinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameListJinListenerManager.java
+END
+BasicJinListenerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/BasicJinListenerManager.java
+END
+MoveMadeEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/MoveMadeEvent.java
+END
+IllegalMoveEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/IllegalMoveEvent.java
+END
+ConnectionListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/ConnectionListener.java
+END
+GameEndEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/jin/event/GameEndEvent.java
+END

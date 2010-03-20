@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot
+END
+CommandEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/CommandEvent.java
+END
+CommandHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/CommandHandler.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/package.html
+END
+Bot.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/3/src/free/chessclub/bot/Bot.java
+END
+AbstractCommandHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/AbstractCommandHandler.java
+END
+SimpleCommandHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/SimpleCommandHandler.java
+END

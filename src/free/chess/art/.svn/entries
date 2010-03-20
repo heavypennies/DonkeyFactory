@@ -1,0 +1,136 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/chess/art
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+EboardVectorPiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+3b2485878c4c52bf0bad69ac8f8ff0ef
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+MarbleBoardPainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+72ac35899e1e5eba1fd5a6c20d1518e5
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ProxyPiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+745d704eff58941a00a3d77d5e0d1f82
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ResourceImagePiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+9057e0bc6aa478a70a64483de5bd4ccc
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+SlateBoardPainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+3b7d8873d6b98ba9b5c1949018c7a1ba
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+WoodenBoardPainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+548182b03674e38e3c87f1c90044a7d2
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+XBoardPiecePainter.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+aaaacfddf519788ab262b6d027bf777c
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+marble
+dir
+
+package.html
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+d77c6201f54ec1864e58e4e2da592d3a
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+slate
+dir
+
+wooden
+dir
+
+xboard
+dir
+

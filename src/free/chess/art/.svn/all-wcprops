@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/DonkeyFactory/!svn/ver/1/src/free/chess/art
+END
+SlateBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/SlateBoardPainter.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/package.html
+END
+ProxyPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/ProxyPiecePainter.java
+END
+WoodenBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/WoodenBoardPainter.java
+END
+XBoardPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/XBoardPiecePainter.java
+END
+ResourceImagePiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/ResourceImagePiecePainter.java
+END
+MarbleBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/MarbleBoardPainter.java
+END
+EboardVectorPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/chess/art/EboardVectorPiecePainter.java
+END

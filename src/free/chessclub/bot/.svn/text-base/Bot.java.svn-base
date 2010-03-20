@@ -1,0 +1,642 @@
+/**
+ * The chessclub.com connection library.
+ * More information is available at http://www.jinchess.com/.
+ * Copyright (C) 2002 Alexander Maryanovsky.
+ * All rights reserved.
+ *
+ * The chessclub.com connection library is free software; you can redistribute
+ * it and/or modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * The chessclub.com connection library is distributed in the hope that it will
+ * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with the chessclub.com connection library; if not, write to the Free
+ * Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+package free.chessclub.bot;
+
+import chess.engine.model.Board;
+import chess.engine.model.Move;
+import chess.engine.model.Piece;
+import chess.engine.search.*;
+import chess.engine.utils.MoveGeneration;
+import free.jin.JinConnection;
+import free.jin.JinFrame;
+import free.jin.event.*;
+import free.jin.freechess.FreechessJinListenerManager;
+import free.jin.freechess.JinFreechessConnection;
+
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+public class Bot extends JinFreechessConnection implements GameListener {
+
+  public boolean autoseek = false;
+  public boolean tellOwner = true;
+  public String owner = "tarabas";
+
+  private MoveGeneration moveGeneration = new MoveGeneration();
+  private BoardEvaluator eval = new SimpleEvaluator(moveGeneration);
+  private ABSearch search = new ABSearch(moveGeneration, eval);
+  private Move[] availableMoves = Move.createMoves(100);
+  private IterativeSearch iterativeSearch = new IterativeSearch(search, moveGeneration, eval);
+  private Thread searchThread;
+  private int lastScore = 0;
+
+  private Board gameBoard;
+
+  /**
+   * Jin's main frame.
+   */
+
+  private static JinFrame mainFrame;
+
+  /**
+   * Our listener manager.
+   */
+
+  private final FreechessJinListenerManager listenerManager = new FreechessJinListenerManager(this);
+
+  /**
+   * A hashtable mapping command names to CommandHandlers.
+   */
+
+  private final Hashtable commandHandlers = new Hashtable();
+
+
+  /**
+   * Jin's properties.
+   */
+
+  private static final Properties jinProps = new Properties();
+
+
+
+
+  /**
+   * The user's properties. The 'user' here isn't the chess server account/user,
+   * but the operating system user.
+   */
+
+  private static final Properties userProps = new Properties();
+  /**
+   * The main method, duh :-). Creates a new Bot and makes it connect to
+   * the server.
+   */
+
+  public static void main(String[] args) {
+    String hostname = args[0];
+    int port = Integer.parseInt(args[1]);
+    String username = args[2];
+    String password = args.length == 5 ? args[3] : "";
+    String owner = args.length == 4 ? args[3] : args[4];
+    
+    try {
+      Bot bot = new Bot(hostname, port, username, password, owner);
+      bot.connectAndLogin();
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.exit(0);
+    }
+  }
+
+  /**
+   * Creates a new ServerBot which will connect to the given hostname on the
+   * given port and will use the given account and password.
+   */
+
+  public Bot(String hostname, int port, String username, String password, String owner) {
+    super(hostname, port, username, password);
+
+
+    this.owner = owner;
+    //setDGState(Datagram.DG_PERSONAL_TELL, true); // This lets people talk to us.
+
+    getJinListenerManager().addGameListener(this);
+  }
+
+
+  public void onLogin() {
+    setStyle(12);
+    super.onLogin(); 
+
+    if(autoseek)
+    {
+      seek();
+    }
+  }
+
+  /**
+   * Returns the SeekJinListenerManager via which you can register and
+   * unregister SeekListeners.
+   */
+  /**
+   * Writes out usage information into the standard error stream.
+   */
+
+  private static void showUsage() {
+    System.out.println("Usage: ");
+    System.out.println("  java " + Bot.class.getName() + " hostname port username password");
+  }
+
+  private class SearchThread implements Runnable
+  {
+    private JinConnection connection;
+    private final Searcher searcher;
+    private final Board searchBoard;
+
+    public SearchThread(final JinConnection connection, final Searcher searcher, final Board searchBoard)
+    {
+      this.connection = connection;
+      this.searcher = searcher;
+      this.searchBoard = searchBoard;
+    }
+
+    public void run() {
+      int score = searcher.search(searchBoard, 50);
+
+      SearchStats stats = search.getStats();
+      if(stats.nodes <100 && score == 0)
+      {
+        connection.sendCommand("draw");
+        connection.sendCommand("tell " + owner + " Detected Draw");
+      }
+
+      if(tellOwner) sendCommand("tell " + owner + " s: " + score);
+      if(tellOwner) connection.sendCommand("tell " + owner + " Moves: " + Move.toString(searcher.getPV()));
+      if(tellOwner)
+      {
+        connection.sendCommand("tell " + owner + " Stats: " + stats);
+      }
+      connection = null;
+    }
+
+
+    protected void finalize() throws Throwable {
+      System.err.println("finalizing searcher thread");
+    }
+  }
+
+  private class SearchTimerThread implements Runnable
+  {
+    private JinConnection connection;
+    private final Searcher searcher;
+    private long maxTime;
+
+    public SearchTimerThread(final JinConnection connection, final IterativeSearch searcher, final long maxTime)
+    {
+      this.connection = connection;
+      this.searcher = searcher;
+      this.maxTime = maxTime;
+    }
+
+    public void run() {
+      long start = System.currentTimeMillis();
+      long end = System.currentTimeMillis();
+      boolean extended = false;
+      boolean spoken = false;
+      while((end - start < maxTime))
+      {
+        try
+        {
+          Thread.sleep(maxTime/4);
+        }
+        catch(InterruptedException e)
+        {
+
+        }
+
+        int score = searcher.getPV()[0].score;
+        if(!extended)
+        {
+          if(score < lastScore - 45)
+          {
+            lastScore = searcher.getPV()[0].score;
+            maxTime += maxTime / 2;
+            if(tellOwner)
+            {
+              connection.sendCommand("tell " + owner + " Extending search b/c we started losing");
+            }
+            extended = true;
+          }
+        }
+
+        if(!spoken)
+        {
+          if(score > lastScore + 10000)
+          {
+            connection.sendCommand("kib Hee-Haw!@#");
+            spoken = true;
+          }
+          else if(score > lastScore + 900)
+          {
+            connection.sendCommand("kib Zoiks!");
+            spoken = true;
+          }
+          else if(score > lastScore + 300)
+          {
+            connection.sendCommand("kib Ruh roh...");
+            spoken = true;
+          }
+        }
+
+        end = System.currentTimeMillis();
+
+        if(search.isDone())
+        {
+
+        }
+
+        System.err.println("Checking on search (" + lastScore + " -> " + score + ")");
+      }
+      System.err.println("Stopping Search");
+      lastScore = searcher.getPV()[0].score;
+      connection.sendCommand(searcher.getPV()[0].toFICSString());
+      searcher.stop();
+    }
+
+    protected void finalize() throws Throwable {
+      System.err.println("finalizing timer thread");
+    }
+  }
+
+  public void gameStarted(GameStartEvent evt) {
+    System.err.println("game started");
+    if(tellOwner) evt.getConnection().sendCommand("tell " + owner + " Game Started: " + evt.getGame().getID());
+    evt.getConnection().sendCommand("say Heee Haw!!");
+    Integer gameNumber = findMyGame();
+    JinFreechessConnection.InternalGameData gameData =
+            (JinFreechessConnection.InternalGameData)ongoingGamesData.get(gameNumber);
+
+    search = new ABSearch(moveGeneration, eval);
+    iterativeSearch = new IterativeSearch(search, moveGeneration, eval);
+    
+    gameBoard = new Board();
+    ((SimpleEvaluator)eval).pawnHash.clear();
+    gameBoard.setEPDPosition(evt.getGame().getInitialPosition().getFEN());
+    System.err.println("Board: " + evt.getGame().getInitialPosition().getFEN());
+
+    gameBoard.stats.whiteKingsideRookMoves = gameData.boardData.canWhiteCastleKingside() ? 0 : 1;
+    gameBoard.stats.whiteQueensideRookMoves = gameData.boardData.canWhiteCastleQueenside() ? 0 : 1;
+    gameBoard.stats.blackKingsideRookMoves = gameData.boardData.canBlackCastleKingside() ? 0 : 1;
+    gameBoard.stats.blackQueensideRookMoves = gameData.boardData.canBlackCastleQueenside() ? 0 : 1;
+  }
+
+  public void moveMade(MoveMadeEvent evt) {
+    System.err.println("move made");
+  }
+
+  public void positionChanged(PositionChangedEvent evt) {
+    int lastScore;
+    System.err.println("position changed");
+
+    Integer gameNumber = findMyGame();
+    JinFreechessConnection.InternalGameData gameData =
+            (JinFreechessConnection.InternalGameData)ongoingGamesData.get(gameNumber);
+    final Move move = makeGameMovesOnBoard(gameData, gameBoard);
+
+    if(gameBoard.isDraw())
+    {
+      if(tellOwner) sendCommand("tell " + owner + " Claiming draw");
+      evt.getConnection().sendCommand("draw");
+    }
+
+//    if(move != null) evt.getConnection().sendCommand("tell " + owner + " board move: " + move.toString());
+    if(evt.getGame().isUserAllowedToMovePieces(evt.getPosition().getCurrentPlayer()))
+    {
+      if(!iterativeSearch.isDone())
+      {
+        iterativeSearch.stop();
+        System.err.println("Waiting for search...");
+        try
+        {
+          searchThread.join();
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        System.err.println("Search complete.");
+      }
+
+      final Board searchBoard = new Board();
+//      searchBoard.setEPDPosition(gameData.boardData.getBoardFEN());
+
+      searchBoard.setEPDPosition(evt.getGame().getInitialPosition().getFEN());
+      searchBoard.turn = evt.getGame().getUserPlayer().isWhite() ? 1 : 0;
+      searchBoard.stats = gameBoard.stats;
+      searchBoard.stats.whiteKingsideRookMoves = gameData.boardData.canWhiteCastleKingside() ? 0 : 1;
+      searchBoard.stats.whiteQueensideRookMoves = gameData.boardData.canWhiteCastleQueenside() ? 0 : 1;
+      searchBoard.stats.blackKingsideRookMoves = gameData.boardData.canBlackCastleKingside() ? 0 : 1;
+      searchBoard.stats.blackQueensideRookMoves = gameData.boardData.canBlackCastleQueenside() ? 0 : 1;
+      searchBoard.repetitionTable = gameBoard.repetitionTable;
+      searchBoard.moveIndex = gameBoard.moveIndex;
+      searchBoard.hash1 = gameBoard.hash1;
+      searchBoard.pawnHash = gameBoard.pawnHash;
+
+      iterativeSearch.reset();
+      
+      System.err.println("MoveIndex: " + searchBoard.moveIndex);
+      System.err.println("GB Approaching Draw: " + gameBoard.isApproachingDraw(0));
+      System.err.println("SB Approaching Draw: " + searchBoard.isApproachingDraw(0));
+      System.err.println("Board: " + gameData.boardData.getBoardFEN());
+      System.err.println("Stats: " + searchBoard.stats);      
+
+      int score = eval.scorePosition(searchBoard, -Searcher.INFINITY, Searcher.INFINITY);
+
+      System.err.println("Searching (" + score + ") ...");
+      System.err.println(searchBoard.toString());
+      searchThread = new Thread(new SearchThread(evt.getConnection(), iterativeSearch, searchBoard));
+      searchThread.setPriority(6);
+      searchThread.start();
+      long maxTime = getTimeForMove(evt, gameData);
+      final Thread searchTimerThread = new Thread(new SearchTimerThread(evt.getConnection(), iterativeSearch, maxTime));
+      searchTimerThread.setPriority(7);
+      searchTimerThread.start();
+    }
+    else
+    {
+      System.err.println("Waiting for opponent...");
+      System.gc();
+    }
+  }
+
+  private Move makeGameMovesOnBoard(InternalGameData gameData, Board board) {
+    if(gameData.moveList.size() == 0)
+    {
+      return null;
+    }
+    free.chess.Move move = (free.chess.Move)gameData.moveList.lastElement();
+    int toSquareIndex = (move.getEndingSquare().getRank() * 8) + move.getEndingSquare().getFile();
+    int fromSquareIndex = (move.getStartingSquare().getRank() * 8) + move.getStartingSquare().getFile();
+
+    try
+    {
+      moveGeneration.generateFullMoves(availableMoves, board);
+    }
+    catch (Exception e)
+    {
+      return null;
+    }
+
+    Move actualMove = null;
+    for(Move possibleMove : availableMoves)
+    {
+      if(possibleMove.fromSquare == null)
+      {
+        break;
+      }
+      if(possibleMove.fromSquare.index64 == fromSquareIndex &&
+         possibleMove.toSquare.index64 == toSquareIndex)
+      {
+        if(move.getMoveString().indexOf("=") > -1)
+        {
+          char promoteTo = move.getMoveString().toLowerCase().substring(move.getMoveString().indexOf("=") + 1).charAt(0);
+          switch(promoteTo)
+          {
+            case 'n':
+            {
+              if(possibleMove.promoteTo == Piece.KNIGHT)
+              {
+                actualMove = possibleMove;
+              }
+              break;
+            }
+            case 'b':
+            {
+              if(possibleMove.promoteTo == Piece.BISHOP)
+              {
+                actualMove = possibleMove;
+              }
+              break;
+            }
+            case 'r':
+            {
+              if(possibleMove.promoteTo == Piece.ROOK)
+              {
+                actualMove = possibleMove;
+              }
+              break;
+            }
+            case 'q':
+            {
+              if(possibleMove.promoteTo == Piece.QUEEN)
+              {
+                actualMove = possibleMove;
+              }
+              break;
+            }
+          }
+        }
+        else
+        {
+          actualMove = possibleMove;
+          break;
+        }
+      }
+    }
+    if(actualMove != null && actualMove.moved != null)
+    {
+      board.make(actualMove);
+/*
+      if(actualMove.moved.type == Piece.PAWN || actualMove.taken != null)
+      {
+        board.repetitionTable[board.moveIndex] = board.moveIndex;
+      }
+*/
+    }
+    return actualMove;
+  }
+
+  private long getTimeForMove(PositionChangedEvent evt, InternalGameData gameData) {
+    int timeLeft = (evt.getGame().getUserPlayer().isWhite() ?
+            gameData.boardData.getWhiteTime() :
+            gameData.boardData.getBlackTime());
+
+    long maxTime;
+    if(gameData.boardData.getNextMoveNumber() < 2)
+    {
+      maxTime = timeLeft / 36;
+    }
+    else if(gameData.boardData.getNextMoveNumber() < 12)
+    {
+      maxTime = timeLeft / 29;
+    }
+    else if(gameData.boardData.getNextMoveNumber() > 30 && timeLeft < 10000)
+    {
+      maxTime = timeLeft / 40;
+    }
+    else
+    {
+      maxTime = timeLeft / 22;
+    }
+
+    System.err.println("Time Left: " + timeLeft);
+    System.err.println("MaxTime: " + maxTime);
+    return maxTime;
+  }
+
+  public void takebackOccurred(TakebackEvent evt) {
+    evt.getConnection().sendCommand("refresh");
+  }
+
+  public void illegalMoveAttempted(IllegalMoveEvent evt) {
+    evt.getConnection().sendCommand("refresh");
+  }
+
+  public void clockAdjusted(ClockAdjustmentEvent evt) {
+  }
+
+  public void boardFlipped(BoardFlipEvent evt) {
+  }
+
+  public void gameEnded(GameEndEvent evt) {
+    if(autoseek)
+    {
+      sendCommand("rem");
+      seek();
+    }
+    System.err.println("Stopping search on game end");
+    iterativeSearch.stop();
+  }
+
+
+  protected void processLine(String line) {
+    if(line.indexOf("(adjourned)") > -1)
+    {
+      sendCommand("accept");
+    }
+    super.processLine(line);
+  }
+
+  /**
+   * Registers a CommandHandler for the given command. All commands registered
+   * this way are case insensitive. There can be only one command handler per
+   * command, so this method will throw an IllegalArgumentException if you try to
+   * register a CommandHandler for a command for which a CommandHandler was
+   * already registered.
+   */
+
+  public void registerCommandHandler(String command, CommandHandler commandHandler) {
+    command = command.toLowerCase();
+    CommandHandler oldCommandHandler = (CommandHandler) commandHandlers.put(command, commandHandler);
+    if (oldCommandHandler != null) {
+      commandHandlers.put(command, oldCommandHandler);
+      throw new IllegalArgumentException("Unable to register another CommandHandler for command: " + command);
+    }
+  }
+
+
+  /**
+   * Sends the given message to the given player as a personal tell.
+   */
+
+  public void sendTell(String player, String message) {
+    sendCommand("tell " + player + " " + message);
+  }
+
+
+  /**
+   * Processes personal tells. If the tell type is TELL, this method parses the
+   * message and delegates to processCommand. Otherwise, the tell is ignored.
+   */
+
+  protected void processPersonalTell(String playerName, String titles, String message, int tellType) {
+/*
+    if (tellType!=TELL)
+      return;
+
+*/
+    StringTokenizer tokenizer = new StringTokenizer(message, " \"\'", true);
+    String[] tokens = new String[tokenizer.countTokens()];
+    int numTokens = 0;
+
+    try {
+      while (tokenizer.hasMoreTokens()) {
+        String token = tokenizer.nextToken();
+        if (token.equals("\"") || token.equals("\'")) {
+          tokens[numTokens++] = tokenizer.nextToken(token);
+          tokenizer.nextToken(" \"\'"); // Get rid of the string terminating quote.
+        } else if (!token.equals(" "))
+          tokens[numTokens++] = token;
+      }
+    } catch (NoSuchElementException e) {
+      sendTell(playerName, "Unterminated string literal");
+      return;
+    }
+
+    if (numTokens == 0) {
+      sendTell(playerName, "You must specify a command");
+      return;
+    }
+
+    String issuedCommand = tokens[0];
+    String[] args = new String[numTokens - 1];
+    System.arraycopy(tokens, 1, args, 0, args.length);
+
+    CommandEvent command = new CommandEvent(this, issuedCommand, args, message, playerName, titles);
+    processCommand(command);
+  }
+
+
+  /**
+   * Asks the appropriate CommandHandler to handle the command.
+   */
+
+  protected void processCommand(CommandEvent command) {
+    String issuedCommand = command.getCommand();
+    CommandHandler commandHandler = (CommandHandler) commandHandlers.get(issuedCommand.toLowerCase());
+    if (commandHandler == null)
+      sendTell(command.getPlayerName(), "Unknown command: " + issuedCommand);
+    else
+      commandHandler.handleCommand(command);
+  }
+
+  private void seek()
+  {
+    sendCommand("seek 1 0 r f");
+    sendCommand("seek 3 0 r f");
+    sendCommand("seek 15 0 r f");   
+  }
+
+  protected boolean processPersonalTell(String username, String titles, String message) {
+    super.processPersonalTell(username, titles, message);
+
+    if(username.equals(owner))
+    {
+      if(message.indexOf("tellme") > -1)
+      {
+        tellOwner = !tellOwner;
+        sendCommand("tell " + owner + " tellme: " + tellOwner);
+      }
+      else if(message.indexOf("test") > -1)
+      {
+        sendCommand("tell " + owner + " challenging testdonkeyfactory");
+        sendCommand("ma testdonkeyfactory 3 0 u");
+      }
+      else if(message.indexOf("seek") > -1)
+      {
+        autoseek = !autoseek;
+        sendCommand("tell " + owner + " autoseek: " + autoseek);
+        if(autoseek)
+        {
+          seek();
+        }
+      }
+      else
+      {
+        sendCommand(message);
+      }
+    }
+    return true;
+  }
+}

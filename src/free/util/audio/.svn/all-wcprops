@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/DonkeyFactory/!svn/ver/1/src/free/util/audio
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/package.html
+END
+players.txt
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/players.txt
+END
+SunAudioPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/SunAudioPlayer.java
+END
+UnixDevAudioPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/UnixDevAudioPlayer.java
+END
+AudioPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/AudioPlayer.java
+END
+AudioClip.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/AudioClip.java
+END
+JDK1_2AudioPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/JDK1_2AudioPlayer.java
+END
+JavaxSampledAudioPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/util/audio/JavaxSampledAudioPlayer.java
+END

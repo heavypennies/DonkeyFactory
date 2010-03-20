@@ -1,0 +1,85 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/freechess
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+FreechessJinListenerManager.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+5d014c775c1f2a4576c91b77c633edeb
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+FreechessLoginDialog.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+a64c34d9b01c8256c384b84966879d05
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+FreechessServer.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+f40c4758d3a8b3c24fc0809e11011bd1
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+JinFreechessConnection.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+5e5c2bcb9d5fa098f3512b79d65ee7c7
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+board
+dir
+
+console
+dir
+
+scripter
+dir
+

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal
+END
+beanshell.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal/beanshell.txt
+END
+gpl.txt
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal/gpl.txt
+END
+copyright.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal/copyright.txt
+END
+lgpl.txt
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal/lgpl.txt
+END
+jregex.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/jin/legal/jregex.txt
+END

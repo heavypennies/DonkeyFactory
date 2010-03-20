@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/servers
+END
+list.txt
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/servers/list.txt
+END
+icc.server
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/servers/icc.server
+END
+fics.server
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/servers/fics.server
+END

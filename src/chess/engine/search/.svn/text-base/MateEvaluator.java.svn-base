@@ -1,0 +1,102 @@
+/* $Id$ */
+
+package chess.engine.search;
+
+import chess.engine.utils.MoveGeneration;
+import chess.engine.utils.MoveGenerationConstants;
+import chess.engine.model.Board;
+import chess.engine.model.Piece;
+import chess.engine.model.Square;
+
+/**
+ * @author Joshua Levine <jlevine@theladders.com>
+ * @version $Revision$ $Name$ $Date$
+ */
+public class MateEvaluator implements BoardEvaluator
+{
+  private MoveGeneration moveGeneration;
+
+  public MateEvaluator(MoveGeneration moveGeneration)
+  {
+    this.moveGeneration = moveGeneration;
+  }
+
+  public int scorePosition(Board board, int alpha, int beta)
+  {
+    int blackMaterial = 0;
+    int whiteMaterial = 0;
+
+    int score = 0;
+
+    // Material
+    for(Piece piece : board.pieces)
+    {
+      if(piece.square != null)
+      {
+        if(piece.type != Piece.KING)
+          if(piece.color == 1)
+          {
+            whiteMaterial += piece.type;
+          }
+          else
+          {
+            blackMaterial += piece.type;
+          }
+      }
+    }
+
+    score += whiteMaterial * countAdjacentChecks(board, board.blackKing.square, 1);
+    score -= blackMaterial * countAdjacentChecks(board, board.whiteKing.square, 0);
+
+    return board.turn == 1 ? score : -score;
+  }
+
+
+  public int getMaterial(Board board) {
+    return 0;
+  }
+
+
+  public int getMaterialDifference(Board board) {
+    return 0;
+  }
+
+
+  public int getKingSafety(Board board) {
+    return 0;
+  }
+
+  public int getPawns(Board board) {
+    return 0;
+  }
+
+  public int getPawnsDifference(Board board) {
+    return 0;
+  }
+
+
+  public void reset() {
+  }
+
+  public int countAdjacentChecks(Board board, Square square, int color)
+  {
+    int count = 0;
+    for(int i : MoveGenerationConstants.kingMoves)
+    {
+      Board.BoardSquare checkFrom = board.getSquare(square.index128 + i);
+      if(checkFrom != null)
+      {
+        count += moveGeneration.isSquareCheckedByBishopOrQueen(board, checkFrom.square, color) ? 3 : 0;
+        count += moveGeneration.isSquareCheckedByRookOrQueen(board, checkFrom.square, color) ? 3 : 0;
+        count += moveGeneration.isSquareCheckedByKnight(board, checkFrom.square, color) ? 2 : 0;
+        count += moveGeneration.isSquareCheckedByPawn(board, checkFrom.square, color) ? 1 : 0;
+        count += moveGeneration.isSquareCheckedByKing(board, checkFrom.square, color) ? 1 : 0;
+      }
+      else
+      {
+        count += 4;
+      }
+    }
+    return count;
+  }
+}

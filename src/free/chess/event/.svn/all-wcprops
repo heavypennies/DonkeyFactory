@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/DonkeyFactory/!svn/ver/1/src/free/chess/event
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/free/chess/event/package.html
+END
+MoveEvent.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/DonkeyFactory/!svn/ver/1/src/free/chess/event/MoveEvent.java
+END
+MoveListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/chess/event/MoveListener.java
+END

@@ -1,0 +1,75 @@
+<project name="Jin2" default="dist">
+
+	<property name="source.dir" value="src"/>
+	<property name="build.dir" value="build/"/>	
+	<property name="docs.dir" value="docs"/>
+	<property name="output.jar" value="DonkeyFactory.jar" />
+	
+	<path id="compile.class.path">
+		<pathelement path="timestamping.jar"/>
+		<pathelement path="timesealing.jar"/>
+		<pathelement path="jregex.jar"/>
+		<pathelement path="bsh-core-1.2b7.jar"/>
+    <pathelement path="twitter4j/lib/jdom.jar"/>
+    <pathelement path="twitter4j/lib/junit.jar"/>
+    <pathelement path="twitter4j/lib/logback-classic-0.9.6.jar"/>
+    <pathelement path="twitter4j/lib/logback-core-0.9.6.jar"/>
+    <pathelement path="twitter4j/lib/rome-0.9.jar"/>
+    <pathelement path="twitter4j/lib/slf4j-api-1.5.0.jar"/>
+    <pathelement path="twitter4j/twitter4j-2.0.8.jar"/>
+  </path>
+	
+	<target name="init">
+	</target>
+
+	<target name="dist" depends="init, compile, jar">
+    <mkdir dir="${build.dir}/free/jin/resources"/>
+    <copy todir="${build.dir}/free/jin/resources">
+      <fileset dir="${source.dir}/free/jin/resources"/>
+    </copy>
+  </target>
+
+  <target name="compile" depends="init">
+		<mkdir dir="${build.dir}"/>
+		<javac srcdir="${source.dir}"
+		       destdir="${build.dir}"
+		       includes="**"
+		       debug="yes"
+           optimize="yes"
+         classpathref="compile.class.path"
+		/>
+	</target>
+	
+	<target name="jar" depends="init, compile">
+		<copy todir="${build.dir}/sounds">
+			<fileset dir="sounds"/>
+		</copy>
+    <copy tofile="${build.dir}/hashKeys.dat">
+      <fileset file="hashKeys.dat"/>
+    </copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${source.dir}" excludes="**/*.java"/>
+		</copy>
+		<jar jarfile="${output.jar}"
+		     basedir="${build.dir}"
+			 compress="no"
+			 manifest="manifest.txt"
+		/>
+	</target>
+
+	<target name="docs" depends="init">
+		<mkdir dir="${docs.dir}"/>
+		<javadoc sourcepath="${source.dir}"
+		       packagenames="free.**"
+		       destdir="${docs.dir}"
+			   classpathref="compile.class.path"
+		/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${docs.dir}" />
+		<delete file="${output.jar}" />
+	</target>
+
+</project>

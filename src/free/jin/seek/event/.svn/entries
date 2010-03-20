@@ -1,0 +1,52 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/seek/event
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+SeekSelectionEvent.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+9ab9b6c4fa03e78b2f36b4e39820ade0
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+SeekSelectionListener.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+817530baa1a6b3f2a3acd449805f367e
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+

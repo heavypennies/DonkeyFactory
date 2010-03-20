@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/DonkeyFactory/!svn/ver/1/src/free/freechess
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/freechess/package.html
+END
+SeekInfoStruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/freechess/SeekInfoStruct.java
+END
+Style12Struct.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/freechess/Style12Struct.java
+END
+GameInfoStruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/freechess/GameInfoStruct.java
+END
+DeltaBoardStruct.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/free/freechess/DeltaBoardStruct.java
+END
+FreechessConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/free/freechess/FreechessConnection.java
+END

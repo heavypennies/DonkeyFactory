@@ -1,0 +1,179 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/DonkeyFactory/!svn/ver/1/src/free/chess
+END
+AbstractChessClock.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/chess/AbstractChessClock.java
+END
+PlainBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/chess/PlainBoardPainter.java
+END
+PositionFormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/free/chess/PositionFormatException.java
+END
+Piece.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/DonkeyFactory/!svn/ver/1/src/free/chess/Piece.java
+END
+ChessPiece.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/DonkeyFactory/!svn/ver/1/src/free/chess/ChessPiece.java
+END
+PieceChooser.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/chess/PieceChooser.java
+END
+Position.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/chess/Position.java
+END
+MoveFormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/chess/MoveFormatException.java
+END
+PieceIcon.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/chess/PieceIcon.java
+END
+ColoredBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/chess/ColoredBoardPainter.java
+END
+DefaultBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/chess/DefaultBoardPainter.java
+END
+BoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/chess/BoardPainter.java
+END
+ChesslikeGenericVariant.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/free/chess/ChesslikeGenericVariant.java
+END
+Player.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/chess/Player.java
+END
+VectorPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/chess/VectorPiecePainter.java
+END
+Chess.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/DonkeyFactory/!svn/ver/1/src/free/chess/Chess.java
+END
+ImageBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/chess/ImageBoardPainter.java
+END
+ColoredPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/chess/ColoredPiecePainter.java
+END
+DefaultPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/DonkeyFactory/!svn/ver/1/src/free/chess/DefaultPiecePainter.java
+END
+PiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/chess/PiecePainter.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/DonkeyFactory/!svn/ver/1/src/free/chess/package.html
+END
+Square.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/chess/Square.java
+END
+JBoard.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/chess/JBoard.java
+END
+SquareFormatException.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/chess/SquareFormatException.java
+END
+WildVariant.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/chess/WildVariant.java
+END
+ImagePiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/free/chess/ImagePiecePainter.java
+END
+JChessClock.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/chess/JChessClock.java
+END
+ChessMove.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/chess/ChessMove.java
+END
+Move.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/DonkeyFactory/!svn/ver/1/src/free/chess/Move.java
+END

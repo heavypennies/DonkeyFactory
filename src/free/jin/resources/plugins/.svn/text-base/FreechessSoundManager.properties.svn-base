@@ -1,0 +1,46 @@
+
+class = free.jin.sound.SoundManager
+id = sound-manager
+name = Sound
+
+# Chat patterns on which sounds are generated. The match is done against the 
+# string "<type>.<forum>.<sender>\n" (without the <> of course), where <forum> 
+# is an empty string if null, or otherwise theForum.toString().
+
+num-chat-patterns = 2
+
+chat-pattern-0 = ^tell\..*
+chat-sound-0 = /sounds/whistle.au
+
+chat-pattern-1 = ^say\..*
+chat-sound-1 = /sounds/whistle.au
+
+
+# Text patterns on which sounds are generated. The match is done against the
+# received text line.
+
+num-text-patterns = 3
+
+text-pattern-0 = ^Notification: [A-z]{3,17} has arrived\\.$
+text-sound-0 = /sounds/ding.au
+
+text-pattern-1 = ^Notification: [A-z]{3,17} has departed\\.$
+text-sound-1 = /sounds/cork.au
+
+text-pattern-2 = ^Notification: [A-z]{3,17}, who has an adjourned game with you, has arrived\\.$
+text-sound-2 = /sounds/ding.au
+
+
+
+OnLogin = /sounds/welcome_fics.au
+OnDisconnect = /sounds/goodbye.au
+Move = /sounds/move-dima.au
+Capture = /sounds/capture-dima.au
+Castling = /sounds/castle-dima.au
+Check = /sounds/check.au
+Checkmate = /sounds/checkmate.au
+IllegalMove = /sounds/buzzer.au
+GameEnd = /sounds/fitebell.au
+GameStart = /sounds/fitebell.au
+FriendConnected = /sounds/ding.au
+FriendDisconnected = /sounds/cork.au

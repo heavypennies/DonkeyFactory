@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/commands
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/commands/package.html
+END
+LogOffCommandHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/commands/LogOffCommandHandler.java
+END
+SpoofCommandHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/DonkeyFactory/!svn/ver/1/src/free/chessclub/bot/commands/SpoofCommandHandler.java
+END

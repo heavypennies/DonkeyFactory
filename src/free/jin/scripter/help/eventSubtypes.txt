@@ -1,0 +1,6 @@
+  The event subtypes selection specifies which of the subtypes of the chosen
+event type your script will "respond" to. If the selected event type has no
+subtypes, then no checkboxes will appear and your script will be run whenever an
+event of the chosen type occurs. You can find the documentation of the various
+subtypes at http://www.jinchess.com/docs/scripter/ (first specify the chess
+server you're using, then click on the event type you selected).

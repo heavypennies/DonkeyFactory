@@ -1,0 +1,6 @@
+
+class = free.jin.freechess.scripter.FreechessScripter
+id = scripter
+name = Scripter
+
+consolePlugin.name = FreechessConsoleManager

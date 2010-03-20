@@ -1,0 +1,42 @@
+  The commands are the "meat" of your script. You specify a single command on
+each line. These will be sent to the server when the script is run, after some
+processing. The processing allows you to add "variables" inside the commands
+which are replaced with the "variable" values before the command is sent.
+Those variables are specified by a dollar sign ('$') followed by the variable
+name. The processing then looks for this pattern and replaces its occurances
+with the value of the variable.
+
+
+Let's look at some examples to get an idea of how it works:
+
+"tell Gorgonian Hello"
+  This will simply send the above command to the server.
+
+"tell $sender Hello"
+  Assuming that this script is responding to Chat Events (which provide a
+  "sender" variable) with the Personal Tell subtype enabled, and you received a
+  tell from Kiebitz, the command sent to the server will be "tell Kiebitz Hello"
+
+"tell $sender What do you mean by "$message"?"
+  This is a funny script I used to test the scripter. Basically this replies to
+  the sender asking him what he meant by his tell to you (or to a channel, or
+  shout, or any other Chat Event subtype you chose). The variable "message"
+  is replaced by the content of the sender's tell.
+
+"tell $who $what"
+  There are currently no "who" and "what" variables in any of the event types,
+  so what good is this script? It is good for User Invoked scripts! When you run
+  a User Invoked script, Jin will ask you to provide a list of variables and
+  their values, which it will then use to "process" the script. This allows you
+  to create "aliases" which you later run, although they are somewhat less
+  comfortable to use than real aliases.
+
+IMPORTANT: The examples in this help file are surrounded with quotes - you do
+NOT need to surround your commands in quotes when you write them.
+
+Note that if you use a variable that isn't defined, it will not be replaced and
+will be sent as specified, in its "$variable" form.
+
+For a list and documentation of the variables (such as sender, message etc.)
+you can use when writing scripts for various event types/subtypes, visit
+http://www.jinchess.com/docs/scripter/.

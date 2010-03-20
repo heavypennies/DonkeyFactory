@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin
+END
+PluginContext.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin/PluginContext.java
+END
+PreferencesPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin/PreferencesPanel.java
+END
+UnsupportedContextException.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin/UnsupportedContextException.java
+END
+Plugin.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin/Plugin.java
+END
+BadChangesException.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/1/src/free/jin/plugin/BadChangesException.java
+END

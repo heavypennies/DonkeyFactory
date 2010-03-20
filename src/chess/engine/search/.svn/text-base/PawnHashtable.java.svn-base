@@ -1,0 +1,73 @@
+package chess.engine.search;
+
+import chess.engine.model.Board;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: jlevine
+ * Date: Jul 30, 2007
+ * Time: 9:38:11 PM
+ */
+public class PawnHashtable {
+  public static final int UPPER_BOUND = 0;
+  public static final int LOWER_BOUND = 1;
+  public static final int EXACT_VALUE = 2;
+
+  private static final int HASH_SIZE = (int)(1L << 19);
+  private static final int HASH_MASK = HASH_SIZE - 1;
+
+  class HashEntry
+  {
+
+    public long hash = 0;
+    public SimpleEvaluator.PawnFlags pawnFlags = new SimpleEvaluator.PawnFlags();
+  }
+
+  // index128 as [hash_index][fallback]
+  public HashEntry[] hash = new HashEntry[HASH_SIZE];
+
+  public PawnHashtable()
+  {
+    for(int t = 0;t < HASH_SIZE;t++)
+    {
+      hash[t] = new HashEntry();
+    }
+    clear();
+  }
+
+  public final HashEntry getEntry(final Board board)
+  {
+    long boardHash = board.turn == 1 ? board.pawnHash : ~board.pawnHash;
+
+    int index = (int)(boardHash & HASH_MASK);
+
+    HashEntry entry = hash[index];
+    if(entry.hash == 0)
+    {
+      return null;
+    }
+
+    if(entry.hash == boardHash)
+    {
+      return entry;
+    }
+    return null;
+  }
+
+  public final HashEntry getEntryNoNull(final Board board)
+  {
+    long boardHash = board.turn == 1 ? board.pawnHash : ~board.pawnHash;
+
+    int index = (int)(boardHash & HASH_MASK);
+
+    return hash[index];
+  }
+
+  public final void clear()
+  {
+    for(int t = 0;t < HASH_SIZE;t++)
+    {
+      hash[t].hash = 0;
+    }
+  }
+}

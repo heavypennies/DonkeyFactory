@@ -1,0 +1,106 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/chessclub
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+ChessclubConnection.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+5cd4deb22114c1f52ad34c7e7b825b61
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+MoveStruct.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+c7708898e2cfa8d8da499a7f896f7345
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+Player.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+cd4581ac543e21d5d6ad57b2a12a6ae9
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+PlayerManagingConnection.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+ef809612cdc6dd15fb05b56ef942f8d7
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+ReaderThread.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+d5e931d7283a7aa4a541b5f2b9a738b5
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+bot
+dir
+
+level2
+dir
+
+package.html
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+950b9f0474b99bd4a51a892eb7e818b3
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+

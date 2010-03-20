@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/DonkeyFactory/!svn/ver/1/src/chess/engine/utils
+END
+MoveGeneration.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/chess/engine/utils/MoveGeneration.java
+END
+MoveGenerationConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/DonkeyFactory/!svn/ver/1/src/chess/engine/utils/MoveGenerationConstants.java
+END
+LineScorer.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/chess/engine/utils/LineScorer.java
+END

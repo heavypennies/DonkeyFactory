@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search
+END
+SimpleEvaluator.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/3/src/chess/engine/search/SimpleEvaluator.java
+END
+SimpleABSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/SimpleABSearch.java
+END
+MateEvaluator.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/MateEvaluator.java
+END
+ABSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/3/src/chess/engine/search/ABSearch.java
+END
+BoardEvaluator.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/BoardEvaluator.java
+END
+PawnHashtable.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/PawnHashtable.java
+END
+IterativeSearchTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/3/src/chess/engine/search/IterativeSearchTest.java
+END
+PositionHashtable.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/PositionHashtable.java
+END
+SearchStats.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/SearchStats.java
+END
+IterativeSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/DonkeyFactory/!svn/ver/3/src/chess/engine/search/IterativeSearch.java
+END
+Searcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/Searcher.java
+END
+OpeningBook.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/DonkeyFactory/!svn/ver/1/src/chess/engine/search/OpeningBook.java
+END

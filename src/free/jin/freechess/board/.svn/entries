@@ -1,0 +1,52 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/jin/freechess/board
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+FreechessBoardManager.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+f4fd9445f19842e7234b2d017a557eda
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+FreechessBoardPanel.java
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+6de47555ed5a6ac7b9bef50d4d343cc7
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+

@@ -1,0 +1,54 @@
+10
+
+dir
+1
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory/src/free/chess/art/slate
+http://donkeyfactorychess-svn.cvsdude.com/DonkeyFactory
+
+
+
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+efcde7ad-22a0-486e-8324-7d3c37ad1eeb
+
+dark.gif
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+2a7c31f98e99dfe46433ed5943eaf2af
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+has-props
+
+light.gif
+file
+
+
+
+
+2008-10-16T05:02:51.917000Z
+85419d7368f079c4f8120eeaeda06e9f
+2008-10-16T05:02:51.917546Z
+1
+donkeyfactorychess
+has-props
+

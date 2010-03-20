@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: free.jin.Jin
+Class-Path: bsh-core-1.2b7.jar jregex.jar timestamping.jar timesealing.jar kunststoff.jar 3DLF.jar

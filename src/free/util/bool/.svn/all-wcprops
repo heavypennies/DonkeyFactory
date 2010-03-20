@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/DonkeyFactory/!svn/ver/1/src/free/util/bool
+END
+EqualToInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/EqualToInteger.java
+END
+True.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/True.java
+END
+UnaryBooleanConditional.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/UnaryBooleanConditional.java
+END
+BiggerThanInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/BiggerThanInteger.java
+END
+BinaryIntegerConditional.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/BinaryIntegerConditional.java
+END
+Nand.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Nand.java
+END
+SmallerThanInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/SmallerThanInteger.java
+END
+BiggerThanOrEqualToInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/BiggerThanOrEqualToInteger.java
+END
+SmallerThanOrEqualToInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/SmallerThanOrEqualToInteger.java
+END
+Conditional.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Conditional.java
+END
+False.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/False.java
+END
+Or.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Or.java
+END
+BinaryBooleanConditional.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/BinaryBooleanConditional.java
+END
+Identity.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Identity.java
+END
+Xor.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Xor.java
+END
+Xnor.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Xnor.java
+END
+And.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/And.java
+END
+Implies.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Implies.java
+END
+Not.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/DonkeyFactory/!svn/ver/1/src/free/util/bool/Not.java
+END

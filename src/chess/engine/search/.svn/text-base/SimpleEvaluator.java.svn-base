@@ -1,0 +1,1916 @@
+/* $Id$ */
+
+package chess.engine.search;
+
+import chess.engine.model.Board;
+import chess.engine.model.Piece;
+import chess.engine.model.Square;
+import chess.engine.utils.MoveGeneration;
+
+/**
+ * @author Joshua Levine <jlevine@theladders.com>
+ * @version $Revision$ $Name$ $Date$
+ */
+public class SimpleEvaluator implements BoardEvaluator
+{
+  // ...
+  private static final int CENTER_CHECK_BALANCE = 12;
+
+  // Material Values
+  private static final double MATERIAL_DIVISOR = 31D;
+  private static final int TRADE_WHEN_LOSING_VALUE = 30;
+  private static final int TRADE_WHEN_UP_PAWNS_VALUE = 30;
+
+  // Opening values
+  private static final int DEVELOPMENT_VALUE = 5;
+  private static final int PIECE_DOUBLE_MOVE_VALUE = 2;
+  private static final int QUEEN_TOO_EARLY_VALUE = 23;
+
+  // Pawn values
+  private static final int[] WHITE_PASSED_PAWN_VALUES = new int[]{0, 7, 14, 40, 80, 140, 330, 0};
+  private static final int[] BLACK_PASSED_PAWN_VALUES = new int[]{0, 330, 140, 80, 30, 14, 7, 0};
+
+  private static final int PAWN_DOUBLED_VALUE = 46;
+  private static final int[] PAWN_BACKWARDS_VALUE = new int[]{18, 26, 35, 42, 42, 35, 26, 18};
+  private static final int UNMOVED_CENTER_PAWN = 0;
+  private static final int UNMOVED_CENTER_PAWN_BLOCKED = 35;
+  private static final int UNMOVED_CENTER_PAWN_ALMOST_BLOCKED = 8;
+  private static final int PAWN_LOCKED_VALUE = 9;
+  private static final int PASSED_PAWN_WIDE_FILE_VALUE = 35;
+
+  private static final int PAWN_PHALANX_VALUE = 4;
+  private static final int[] PAWN_CHAIN_VALUE = {2, 3, 4, 6, 6, 4, 3, 2};
+
+  // Knight Values
+  private static final int KNIGHT_TRAPPED_VALUE = 50;
+  private static final int KNIGHT_OUTPOST_VALUE = 12;
+
+  // Bishop Values
+  private static final int TWO_BISHOPS_VALUE = 60;
+  private static final int BISHOP_TRAPPED_VALUE = 7;
+  private static final int BISHOP_OPEN_DIAGONAL_VALUE = 9;
+
+  // Rook Values
+  private static final int ROOK_ON_OPEN_FILE = 36;
+  private static final int ROOK_ON_HALF_OPEN_FILE = 7;
+  private static final int TRAPPED_ROOK_VALUE = 240;
+  private static final int ROOK_OPPOSITE_KING_VALUE = 4;
+  private static final int ROOK_OPPOSITE_KING_HALF_OPEN_VALUE = 12;
+  private static final int ROOK_OPPOSITE_KING_OPEN_VALUE = 100;
+
+  // King Values
+  private static final int KING_NO_CASTLE_VALUE = 22;
+  private static final int KING_FORFEIT_CASTLE_VALUE = 66;
+  private static final int KING_ON_OPEN_FILE = 91;
+  private static final int KING_ON_HALF_OPEN_FILE = 49;
+  private static final int WAITING_TO_CASTLE_VALUE = 8;
+  private static final int KING_OPEN_FILE = 23;
+  private static final int KING_HALF_OPEN_FILE = 16;
+  private static final int CASTLE_DESTINATION_VALUE = 12;
+
+  private static final int CHECK_IMMEDIATE_KING_VALUE = 3;
+  private static final int CHECK_NEARBY_KING_VALUE = 3;
+
+  // Piece masks
+  private static final int PAWN_MASK = 8;
+  private static final int ROOK_MASK = 16;
+  private static final int MINOR_MASK = 32;
+  private static final int QUEEN_MASK = 64;
+  private static final int KING_MASK = 128;
+
+  private MoveGeneration moveGeneration;
+
+  public PawnHashtable pawnHash = new PawnHashtable();
+
+  public SimpleEvaluator(MoveGeneration moveGeneration)
+  {
+    this.moveGeneration = moveGeneration;
+    for (int square = 0; square < 64; square++)
+    {
+
+      SMALL_KING_AREA[square] = getSmallKingArea(Board.SQUARES[square]);
+      KING_AREA_A1_H8[square] = getKingAreaA1H8(Board.SQUARES[square]);
+      KING_AREA_H1_A8[square] = getKingAreaH1A8(Board.SQUARES[square]);
+    }
+  }
+
+
+  public void reset()
+  {
+    pawnHash.clear();
+  }
+
+  static long DARK_SQUARES;
+  static long LIGHT_SQUARES;
+  static final long[] FILES = new long[8];
+  static final long[] RANKS = new long[8];
+
+  static final long[] WHITE_PASSED_MASK = new long[64];
+  static final long[] BLACK_PASSED_MASK = new long[64];
+
+  static final long[] WHITE_BACKWARDS_MASK = new long[64];
+  static final long[] BLACK_BACKWARDS_MASK = new long[64];
+
+  private static final long[] WHITE_KNIGHT_OUTPOST_MASK = new long[64];
+  private static final long[] BLACK_KNIGHT_OUTPOST_MASK = new long[64];
+
+  static final long[] SMALL_KING_AREA = new long[64];
+  static final long[] KING_AREA_A1_H8 = new long[64];
+  static final long[] KING_AREA_H1_A8 = new long[64];
+
+  static final long[] WHITE_HALF = new long[64];
+  static final long[] BLACK_HALF = new long[64];
+
+  static
+  {
+    for (int square = 0; square < 64; square++)
+    {
+      if (square % 2 == 0)
+      {
+        DARK_SQUARES |= Board.SQUARES[square].mask_on;
+      }
+      else
+      {
+        LIGHT_SQUARES |= Board.SQUARES[square].mask_on;
+      }
+
+      FILES[Board.SQUARES[square].file] |= Board.SQUARES[square].mask_on;
+      RANKS[Board.SQUARES[square].rank] |= Board.SQUARES[square].mask_on;
+    }
+
+    for (int square = 0; square < 64; square++)
+    {
+      // Initialize white passed pawn masks
+      for (int rank = Board.SQUARES[square].rank + 1; rank < 7; rank++)
+      {
+        if (Board.SQUARES[square].file == 0)
+        {
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) + 1].mask_on;
+        }
+        else if (Board.SQUARES[square].file == 7)
+        {
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) - 1].mask_on;
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+        }
+        else
+        {
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) - 1].mask_on;
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+          WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) + 1].mask_on;
+        }
+      }
+
+      // Initialize black passed pawn masks
+      for (int rank = 0; rank < Board.SQUARES[square].rank; rank++)
+      {
+        if (Board.SQUARES[square].file == 0)
+        {
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) + 1].mask_on;
+        }
+        else if (Board.SQUARES[square].file == 7)
+        {
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) - 1].mask_on;
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+        }
+        else
+        {
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) - 1].mask_on;
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
+          BLACK_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) + 1].mask_on;
+        }
+      }
+
+      WHITE_BACKWARDS_MASK[square] = BLACK_PASSED_MASK[square];
+      BLACK_BACKWARDS_MASK[square] = WHITE_PASSED_MASK[square];
+
+/*
+      if (Board.SQUARES[square].file > 0)
+      {
+        WHITE_BACKWARDS_MASK[square] |= Board.SQUARES[square - 1].mask_on;
+        BLACK_BACKWARDS_MASK[square] |= Board.SQUARES[square - 1].mask_on;
+      }
+      if (Board.SQUARES[square].file < 7)
+      {
+        WHITE_BACKWARDS_MASK[square] |= Board.SQUARES[square + 1].mask_on;
+        BLACK_BACKWARDS_MASK[square] |= Board.SQUARES[square + 1].mask_on;
+      }
+*/
+
+      WHITE_KNIGHT_OUTPOST_MASK[square] = WHITE_PASSED_MASK[square] & ~FILES[Board.file(square)];
+      BLACK_KNIGHT_OUTPOST_MASK[square] = BLACK_PASSED_MASK[square] & ~FILES[Board.file(square)];
+
+      for (int i = 0; i <= Board.SQUARES[square].rank; i++)
+      {
+        WHITE_HALF[square] |= RANKS[i];
+      }
+      for (int i = 7; i >= Board.SQUARES[square].rank; i--)
+      {
+        BLACK_HALF[square] |= RANKS[i];
+      }
+    }
+
+  }
+
+  static final int[] PAWNSCORES = new int[64];
+
+  static
+  {
+    // ABC vs ABC
+    // ABC vs AB
+    // ABC vs A C
+    // ABC vs  BC
+    // ABC vs A
+    // ABC vs  B
+    // ABC vs   C
+    // ABC vs
+    // etc
+    for(int blackPawns = 0; blackPawns < 8; blackPawns++)
+    {
+      for(int whitePawns = 0; whitePawns < 8; whitePawns++)
+      {
+        PAWNSCORES[(whitePawns << 3) + blackPawns] = scorePawnWing(whitePawns, blackPawns);
+      }
+    }
+  }
+
+  static final int scorePawnWing(int whitePawns, int blackPawns)
+  {
+    int whitePawnCount = Integer.bitCount(whitePawns);
+    int blackPawnCount = Integer.bitCount(blackPawns);
+
+    int score = (whitePawnCount - blackPawnCount) > 0 ? 45 : ((whitePawnCount - blackPawnCount) < 0 ? -45 : 0);
+
+
+    return score;
+  }
+
+
+
+  static final long FILES_ABCD = FILES[0] | FILES[1] | FILES[2] | FILES[3];
+  static final long FILES_EFGH = FILES[4] | FILES[5] | FILES[6] | FILES[7];
+
+  static final long FILES_AB = FILES[0] | FILES[1];
+  static final long FILES_CD = FILES[2] | FILES[3];
+  static final long FILES_EF = FILES[4] | FILES[6];
+  static final long FILES_GH = FILES[6] | FILES[7];
+
+  static final long FILES_DE = FILES[3] | FILES[4];
+
+  static final long CENTER = (FILES_CD | FILES_EF) & (RANKS[2] | RANKS[3] | RANKS[4] | RANKS[5]);
+
+  public static final int[][][] PIECE_VALUE_TABLES = new int[2][8][64];
+
+  static final int[] CHECK_VALUE_TABLE_WHITE_O_O = new int[]{
+          3, 3, 3, 5, 5, 7, 9, 9,
+          2, 4, 4, 5, 5, 6, 7, 7,
+          2, 2, 2, 4, 4, 5, 5, 5,
+          1, 1, 2, 3, 4, 4, 4, 3,
+  };
+  static final int[] CHECK_VALUE_TABLE_BLACK_O_O = new int[]{
+          1, 1, 2, 3, 4, 4, 4, 3,
+          2, 2, 2, 4, 4, 5, 5, 5,
+          2, 4, 4, 5, 5, 6, 7, 7,
+          3, 3, 3, 5, 5, 7, 9, 9,
+  };
+  static final int[] CHECK_VALUE_TABLE_WHITE_O_O_O = new int[]{
+          9, 9, 7, 5, 5, 3, 3, 3,
+          7, 7, 6, 5, 5, 4, 4, 2,
+          5, 5, 5, 4, 4, 2, 2, 2,
+          3, 4, 4, 4, 3, 2, 1, 1,
+  };
+  static final int[] CHECK_VALUE_TABLE_BLACK_O_O_O = new int[]{
+          3, 4, 4, 4, 3, 2, 1, 1,
+          5, 5, 5, 4, 4, 2, 2, 2,
+          7, 7, 6, 5, 5, 4, 4, 2,
+          9, 9, 7, 5, 5, 3, 3, 3,
+  };
+  static final int[] CHECK_VALUE_TABLE_WHITE_CENTER = new int[]{
+          5, 9, 9, 9, 9, 9, 9, 5,
+          2, 2, 5, 5, 5, 5, 2, 2,
+          1, 1, 3, 4, 4, 3, 1, 1,
+          1, 2, 3, 4, 4, 3, 2, 1,
+  };
+
+  static final int[] CHECK_VALUE_TABLE_BLACK_CENTER = new int[]{
+          1, 2, 3, 4, 4, 3, 2, 1,
+          1, 1, 3, 4, 4, 3, 1, 1,
+          2, 2, 5, 5, 5, 5, 2, 2,
+          5, 7, 9, 9, 9, 9, 7, 5,
+  };
+
+  static final long mask2 = Square.A1.mask_on | Square.B1.mask_on;
+  static final long mask3 = Square.A1.mask_on | Square.B1.mask_on | Square.C1.mask_on;
+
+  static final long mask3x2 = Square.A1.mask_on | Square.B1.mask_on | Square.C1.mask_on |
+                              Square.A2.mask_on | Square.B2.mask_on | Square.C2.mask_on;
+
+
+  static
+  {
+    // White Pawn
+    PIECE_VALUE_TABLES[1][Piece.PAWN] = new int[]{
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 5, 5, 5,
+            1, 1, 4, 5, 5, 2, 1, 1,
+            2, 2, 18, 28, 29, 12, 2, 2,
+            5, 7, 17, 30, 31, 22, 7, 6,
+            8, 12, 26, 44, 45, 24, 12, 8,
+            10, 22, 32, 50, 51, 32, 22, 10,
+            0, 0, 0, 0, 0, 0, 0, 0,
+    };
+
+    // Black Pawn
+    PIECE_VALUE_TABLES[0][Piece.PAWN] = new int[]{
+            0, 0, 0, 0, 0, 0, 0, 0,
+            10, 22, 32, 50, 51, 32, 22, 10,
+            8, 12, 26, 44, 45, 24, 12, 8,
+            5, 7, 17, 20, 21, 22, 7, 6,
+            2, 2, 18, 18, 19, 12, 2, 2,
+            1, 1, 4, 5, 5, 2, 1, 1,
+            0, 0, 0, 0, 0, 5, 5, 5,
+            0, 0, 0, 0, 0, 0, 0, 0,
+    };
+
+    // White knight
+    PIECE_VALUE_TABLES[1][Piece.KNIGHT] = new int[]{
+            -10, -6, -7, -5, -5, -7, -6, -10,
+            -8, 1, 3, 4, 4, 3, 1, -8,
+            -4, 8, 8, 10, 10, 9, 8, -4,
+            -3, 5, 12, 19, 19, 12, 5, -3,
+            -3, 6, 16, 22, 22, 16, 6, -3,
+            -3, 5, 10, 12, 16, 15, 5, -3,
+            1, 2, 9, 9, 9, 9, 2, 1,
+            -10, -8, -7, -5, -5, -7, -8, -10,
+    };
+    // Black knight
+    PIECE_VALUE_TABLES[0][Piece.KNIGHT] = new int[]{
+            -10, -8, -7, -5, -5, -7, -8, -10,
+            1, 2, 9, 9, 9, 9, 2, 1,
+            -3, 5, 10, 12, 16, 15, 5, -3,
+            -3, 6, 16, 22, 22, 16, 6, -3,
+            -3, 5, 12, 19, 19, 12, 5, -3,
+            -4, 8, 8, 10, 10, 9, 8, -4,
+            -8, 1, 3, 4, 4, 3, 1, -8,
+            -10, -6, -7, -5, -5, -7, -6, -10,
+    };
+
+    // White bishop
+    PIECE_VALUE_TABLES[1][Piece.BISHOP] = new int[]{
+            -4, -3, -2, -1, -1, -2, -3, -4,
+            -5, 6, 1, 7, 7, 1, 6, -5,
+            0, 5, 7, 8, 8, 7, 5, 0,
+            0, 1, 13, 18, 18, 13, 1, 0,
+            0, 8, 15, 18, 18, 15, 8, 0,
+            0, 1, 9, 10, 10, 9, 1, 0,
+            0, 2, 2, 3, 3, 2, 2, 0,
+            -4, -3, -2, -1, -1, -2, -3, -4,
+    };
+    // Black bishop
+    PIECE_VALUE_TABLES[0][Piece.BISHOP] = new int[]{
+            -4, -3, -2, -1, -1, -2, -3, -4,
+            0, 2, 2, 3, 3, 2, 2, 0,
+            0, 1, 9, 10, 10, 9, 1, 0,
+            0, 8, 15, 18, 18, 15, 8, 0,
+            0, 1, 13, 18, 18, 13, 1, 0,
+            0, 5, 7, 8, 8, 7, 5, 0,
+            -5, 6, 1, 7, 7, 1, 6, -5,
+            -4, -3, -2, -1, -1, -2, -3, -4,
+    };
+
+    // White rook
+    PIECE_VALUE_TABLES[1][Piece.ROOK] = new int[]{
+            -4, -5, 1, 6, 6, 3, -5, -4,
+            -5, 0, 1, 6, 6, 1, 0, -5,
+            -3, 1, 2, 7, 7, 2, 1, -3,
+            -3, 2, 3, 8, 8, 3, 2, -3,
+            -3, 3, 4, 9, 9, 4, 3, -3,
+            -2, 3, 5, 10, 10, 5, 3, -2,
+            12, 18, 22, 25, 25, 22, 18, 12,
+            6, 6, 6, 6, 6, 6, 6, 6,
+    };
+    // Black rook
+    PIECE_VALUE_TABLES[0][Piece.ROOK] = new int[]{
+            6, 6, 6, 6, 6, 6, 6, 6,
+            12, 18, 22, 25, 25, 22, 18, 12,
+            -2, 3, 5, 10, 10, 5, 3, -2,
+            -3, 3, 4, 9, 9, 4, 3, -3,
+            -3, 2, 3, 8, 8, 3, 2, -3,
+            -3, 1, 2, 7, 7, 2, 1, -3,
+            -5, 0, 1, 6, 6, 1, 0, -5,
+            -4, -5, 1, 6, 6, 3, -5, -4,
+    };
+    // White Queen
+    PIECE_VALUE_TABLES[1][Piece.QUEEN] = new int[]{
+            -12, -12, -8, 4, 4, -8, -12, -12,
+            -6, -5, 1, 5, 5, 1, -5, -6,
+            0, 1, 7, 11, 11, 7, 1, 0,
+            0, 1, 8, 13, 13, 8, 1, 0,
+            0, 1, 5, 11, 11, 5, 1, 0,
+            0, 1, 5, 10, 10, 5, 1, 0,
+            7, 8, 9, 11, 11, 9, 8, 7,
+            5, 6, 6, 8, 8, 6, 6, 5,
+    };
+    // Black Queen
+    PIECE_VALUE_TABLES[0][Piece.QUEEN] = new int[]{
+            5, 6, 6, 8, 8, 6, 6, 5,
+            7, 8, 9, 11, 11, 9, 8, 7,
+            0, 1, 5, 10, 10, 5, 1, 0,
+            0, 1, 5, 11, 11, 5, 1, 0,
+            0, 1, 8, 13, 13, 8, 1, 0,
+            0, 1, 7, 11, 11, 7, 1, 0,
+            -6, -5, 1, 5, 5, 1, -5, -6,
+            -12, -12, -8, 4, 4, -8, -12, -12,
+    };
+    // King
+    PIECE_VALUE_TABLES[0][Piece.KING] = new int[]{
+            2, 1, 1, 2, 2, 1, 1, 1,
+            1, 2, 2, 3, 3, 2, 3, 1,
+            3, 3, 4, 4, 4, 4, 3, 3,
+            3, 4, 5, 6, 6, 5, 4, 3,
+            3, 4, 5, 6, 6, 5, 4, 3,
+            3, 3, 4, 4, 4, 4, 3, 3,
+            1, 3, 2, 3, 3, 2, 3, 1,
+            2, 1, 1, 2, 2, 1, 1, 1,
+    };
+
+  }
+
+  public static class PawnFlags
+  {
+    public long whitePassedPawns;
+    public long blackPassedPawns;
+    public long openFiles;
+    public long openRanks;
+    public long lockedFiles;
+    public int score;
+    public int whitePawnCount;
+    public int blackPawnCount;
+    public final long[] closedFiles;
+    public int endgameScore;
+    public int centerScore;
+
+    public PawnFlags()
+    {
+      closedFiles = new long[]{0L, 0L};
+      reset();
+    }
+
+    public void reset()
+    {
+      whitePassedPawns = 0;
+      blackPassedPawns = 0;
+      openFiles = ~0L;
+      openRanks = ~0L;
+      lockedFiles = 0;
+      score = 0;
+      whitePawnCount = 0;
+      blackPawnCount = 0;
+      closedFiles[0] = 0;
+      closedFiles[1] = 0;
+
+      endgameScore = 0;
+      centerScore = 0;
+    }
+  }
+
+
+  public final int scorePosition(final Board board, final int alpha, final int beta)
+  {
+//    moveGeneration.generateChecks(board);
+
+    int score = 0;
+
+    int whiteMaterial = 0;
+    int blackMaterial = 0;
+
+    // pawn position (with hash)
+    final PawnFlags pawnFlags = scorePawns(board);
+    // TODO copy pawnflags into local pawnflags and let pieces affect open files/diagonals
+
+    int pieceValueScore = 0;
+
+    // Count Undeveloped Pieces
+    final int undevelopedWhitePieceCount = Board.countBits((RANKS[0] & (board.pieceBoards[1][Piece.KNIGHT] | board.pieceBoards[1][Piece.BISHOP]))) + (board.stats.whiteCastleFlag == 0 ?
+                                                                                                                                                1 :
+                                                                                                                                                0);
+    final int undevelopedBlackPieceCount = Board.countBits((RANKS[7] & (board.pieceBoards[0][Piece.KNIGHT] | board.pieceBoards[0][Piece.BISHOP]))) + (board.stats.blackCastleFlag == 0 ?
+                                                                                                                                                1 :
+                                                                                                                                                0);
+
+    // Eval Piece by piece
+    long pieces = board.pieceBoards[1][Piece.KNIGHT];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score += Piece.TYPE_VALUES[Piece.KNIGHT];
+      pieceValueScore += PIECE_VALUE_TABLES[1][Piece.KNIGHT][square];
+      whiteMaterial += 3;
+
+      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+
+      if ((WHITE_KNIGHT_OUTPOST_MASK[square] & board.pieceBoards[0][Piece.PAWN]) == 0)
+      {
+        pieceValueScore += KNIGHT_OUTPOST_VALUE * Board.rank(square);
+      }
+    }
+
+    pieces = board.pieceBoards[0][Piece.KNIGHT];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score -= Piece.TYPE_VALUES[Piece.KNIGHT];
+      pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.KNIGHT][square];
+      blackMaterial += 3;
+
+      pieceValueScore += (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+
+      if ((BLACK_KNIGHT_OUTPOST_MASK[square] & board.pieceBoards[1][Piece.PAWN]) == 0)
+      {
+        pieceValueScore -= KNIGHT_OUTPOST_VALUE * (7 - Board.rank(square));
+      }
+    }
+
+    pieces = board.pieceBoards[1][Piece.BISHOP];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score += Piece.TYPE_VALUES[Piece.BISHOP];
+      pieceValueScore += PIECE_VALUE_TABLES[1][Piece.BISHOP][square];
+      whiteMaterial += 3;
+
+      if (pieces != 0)
+      {
+        pieceValueScore += TWO_BISHOPS_VALUE;
+      }
+
+/*
+      if(((MoveGeneration.attackVectors[1][Piece.KING][square] & ~MoveGeneration.attackVectors[1][Piece.ROOK][square]) & ~board.pieceBoards[1][Board.ALL_PIECES]) == 0)
+      {
+        pieceValueScore -= BISHOP_TRAPPED_VALUE;
+      }
+*/
+      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+      pieceValueScore += board.bishopMobility(square) << 1;
+    }
+
+    pieces = board.pieceBoards[0][Piece.BISHOP];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score -= Piece.TYPE_VALUES[Piece.BISHOP];
+      pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.BISHOP][square];
+      blackMaterial += 3;
+      if (pieces != 0)
+      {
+        pieceValueScore -= TWO_BISHOPS_VALUE;
+      }
+
+/*
+      if(((MoveGeneration.attackVectors[0][Piece.KING][square] & ~MoveGeneration.attackVectors[0][Piece.ROOK][square]) & ~board.pieceBoards[0][Board.ALL_PIECES]) == 0)
+      {
+        pieceValueScore += BISHOP_TRAPPED_VALUE;
+      }
+*/
+      pieceValueScore += (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+      pieceValueScore -= board.bishopMobility(square) << 1;
+    }
+
+    pieces = board.pieceBoards[1][Piece.ROOK];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score += Piece.TYPE_VALUES[Piece.ROOK];
+      pieceValueScore += PIECE_VALUE_TABLES[1][Piece.ROOK][square];
+      whiteMaterial += 5;
+
+      if (square == Square.A1.index64 && board.whiteKing.square.index64 == Square.B1.index64)
+      {
+        pieceValueScore -= TRAPPED_ROOK_VALUE;
+      }
+      if (square == Square.H1.index64 && board.blackKing.square.index64 == Square.G1.index64)
+      {
+        pieceValueScore -= TRAPPED_ROOK_VALUE;
+      }
+      if (((Board.SQUARES[square].mask_on & pawnFlags.openFiles) != 0))
+      {
+        pieceValueScore += ROOK_ON_OPEN_FILE;
+      }
+      else if (((Board.SQUARES[square].mask_on & pawnFlags.closedFiles[1]) == 0))
+      {
+        pieceValueScore += ROOK_ON_HALF_OPEN_FILE;
+      }
+/*
+      else if (((Board.SQUARES[square].mask_on & pawnFlags.lockedFiles) != 0))
+      {
+        pieceValueScore -= ROOK_ON_OPEN_FILE;
+      }
+*/
+      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+      pieceValueScore += board.rookMobility(square) << 1;
+    }
+
+    pieces = board.pieceBoards[0][Piece.ROOK];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score -= Piece.TYPE_VALUES[Piece.ROOK];
+      pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.ROOK][square];
+      blackMaterial += 5;
+
+      if (square == Square.A8.index64 && board.blackKing.square.index64 == Square.B8.index64)
+      {
+        pieceValueScore += TRAPPED_ROOK_VALUE;
+      }
+      if (square == Square.H8.index64 && board.blackKing.square.index64 == Square.G8.index64)
+      {
+        pieceValueScore += TRAPPED_ROOK_VALUE;
+      }
+      if (((Board.SQUARES[square].mask_on & pawnFlags.openFiles) != 0))
+      {
+        pieceValueScore -= ROOK_ON_OPEN_FILE;
+      }
+      else if (((Board.SQUARES[square].mask_on & pawnFlags.closedFiles[0]) == 0))
+      {
+        pieceValueScore -= ROOK_ON_HALF_OPEN_FILE;
+      }
+/*
+      else if (((Board.SQUARES[square].mask_on & pawnFlags.lockedFiles) != 0))
+      {
+        pieceValueScore += ROOK_ON_OPEN_FILE;
+      }
+*/
+      pieceValueScore += (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+      pieceValueScore -= board.rookMobility(square) << 1;
+    }
+
+    pieces = board.pieceBoards[1][Piece.QUEEN];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score += Piece.TYPE_VALUES[Piece.QUEEN];
+      pieceValueScore += PIECE_VALUE_TABLES[1][Piece.QUEEN][square];
+      whiteMaterial += 9;
+      pieceValueScore += board.rookMobility(square) << 1;
+      pieceValueScore += board.bishopMobility(square) << 1;
+      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+    }
+
+    pieces = board.pieceBoards[0][Piece.QUEEN];
+    while (pieces != 0)
+    {
+      final int square = Board.getLeastSignificantBit(pieces);
+      pieces &= Board.SQUARES[square].mask_off;
+      score -= Piece.TYPE_VALUES[Piece.QUEEN];
+      pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.QUEEN][square];
+      blackMaterial += 9;
+      pieceValueScore -= board.rookMobility(square) << 1;
+      pieceValueScore -= board.bishopMobility(square) << 1;
+      pieceValueScore += (undevelopedWhitePieceCount == 0 ? 3 : board.boardSquares[Board.SQUARES[square].index128].piece.moveCount) * board.boardSquares[Board.SQUARES[square].index128].piece.moveCount;
+    }
+
+    score += pieceValueScore;
+
+    if (whiteMaterial < 5 && blackMaterial < 5 && pawnFlags.whitePawnCount == 0 && pawnFlags.blackPawnCount == 0)
+    {
+      return 0;
+    }
+
+
+
+    // Develop pieces
+    score += (undevelopedBlackPieceCount - undevelopedWhitePieceCount) * DEVELOPMENT_VALUE;
+
+    // Dont move the queen too much too early
+    if (undevelopedWhitePieceCount > 0 && board.pieceBoards[1][Piece.QUEEN] != 0 && board.stats.whitePieceMoves[Piece.QUEEN] > 1)
+    {
+      score -= min(66, board.stats.whitePieceMoves[Piece.QUEEN] * QUEEN_TOO_EARLY_VALUE);
+    }
+    if (undevelopedBlackPieceCount > 0 && board.pieceBoards[0][Piece.QUEEN] != 0 && board.stats.blackPieceMoves[Piece.QUEEN] > 1)
+    {
+      score += min(66, board.stats.blackPieceMoves[Piece.QUEEN] * QUEEN_TOO_EARLY_VALUE);
+    }
+
+    if ((board.pieceBoards[1][Piece.PAWN] & Square.E2.mask_on) != 0)
+    {
+      score -= UNMOVED_CENTER_PAWN;
+      if ((board.pieceBoards[1][Board.ALL_PIECES] & Square.E3.mask_on) != 0)
+      {
+        score -= UNMOVED_CENTER_PAWN_BLOCKED;
+      }
+    }
+    if ((board.pieceBoards[1][Piece.PAWN] & Square.D2.mask_on) != 0)
+    {
+      score -= UNMOVED_CENTER_PAWN;
+      if ((board.pieceBoards[1][Board.ALL_PIECES] & Square.D3.mask_on) != 0)
+      {
+        score -= UNMOVED_CENTER_PAWN_BLOCKED;
+      }
+    }
+    if ((board.pieceBoards[0][Piece.PAWN] & Square.E7.mask_on) != 0)
+    {
+      score += UNMOVED_CENTER_PAWN;
+      if ((board.pieceBoards[0][Board.ALL_PIECES] & Square.E6.mask_on) != 0)
+      {
+        score += UNMOVED_CENTER_PAWN_BLOCKED;
+      }
+    }
+    if ((board.pieceBoards[0][Piece.PAWN] & Square.D7.mask_on) != 0)
+    {
+      score += UNMOVED_CENTER_PAWN;
+      if ((board.pieceBoards[0][Board.ALL_PIECES] & Square.D6.mask_on) != 0)
+      {
+        score += UNMOVED_CENTER_PAWN_BLOCKED;
+      }
+    }
+
+    final double whiteMaterialRatio = 1 - (whiteMaterial / 31D);
+    final double blackMaterialRatio = 1 - (blackMaterial / 31D);
+
+    score += pawnFlags.centerScore > 0 ? pawnFlags.centerScore * (1 - whiteMaterialRatio) : pawnFlags.centerScore * (1 - blackMaterialRatio);
+    score += pawnFlags.endgameScore > 0 ? pawnFlags.endgameScore * blackMaterialRatio : pawnFlags.endgameScore * whiteMaterialRatio;
+
+    // Don't trade when down material
+    if (board.stats.originalMaterialDifference < 0 && blackMaterial > whiteMaterial/* || board.stats.whiteAttacking*/)
+    {
+      if (whiteMaterial + blackMaterial < board.stats.originalMaterial)
+      {
+        score -= TRADE_WHEN_LOSING_VALUE;
+      }
+    }
+    else if (board.stats.originalMaterialDifference > 0 && whiteMaterial > blackMaterial/* || board.stats.blackAttacking*/)
+    {
+      if (whiteMaterial + blackMaterial < board.stats.originalMaterial)
+      {
+        score += TRADE_WHEN_LOSING_VALUE;
+      }
+    }
+
+    // Pawns
+    final int pawnScore = pawnFlags.score;
+    score += pawnScore;
+
+    // Passed Pawns
+    if ((pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns) != 0)
+    {
+      final int passedPawnScore = scorePassedPawns(board,
+                                             pawnFlags.whitePassedPawns,
+                                             pawnFlags.blackPassedPawns,
+                                             whiteMaterial,
+                                             blackMaterial);
+      score += passedPawnScore;
+    }
+
+    // King Evals
+    final int whiteKingScore = evalWhiteKing(board, pawnFlags, blackMaterial);
+    final int blackKingScore = evalBlackKing(board, pawnFlags, whiteMaterial);
+
+    score += whiteKingScore;
+    score -= blackKingScore;
+
+/*
+    evalWhiteKing(board, pawnFlags, blackMaterial);
+    evalBlackKing(board, pawnFlags, whiteMaterial);
+*/
+
+    return board.turn == 1 ?
+           score :
+           -score;
+  }
+
+
+  //////////////
+  //   PAWNS
+  //////////////
+  private PawnFlags scorePawns(final Board board)
+  {
+    // probe pawn hash
+    final PawnHashtable.HashEntry pawnHashEntry = pawnHash.getEntryNoNull(board);
+
+    final long boardHash = board.turn == 1 ?
+                     board.pawnHash :
+                     ~board.pawnHash;
+
+    // if the entry is good
+    if (pawnHashEntry.hash == boardHash)
+    {
+      // return the score from the entry
+      return pawnHashEntry.pawnFlags;
+    }
+
+    int score = 0;
+
+    pawnHashEntry.pawnFlags.whitePawnCount = 0;
+    pawnHashEntry.pawnFlags.blackPawnCount = 0;
+
+    pawnHashEntry.pawnFlags.whitePassedPawns = 0;
+    pawnHashEntry.pawnFlags.blackPassedPawns = 0;
+    pawnHashEntry.pawnFlags.openFiles = ~0;
+    pawnHashEntry.pawnFlags.openRanks = ~0;
+    pawnHashEntry.pawnFlags.lockedFiles = 0;
+    pawnHashEntry.pawnFlags.closedFiles[0] = 0;
+    pawnHashEntry.pawnFlags.closedFiles[1] = 0;
+    pawnHashEntry.pawnFlags.endgameScore = 0;
+
+    long whitePawns = board.pieceBoards[1][Piece.PAWN];
+    long blackPawns = board.pieceBoards[0][Piece.PAWN];
+
+    int whitePawnScore = 0;
+    int blackPawnScore = 0;
+
+    while (whitePawns != 0)
+    {
+      final int pawnSquareIndex = Board.getLeastSignificantBit(whitePawns);
+      whitePawns &= (whitePawns - 1);
+      final Square pawnSquare = Board.SQUARES[pawnSquareIndex];
+
+      whitePawnScore += Piece.TYPE_VALUES[Piece.PAWN];
+      pawnHashEntry.pawnFlags.whitePawnCount++;
+      pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
+      pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
+      whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex];
+
+      // locked files
+      if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 + 8].mask_on) != 0)
+      {
+        pawnHashEntry.pawnFlags.lockedFiles |= FILES[pawnSquare.file];
+        whitePawnScore -= PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex] >> 3;
+      }
+
+      // doubled pawns
+      if (((board.pieceBoards[1][Piece.PAWN] & BLACK_PASSED_MASK[pawnSquare.index64] & FILES[pawnSquare.file])) != 0)
+      {
+        whitePawnScore -= PAWN_DOUBLED_VALUE;
+      }
+
+      // white passed pawns
+      if ((board.pieceBoards[0][Piece.PAWN] & WHITE_PASSED_MASK[pawnSquareIndex]) == 0 && pawnSquare.rank > 1)
+      {
+        pawnHashEntry.pawnFlags.whitePassedPawns |= pawnSquare.mask_on;
+      }
+
+      if (pawnSquare.file == 0)
+      {
+        // white pawn chain (H1-A8)
+        if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 7].mask_on) != 0)
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 7];
+          pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+        }
+      }
+      else if (pawnSquare.file == 7)
+      {
+        // white pawn phalanx
+        if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 1].mask_on) != 0)
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 1];
+        }
+        // white pawn chain (A1-H8)
+        if (((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 9].mask_on) != 0))
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 9];
+          pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+        }
+      }
+      else
+      {
+        // white pawn phalanx
+        if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 1].mask_on) != 0)
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 1];
+        }
+        // white pawn chain (A1-H8)
+        if (((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 9].mask_on) != 0))
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 9];
+          pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+        }
+        // white pawn chain (H1-A8)
+        if (((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 7].mask_on) != 0))
+        {
+          whitePawnScore += PIECE_VALUE_TABLES[1][Piece.PAWN][pawnSquareIndex - 7];
+          pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+        }
+      }
+
+      // white backward pawns
+      if ((board.pieceBoards[1][Piece.PAWN] & WHITE_BACKWARDS_MASK[pawnSquareIndex]) == 0)
+      {
+        whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+        if((board.pieceBoards[0][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
+        {
+          whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+        }
+      }
+
+      pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
+    }
+
+    while (blackPawns != 0)
+    {
+      final int pawnSquareIndex = Board.getLeastSignificantBit(blackPawns);
+      blackPawns &= (blackPawns - 1);
+      final Square pawnSquare = Board.SQUARES[pawnSquareIndex];
+
+      blackPawnScore += Piece.TYPE_VALUES[Piece.PAWN];
+      pawnHashEntry.pawnFlags.blackPawnCount++;
+      pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
+      pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
+      blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex];
+
+      // locked files
+      if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 - 8].mask_on) != 0)
+      {
+        pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+        blackPawnScore -= PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex] >> 3;
+      }
+
+      // doubled pawns
+      if ((board.pieceBoards[0][Piece.PAWN] & WHITE_PASSED_MASK[pawnSquare.index64] & FILES[pawnSquare.file]) != 0)
+      {
+        blackPawnScore -= PAWN_DOUBLED_VALUE;
+      }
+
+      // black passed pawns
+      if ((board.pieceBoards[1][Piece.PAWN] & BLACK_PASSED_MASK[pawnSquareIndex]) == 0 && pawnSquare.rank < 6)
+      {
+        pawnHashEntry.pawnFlags.blackPassedPawns |= pawnSquare.mask_on;
+      }
+
+      if (pawnSquare.file == 0)
+      {
+        // black pawn chain (A1-H8)
+        if (((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex + 9].mask_on) != 0))
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex + 9];
+          pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
+        }
+      }
+      else if (pawnSquare.file == 7)
+      {
+        // black pawn phalanx
+        if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 1].mask_on) != 0)
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex - 1];
+        }
+        // black pawn chain (H1-A8)
+        if (((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex + 7].mask_on) != 0))
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex + 7];
+          pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
+        }
+      }
+      else
+      {
+        // black pawn phalanx
+        if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex - 1].mask_on) != 0)
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex - 1];
+        }
+        // black pawn chain (A1-H8)
+        if (((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex + 9].mask_on) != 0))
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex + 9];
+          pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
+        }
+        // black pawn chain (H1-A8)
+        if (((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquareIndex + 7].mask_on) != 0))
+        {
+          blackPawnScore += PIECE_VALUE_TABLES[0][Piece.PAWN][pawnSquareIndex + 7];
+          pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
+        }
+      }
+      // black backward pawns
+      if ((board.pieceBoards[0][Piece.PAWN] & BLACK_BACKWARDS_MASK[pawnSquareIndex]) == 0)
+      {
+        blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+        if((board.pieceBoards[1][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
+        {
+          blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+        }
+      }
+
+      pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
+    }
+
+    score += whitePawnScore - blackPawnScore;
+
+    final int whiteQueenside = normalizeQueensidePawns(board, 1);
+    final int blackQueenside = normalizeQueensidePawns(board, 0);
+    final int whiteKingside = normalizeKingsidePawns(board, 1);
+    final int blackKingside = normalizeKingsidePawns(board, 0);
+    final int whiteCenter = normalizeCenterPawns(board, 1);
+    final int blackCenter = normalizeCenterPawns(board, 0);
+
+    final int queensideScore = PAWNSCORES[ (whiteQueenside << 3) + blackQueenside];
+    final int kingsideScore = PAWNSCORES[ (whiteKingside << 3) + blackKingside];
+
+    final int centerScore = PAWNSCORES[ (whiteCenter << 3) + blackCenter];
+
+    pawnHashEntry.pawnFlags.centerScore = centerScore;
+    pawnHashEntry.pawnFlags.endgameScore = queensideScore + kingsideScore;
+    pawnHashEntry.pawnFlags.score = score;
+
+    // Store pawn hash
+    pawnHashEntry.hash = boardHash;
+
+    return pawnHashEntry.pawnFlags;
+  }
+
+  private int normalizeQueensidePawns(final Board board, final int color)
+  {
+    final long pawns = board.pieceBoards[color][Piece.PAWN];
+    if((pawns & FILES[0]) != 0)
+    {
+      if((pawns & FILES[1]) != 0)
+      {
+        // ABC
+        if((pawns & FILES[2]) != 0)
+        {
+          return 7;
+        }
+        // AB
+        else
+        {
+          return 6;
+        }
+
+      }
+      // A C
+      else if((pawns & FILES[2]) != 0)
+      {
+        return 5;
+      }
+      // A
+      else
+      {
+        return 4;
+      }
+    }
+    else if((pawns & FILES[1]) != 0)
+    {
+      //  BC
+      if((pawns & FILES[2]) != 0)
+      {
+        return 3;
+      }
+      //  B
+      else
+      {
+        return 2;
+      }
+    }
+    //   C
+    else if((pawns & FILES[2]) != 0)
+    {
+      return 1;
+    }
+    return 0;
+  }
+
+  private int normalizeKingsidePawns(Board board, int color)
+  {
+    final long pawns = board.pieceBoards[color][Piece.PAWN];
+    if((pawns & FILES[7]) != 0)
+    {
+      if((pawns & FILES[6]) != 0)
+      {
+        // HGF
+        if((pawns & FILES[5]) != 0)
+        {
+          return 7;
+        }
+        // HG
+        else
+        {
+          return 6;
+        }
+
+      }
+      // H F
+      else if((pawns & FILES[5]) != 0)
+      {
+        return 5;
+      }
+      // H
+      else
+      {
+        return 4;
+      }
+    }
+    else if((pawns & FILES[6]) != 0)
+    {
+      //  GF
+      if((pawns & FILES[5]) != 0)
+      {
+        return 3;
+      }
+      //  G
+      else
+      {
+        return 2;
+      }
+    }
+    //   F
+    else if((pawns & FILES[5]) != 0)
+    {
+      return 1;
+    }
+    return 0;
+  }
+
+  private int normalizeCenterPawns(final Board board, final int color)
+  {
+    final long pawns = board.pieceBoards[color][Piece.PAWN];
+    if((pawns & FILES[3]) != 0)
+    {
+      // ED
+      if((pawns & FILES[4]) != 0)
+      {
+        return 3;
+      }
+      // E
+      else
+      {
+        return 2;
+      }
+
+    }
+    // D
+    else if((pawns & FILES[4]) != 0)
+    {
+      return 1;
+    }
+    return 0;
+  }
+
+  private int scorePassedPawns(final Board board,
+                               long whitePassedPawns,
+                               long blackPassedPawns,
+                               final int whiteMaterial,
+                               final int blackMaterial)
+  {
+    int score = 0;
+
+/*
+    if(whiteMaterial > 21 || blackMaterial > 21)
+    {
+      return 0;
+    }
+*/
+    final double whiteMaterialRatio = 1 - (whiteMaterial / 50D);
+    final double blackMaterialRatio = 1 - (blackMaterial / 50D);
+
+    while (whitePassedPawns != 0)
+    {
+      final int pawnSquareIndex = Board.getLeastSignificantBit(whitePassedPawns);
+      whitePassedPawns &= (whitePassedPawns - 1);
+
+      if (Board.SQUARES[pawnSquareIndex].file < 2 && Board.SQUARES[pawnSquareIndex].file < board.blackKing.square.file - 2)
+      {
+        score += PASSED_PAWN_WIDE_FILE_VALUE * blackMaterialRatio;
+      }
+      else if (Board.SQUARES[pawnSquareIndex].file > 5 && Board.SQUARES[pawnSquareIndex].file > board.blackKing.square.file + 2)
+      {
+        score += PASSED_PAWN_WIDE_FILE_VALUE * blackMaterialRatio;
+      }
+
+      score += (WHITE_PASSED_PAWN_VALUES[pawnSquareIndex >> 3] >> 2) * blackMaterialRatio;
+      final int attackers = scoreAttacksToSquare(board, Board.SQUARES[pawnSquareIndex + 8], 1, false);
+      final int defenders = scoreAttacksToSquare(board, Board.SQUARES[pawnSquareIndex + 8], 0, true);
+      if (attackers - defenders > 0 || defenders == 0)
+      {
+        if ((board.pieceBoards[0][Board.ALL_PIECES] & Board.SQUARES[pawnSquareIndex + 8].mask_on) == 0)
+        {
+          score += (WHITE_PASSED_PAWN_VALUES[Board.rank(pawnSquareIndex)]) * blackMaterialRatio;
+        }
+        else
+        {
+          score += (WHITE_PASSED_PAWN_VALUES[Board.rank(pawnSquareIndex)] >> 1) * blackMaterialRatio;
+        }
+      }                                                       
+    }
+
+    while (blackPassedPawns != 0)
+    {
+      final int pawnSquareIndex = Board.getLeastSignificantBit(blackPassedPawns);
+      blackPassedPawns &= (blackPassedPawns - 1);
+
+      if (Board.SQUARES[pawnSquareIndex].file < 2 && Board.SQUARES[pawnSquareIndex].file < board.whiteKing.square.file - 2)
+      {
+        score -= PASSED_PAWN_WIDE_FILE_VALUE * whiteMaterialRatio;
+      }
+      else if (Board.SQUARES[pawnSquareIndex].file > 5 && Board.SQUARES[pawnSquareIndex].file > board.whiteKing.square.file + 2)
+      {
+        score -= PASSED_PAWN_WIDE_FILE_VALUE * whiteMaterialRatio;
+      }
+
+      score -= (BLACK_PASSED_PAWN_VALUES[pawnSquareIndex >> 3] >> 2) * whiteMaterialRatio;
+      final int attackers = scoreAttacksToSquare(board, Board.SQUARES[pawnSquareIndex - 8], 0, false);
+      final int defenders = scoreAttacksToSquare(board, Board.SQUARES[pawnSquareIndex - 8], 1, true);
+      if (attackers - defenders > 0 || defenders == 0)
+      {
+        if ((board.pieceBoards[1][Board.ALL_PIECES] & Board.SQUARES[pawnSquareIndex - 8].mask_on) == 0)
+        {
+          score -= (BLACK_PASSED_PAWN_VALUES[Board.rank(pawnSquareIndex)]) * whiteMaterialRatio;
+        }
+        else
+        {
+          score -= (BLACK_PASSED_PAWN_VALUES[Board.rank(pawnSquareIndex)] >> 1) * whiteMaterialRatio;
+        }
+      }
+    }
+    return score;
+  }
+
+  //////////////////
+  // EVAL WHITE KING
+  //////////////////
+
+  private int evalWhiteKing(final Board board, final PawnFlags pawnFlags, final int blackMaterial)
+  {
+    final Square kingSquare = board.whiteKing.square;
+    int score = 0;
+
+    if ((blackMaterial < 17 && board.pieceBoards[0][Piece.QUEEN] == 0))
+    {
+      score += PIECE_VALUE_TABLES[1][Piece.KNIGHT][kingSquare.index64] << 1;
+      final int nearbyPassedPawns = Board.countBits(
+              (mask3 << (kingSquare.file > 0 ?
+                         kingSquare.index64 + 7 :
+                         kingSquare.index64 + 8)) &
+                                                  (pawnFlags.whitePassedPawns)
+      );
+      score += nearbyPassedPawns * kingSquare.rank * 10;
+      return score;
+    }
+
+    int attackers = 0;
+
+    // White should prepare to castle
+    if (board.stats.whiteCastleFlag == 0 && board.stats.whiteKingMoves == 0 && (board.stats.whiteKingsideRookMoves == 0 || board.stats.whiteQueensideRookMoves == 0))
+    {
+      score -= KING_NO_CASTLE_VALUE + board.moveIndex;
+      attackers = scoreAttackingPieces(board,
+                                       Square.E1,
+                                       0);
+    }
+    else
+    {
+/*
+      if (((kingSquare.mask_on & pawnFlags.openFiles) != 0))
+      {
+        score -= KING_ON_OPEN_FILE;
+      }
+      else if (((kingSquare.mask_on & pawnFlags.closedFiles[1]) == 0) || ((kingSquare.mask_on & pawnFlags.closedFiles[0]) == 0))
+      {
+        score -= KING_ON_HALF_OPEN_FILE;
+      }
+*/
+
+      attackers = scoreAttackingPieces(board,
+                                       kingSquare,
+                                       0);
+      if (board.stats.whiteCastleFlag == 0 && board.whiteKing.moveCount > 0)
+      {
+        score -= KING_FORFEIT_CASTLE_VALUE;
+      }
+    }
+    score -= attackers;
+
+    return score;
+  }
+
+  //////////////////
+  // EVAL BLACK KING
+  //////////////////
+
+  private int evalBlackKing(final Board board, final PawnFlags pawnFlags, final int whiteMaterial)
+  {
+    final Square kingSquare = board.blackKing.square;
+    int score = 0;
+
+    if ((whiteMaterial < 17 && board.pieceBoards[1][Piece.QUEEN] == 0))
+    {
+      score += PIECE_VALUE_TABLES[0][Piece.KNIGHT][kingSquare.index64] << 1;
+      final int nearbyPassedPawns = Board.countBits(
+              (mask3 << (kingSquare.file > 0 ?
+                         kingSquare.index64 - 9 :
+                         kingSquare.index64 - 8)) &
+                                                  (pawnFlags.blackPassedPawns)
+      );
+      score += nearbyPassedPawns * (7 - kingSquare.rank) * 10;
+      return score;
+    }
+
+    int attackers = 0;
+
+    // Black should prepare to castle
+    if (board.stats.blackCastleFlag == 0 && board.stats.blackKingMoves == 0 && (board.stats.blackKingsideRookMoves == 0 || board.stats.blackQueensideRookMoves == 0))
+    {
+      score -= KING_NO_CASTLE_VALUE + board.moveIndex;
+      attackers = scoreAttackingPieces(board,
+                                       Square.E8,
+                                       1);
+    }
+    else
+    {
+/*
+      if (((kingSquare.mask_on & pawnFlags.openFiles) != 0))
+      {
+        score -= KING_ON_OPEN_FILE;
+      }
+      else if (((kingSquare.mask_on & pawnFlags.closedFiles[1]) == 0) || ((kingSquare.mask_on & pawnFlags.closedFiles[0]) == 0))
+      {
+        score -= KING_ON_HALF_OPEN_FILE;
+      }
+*/
+
+      attackers = scoreAttackingPieces(board,
+                                       kingSquare,
+                                       1);
+      if (board.stats.blackCastleFlag == 0 && board.blackKing.moveCount > 0)
+      {
+        score -= KING_FORFEIT_CASTLE_VALUE;
+      }
+    }
+    score -= attackers;
+
+    return score;
+  }
+
+  private static final int[][] KING_SAFETY_STAGING_AREA = new int[2][3];
+  private static final int[][] KING_SAFETY_PAWN_AREA = new int[2][3];
+  private static final int[][] KING_SAFETY_TINY_AREA = new int[2][5];
+
+  static
+  {
+    KING_SAFETY_STAGING_AREA[1] = new int[]{31, 32, 33};
+    KING_SAFETY_STAGING_AREA[0] = new int[]{-31, -32, -33};
+
+    KING_SAFETY_PAWN_AREA[1] = new int[]{15, 16, 17};
+    KING_SAFETY_PAWN_AREA[0] = new int[]{-15, -16, -17};
+
+    KING_SAFETY_TINY_AREA[1] = new int[]{1, -1, -15, -16, -17};
+    KING_SAFETY_TINY_AREA[0] = new int[]{1, -1, 15, 16, 17};
+
+  }
+
+  /**
+   * count
+   * [1 - 3] [ P ] [ minor ] [ R ] [ Q ] [ K ]
+   *
+   * @param board
+   * @param kingSquare
+   * @param color
+   * @return
+   */
+  private int scoreAttackingPieces(final Board board,
+                                   final Square kingSquare,
+                                   final int color)
+  {
+    int score = 0;
+    int pawnScore = 0;
+    int tinyScore = 0;
+    int stagingScore = 0;
+    int count = 1;
+
+    final int enemyColor = color ^ 1;
+    for (int i = 0; i < 3; i++)
+    {
+      int stagingSquare = KING_SAFETY_STAGING_AREA[enemyColor][i];
+      int squareIndex = kingSquare.index128 + stagingSquare;
+      if ((squareIndex & 0x88) != 0)
+      {
+        continue;
+      }
+
+      Square square = board.boardSquares[squareIndex].square;
+      int attackingScore = scoreAttacksToSquare(board, square, color, true);
+      int defenderScore = scoreDefenseOfSquare(board, square, enemyColor, false) >> 2;
+      stagingScore += attackingScore - defenderScore;
+
+      int pawnSquare = KING_SAFETY_PAWN_AREA[enemyColor][i];
+      squareIndex = kingSquare.index128 + pawnSquare;
+      square = board.boardSquares[squareIndex].square;
+
+      attackingScore = scoreAttacksToSquare(board, square, color, false);
+      defenderScore = scoreDefenseOfSquare(board, square, enemyColor, true);
+      pawnScore += attackingScore - defenderScore;
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+      int tinySquare = KING_SAFETY_TINY_AREA[enemyColor][i];
+      int squareIndex = kingSquare.index128 + tinySquare;
+      if ((squareIndex & 0x88) != 0)
+      {
+        continue;
+      }
+      Square square = board.boardSquares[squareIndex].square;
+
+      int attackingScore = scoreAttacksToSquare(board, square, color, false);
+      if (attackingScore > 0)
+      {
+        int defenderScore = scoreDefenseOfSquare(board, square, enemyColor, false);
+        tinyScore += attackingScore - defenderScore;
+      }
+      else
+      {
+        count++;
+      }
+/*
+      tinyScore += (board.mobilityRank(square.index64) +
+                   board.mobilityFile(square.index64) +
+                   board.mobilityDiaga1(square.index64) +
+                   board.mobilityDiagh1(square.index64)) <<1;
+*/
+    }
+
+    score = (tinyScore + (stagingScore) + (pawnScore / count));
+    return max(score, -50);
+
+/*
+    int pawnAttackers = Board.countBits(tinyKingArea & (board.pieceBoards[color][Piece.PAWN]));
+    int minorAttackers = Board.countBits(smallKingArea & (board.pieceBoards[color][Piece.KNIGHT]));
+
+    minorAttackers += Board.countBits(kingAreaA1H8 & board.pieceBoards[color][Piece.BISHOP]);
+    minorAttackers += Board.countBits(kingAreaH1A8 & board.pieceBoards[color][Piece.BISHOP]);
+
+    int queenAttackers = (kingAreaA1H8 & board.pieceBoards[color][Piece.QUEEN]) != 0 ? 1 : 0;
+    queenAttackers += (kingAreaH1A8 & board.pieceBoards[color][Piece.QUEEN]) != 0 ? 1 : 0;
+    queenAttackers += (board.pieceBoards[color][Piece.QUEEN] & fileMask) != 0 ? 1 : 0;
+    queenAttackers += (pawnFlags.openRanks & board.pieceBoards[color][Piece.QUEEN] & rankMask) != 0 ? 1 : 0;
+
+    int rookAttackers = Board.countBits(board.pieceBoards[color][Piece.ROOK] & fileMask);
+    rookAttackers += Board.countBits(board.pieceBoards[color][Piece.ROOK] & rankMask);
+
+    return (minorAttackers * 2) +
+           (rookAttackers * 3) +
+           ((rookAttackers + minorAttackers + pawnAttackers > 0) ? queenAttackers << 2 : 0) +
+           (pawnAttackers) + best;
+*/
+  }
+
+  private static final int[][][][] attackCoordinationValues = new int[2][3][2][2];
+
+  static
+  {
+
+  }
+
+  public final int scoreAttacksToSquare(final Board board, final Square square, final int color, final boolean rewardOccupancy)
+  {
+    int score = 0;
+
+    int pawns = 0;
+    int minors = 0;
+    int rooks = 0;
+    int queens = 0;
+
+    if ((MoveGeneration.attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) != 0)
+    {
+      pawns++;
+    }
+    final long knightAttackers = (MoveGeneration.attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]);
+    if (knightAttackers != 0)
+    {
+      if ((knightAttackers & (knightAttackers - 1)) != 0)
+      {
+        minors++;
+      }
+      minors++;
+    }
+    final long bishopAttacks = board.bishopAttacks(square.index64);
+    if ((bishopAttacks & board.pieceBoards[color][Piece.BISHOP]) != 0)
+    {
+      minors++;
+    }
+    final long rookAttacks = board.rookAttacks(square.index64);
+    if ((rookAttacks & board.pieceBoards[color][Piece.ROOK]) != 0)
+    {
+      rooks++;
+    }
+    if (((bishopAttacks | rookAttacks) & board.pieceBoards[color][Piece.QUEEN]) != 0)
+    {
+      queens++;
+    }
+
+    int pawnValue = 0;
+    int minorValue = 0;
+    int rookValue = 0;
+    int queenValue = 0;
+
+    Piece pieceOnSquare = board.boardSquares[square.index128].piece;
+
+    if (rewardOccupancy && pieceOnSquare != null && pieceOnSquare.color == color)
+    {
+      switch (pieceOnSquare.type)
+      {
+        case Piece.PAWN:
+        {
+          pawns++;
+          break;
+        }
+        case Piece.KNIGHT:
+        {
+          minors++;
+          break;
+        }
+        case Piece.BISHOP:
+        {
+          minors++;
+          break;
+        }
+        case Piece.ROOK:
+        {
+          rooks++;
+          break;
+        }
+        case Piece.QUEEN:
+        {
+          queens++;
+          break;
+        }
+      }
+    }
+
+    if (pawns > 0)
+    {
+      minorValue += 10;
+      rookValue += 15;
+      queenValue += 25;
+      pawnValue +=  5;
+    }
+    if (minors > 0)
+    {
+      pawnValue +=  5;
+      rookValue += 15;
+      queenValue += 35;
+      minorValue += 20;
+    }
+    if (rooks > 0)
+    {
+      pawnValue +=  5;
+      minorValue += 10;
+      queenValue += 25;
+      rookValue += 15;
+    }
+
+    if (queens > 0)
+    {
+      pawnValue +=  5;
+      minorValue += 10;
+      rookValue += 15;
+      queenValue += 45;
+    }
+
+    score = (pawns * pawnValue) + (minors * minorValue) + (rooks * rookValue) + (queens * queenValue);
+
+    return score;
+  }
+
+  public final int scoreDefenseOfSquare(final Board board, final Square square, final int color, final boolean rewardOccupancy)
+  {
+    int score = 0;
+//    long attackers = moveGeneration.getAllAttackers(board, square, color);
+
+    int pawns = 0;
+    int minors = 0;
+    int rooks = 0;
+    int queens = 0;
+
+
+    if ((MoveGeneration.attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) != 0)
+    {
+      pawns++;
+    }
+    final long knightAttackers = (MoveGeneration.attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]);
+    if (knightAttackers != 0)
+    {
+      if ((knightAttackers & (knightAttackers - 1)) != 0)
+      {
+        minors++;
+      }
+      minors++;
+    }
+    final long bishopAttacks = board.bishopAttacks(square.index64);
+    if ((bishopAttacks & board.pieceBoards[color][Piece.BISHOP]) != 0)
+    {
+      minors++;
+    }
+    final long rookAttacks = board.rookAttacks(square.index64);
+    if ((rookAttacks & board.pieceBoards[color][Piece.ROOK]) != 0)
+    {
+      rooks++;
+    }
+    if (((bishopAttacks | rookAttacks) & board.pieceBoards[color][Piece.QUEEN]) != 0)
+    {
+      queens++;
+    }
+
+
+    int pawnValue = 0;
+    int minorValue = 0;
+    int rookValue = 0;
+    int queenValue = 0;
+
+    Piece pieceOnSquare = board.boardSquares[square.index128].piece;
+
+    if (rewardOccupancy && pieceOnSquare != null && pieceOnSquare.color == color)
+    {
+      switch (pieceOnSquare.type)
+      {
+        case Piece.PAWN:
+        {
+          pawns++;
+          break;
+        }
+        case Piece.KNIGHT:
+        {
+          minors++;
+          break;
+        }
+        case Piece.BISHOP:
+        {
+          minors++;
+          break;
+        }
+        case Piece.ROOK:
+        {
+          rooks++;
+          break;
+        }
+        case Piece.QUEEN:
+        {
+          queens++;
+          break;
+        }
+      }
+    }
+
+    if (pawns > 0)
+    {
+      pawnValue += 30;
+      minorValue += 10;
+      rookValue +=  5;
+      queenValue +=  5;
+    }
+    if (minors > 0)
+    {
+      pawnValue += 20;
+      minorValue += 15;
+      rookValue +=  5;
+      queenValue +=  5;
+    }
+    if (rooks > 0)
+    {
+      pawnValue +=  5;
+      minorValue +=  5;
+      rookValue +=  5;
+      queenValue += 2;
+    }
+
+    if (queens > 0)
+    {
+      pawnValue += 10;
+      minorValue +=  5;
+      rookValue +=  5;
+      queenValue += 2;
+    }
+
+    score = (pawns * pawnValue) + (minors * minorValue) + (rooks * rookValue) + (queens * queenValue);
+
+    return score;
+  }
+
+  private int countDefendingPieces(Board board, long kingArea, int color)
+  {
+    int attackers = Board.countBits(kingArea & (board.pieceBoards[color][Piece.KNIGHT] |
+                                                board.pieceBoards[color][Piece.BISHOP] |
+                                                board.pieceBoards[color][Piece.QUEEN] |
+                                                board.pieceBoards[color][Piece.ROOK]));
+    return attackers;
+  }
+
+  private static long getSmallKingArea(Square square)
+  {
+    return (square.file < 7 ?
+            MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 + 1] :
+            0)
+           | (square.rank > 1 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 - 7] :
+              0)
+           | (square.rank > 1 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 - 8] :
+              0)
+           | (square.rank > 1 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 - 9] :
+              0)
+           | (square.file > 0 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 - 1] :
+              0)
+           | (square.rank < 7 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 + 7] :
+              0)
+           | (square.rank < 7 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 + 8] :
+              0)
+           | (square.rank < 7 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][Piece.KNIGHT][square.index64 + 9] :
+              0);
+  }
+
+  private static long getKingAreaA1H8(Square square)
+  {
+    return MoveGeneration.attackVectors[0][7][square.index64]
+           | (square.file > 0 ?
+              MoveGeneration.attackVectors[0][7][square.index64 - 1] :
+              0)
+           | (square.file < 7 ?
+              MoveGeneration.attackVectors[0][7][square.index64 + 1] :
+              0)
+           | (square.rank > 0 ?
+              MoveGeneration.attackVectors[0][7][square.index64 - 8] :
+              0)
+           | (square.rank < 7 ?
+              MoveGeneration.attackVectors[0][7][square.index64 + 8] :
+              0)
+           | (square.rank < 7 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][7][square.index64 + 7] :
+              0)
+           | (square.rank < 7 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][7][square.index64 + 9] :
+              0)
+           | (square.rank > 0 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][7][square.index64 - 9] :
+              0)
+           | (square.rank > 0 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][7][square.index64 - 7] :
+              0);
+  }
+
+  private static long getKingAreaH1A8(Square square)
+  {
+    return MoveGeneration.attackVectors[0][8][square.index64]
+           | (square.file > 0 ?
+              MoveGeneration.attackVectors[0][8][square.index64 - 1] :
+              0)
+           | (square.file < 7 ?
+              MoveGeneration.attackVectors[0][8][square.index64 + 1] :
+              0)
+           | (square.rank > 0 ?
+              MoveGeneration.attackVectors[0][8][square.index64 - 8] :
+              0)
+           | (square.rank < 7 ?
+              MoveGeneration.attackVectors[0][8][square.index64 + 8] :
+              0)
+           | (square.rank < 7 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][8][square.index64 + 7] :
+              0)
+           | (square.rank < 7 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][8][square.index64 + 9] :
+              0)
+           | (square.rank > 0 && square.file > 0 ?
+              MoveGeneration.attackVectors[0][8][square.index64 - 9] :
+              0)
+           | (square.rank > 0 && square.file < 7 ?
+              MoveGeneration.attackVectors[0][8][square.index64 - 7] :
+              0);
+  }
+
+  private int max(int a, int b)
+  {
+    return a > b ?
+           a :
+           b;
+  }
+
+  private int min(int a, int b)
+  {
+    return a < b ?
+           a :
+           b;
+  }
+
+  private double max(double a, double b)
+  {
+    return a > b ?
+           a :
+           b;
+  }
+
+  private double min(double a, double b)
+  {
+    return a > b ?
+           a :
+           b;
+  }
+
+  public static void multiplyAll(int[] original, int factor)
+  {
+    for (int i = 0; i < original.length; i++)
+    {
+      original[i] *= factor;
+    }
+  }
+
+  public int getMaterial(Board board)
+  {
+    int whiteKnightCount = Board.countBits(board.pieceBoards[1][Piece.KNIGHT]);
+    int blackKnightCount = Board.countBits(board.pieceBoards[0][Piece.KNIGHT]);
+
+    int whiteBishopCount = Board.countBits(board.pieceBoards[1][Piece.BISHOP]);
+    int blackBishopCount = Board.countBits(board.pieceBoards[0][Piece.BISHOP]);
+
+    int whiteRookCount = Board.countBits(board.pieceBoards[1][Piece.ROOK]);
+    int blackRookCount = Board.countBits(board.pieceBoards[0][Piece.ROOK]);
+
+    int whiteQueenCount = Board.countBits(board.pieceBoards[1][Piece.QUEEN]);
+    int blackQueenCount = Board.countBits(board.pieceBoards[0][Piece.QUEEN]);
+
+    int whiteMaterial = (whiteKnightCount * 3) + (whiteBishopCount * 3) + (whiteRookCount * 5) + (whiteQueenCount * 9);
+    int blackMaterial = (blackKnightCount * 3) + (blackBishopCount * 3) + (blackRookCount * 5) + (blackQueenCount * 9);
+
+    return whiteMaterial + blackMaterial;
+  }
+
+  public int getMaterialDifference(Board board)
+  {
+    int whiteKnightCount = Board.countBits(board.pieceBoards[1][Piece.KNIGHT]);
+    int blackKnightCount = Board.countBits(board.pieceBoards[0][Piece.KNIGHT]);
+
+    int whiteBishopCount = Board.countBits(board.pieceBoards[1][Piece.BISHOP]);
+    int blackBishopCount = Board.countBits(board.pieceBoards[0][Piece.BISHOP]);
+
+    int whiteRookCount = Board.countBits(board.pieceBoards[1][Piece.ROOK]);
+    int blackRookCount = Board.countBits(board.pieceBoards[0][Piece.ROOK]);
+
+    int whiteQueenCount = Board.countBits(board.pieceBoards[1][Piece.QUEEN]);
+    int blackQueenCount = Board.countBits(board.pieceBoards[0][Piece.QUEEN]);
+
+    int whiteMaterial = (whiteKnightCount * 3) + (whiteBishopCount * 3) + (whiteRookCount * 5) + (whiteQueenCount * 9);
+    int blackMaterial = (blackKnightCount * 3) + (blackBishopCount * 3) + (blackRookCount * 5) + (blackQueenCount * 9);
+
+    return whiteMaterial - blackMaterial;
+  }
+
+
+  public int getWhiteKingSafety(Board board)
+  {
+    int blackKnightCount = Board.countBits(board.pieceBoards[0][Piece.KNIGHT]);
+    int blackBishopCount = Board.countBits(board.pieceBoards[0][Piece.BISHOP]);
+    int blackRookCount = Board.countBits(board.pieceBoards[0][Piece.ROOK]);
+    int blackQueenCount = Board.countBits(board.pieceBoards[0][Piece.QUEEN]);
+    int blackMaterial = (blackKnightCount * 3) + (blackBishopCount * 3) + (blackRookCount * 5) + (blackQueenCount * 9);
+
+    PawnFlags pawnFlags = scorePawns(board);
+
+    return evalWhiteKing(board, pawnFlags, blackMaterial);
+  }
+
+  public int getBlackKingSafety(Board board)
+  {
+    int whiteKnightCount = Board.countBits(board.pieceBoards[1][Piece.KNIGHT]);
+    int whiteBishopCount = Board.countBits(board.pieceBoards[1][Piece.BISHOP]);
+    int whiteRookCount = Board.countBits(board.pieceBoards[1][Piece.ROOK]);
+    int whiteQueenCount = Board.countBits(board.pieceBoards[1][Piece.QUEEN]);
+    int whiteMaterial = (whiteKnightCount * 3) + (whiteBishopCount * 3) + (whiteRookCount * 5) + (whiteQueenCount * 9);
+
+    PawnFlags pawnFlags = scorePawns(board);
+
+    return evalBlackKing(board, pawnFlags, whiteMaterial);
+  }
+
+
+  public int getKingSafety(Board board)
+  {
+    return getWhiteKingSafety(board) - getBlackKingSafety(board);
+  }
+
+  public int getPawns(Board board)
+  {
+    int whitePawnCount = Board.countBits(board.pieceBoards[1][Piece.KNIGHT]);
+    int blackPawnCount = Board.countBits(board.pieceBoards[0][Piece.KNIGHT]);
+
+    return whitePawnCount + blackPawnCount;
+  }
+
+  public int getPawnsDifference(Board board)
+  {
+    int whitePawnCount = Board.countBits(board.pieceBoards[1][Piece.KNIGHT]);
+    int blackPawnCount = Board.countBits(board.pieceBoards[0][Piece.KNIGHT]);
+
+    return whitePawnCount - blackPawnCount;
+  }
+
+
+}

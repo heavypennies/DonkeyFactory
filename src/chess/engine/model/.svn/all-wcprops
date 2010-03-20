@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model
+END
+Constants.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Constants.java
+END
+Piece.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Piece.java
+END
+Square.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Square.java
+END
+ShortAnalysis.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/ShortAnalysis.java
+END
+MoveComparator.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/MoveComparator.java
+END
+Board.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Board.java
+END
+Game.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Game.java
+END
+Move.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/DonkeyFactory/!svn/ver/1/src/chess/engine/model/Move.java
+END

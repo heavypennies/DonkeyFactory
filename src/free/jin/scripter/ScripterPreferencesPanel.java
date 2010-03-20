@@ -1,0 +1,482 @@
+/**
+ * Jin - a chess client for internet chess servers.
+ * More information is available at http://www.jinchess.com/.
+ * Copyright (C) 2003 Alexander Maryanovsky.
+ * All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package free.jin.scripter;
+
+import free.jin.plugin.BadChangesException;
+import free.jin.plugin.PreferencesPanel;
+import free.util.AWTUtilities;
+import free.util.Utilities;
+import free.util.WindowDisposingListener;
+import free.workarounds.FixedJTextArea;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.EventObject;
+
+
+/**
+ * The preferences UI for the Scripter plugin.
+ */
+
+public class ScripterPreferencesPanel extends PreferencesPanel{
+
+
+
+  /**
+   * The Scripter whose preferences we're displaying/modifying.
+   */
+
+  private Scripter scripter;
+
+
+
+  /**
+   * The <code>DefaultListModel</code> holding the scripts.
+   */
+
+  private DefaultListModel scriptsListModel;
+
+
+
+  /**
+   * Creates a new <code>ScripterPreferencesPanel</code> to display/modify the
+   * preferences of the specified <code>Scripter</code>.
+   */
+
+  public ScripterPreferencesPanel(Scripter scripter){
+    this.scripter = scripter;
+
+    Script [] scripts = scripter.getScripts();
+    scriptsListModel = new DefaultListModel();
+    for (int i = 0; i < scripts.length; i++)
+      scriptsListModel.addElement(scripts[i]);
+
+    createUI();
+  }
+
+
+
+
+  /**
+   * Opens a dialog to allow the user to create a new script.
+   */
+
+  private void addScript(){
+    ScriptTypeSelectionDialog scriptTypeChooser = new ScriptTypeSelectionDialog(this);
+    AWTUtilities.centerWindow(scriptTypeChooser, this);
+    String scriptType = scriptTypeChooser.askScriptType();
+    if (scriptType == null)
+      return;
+
+    ScriptDialog dialog = scriptDialogForType(scriptType, null);
+    if (dialog == null)
+      throw new IllegalStateException("Unknown script type: "+scriptType);
+
+    AWTUtilities.centerWindow(dialog, this);
+    Script script = dialog.askForScript();
+    if (script != null){
+      scriptsListModel.addElement(script);
+      fireStateChanged();
+    }
+
+    // An attempt at a workaround for bug report
+    // https://sourceforge.net/tracker/index.php?func=detail&aid=803455&group_id=50386&atid=459537
+    SwingUtilities.windowForComponent(this).toFront();
+  }
+
+
+
+
+  /**
+   * Opens a dialog to allow the user to edit the specified <code>Script</code>.
+   */
+
+  private void editScript(Script script){
+    String scriptType = script.getType();
+    ScriptDialog dialog = scriptDialogForType(scriptType, script);
+    if (dialog == null)
+      throw new IllegalStateException("Unknown script type: "+scriptType);
+
+    AWTUtilities.centerWindow(dialog, this);
+    Script editedScript = dialog.askForScript();
+    if (editedScript != null){
+      int index = scriptsListModel.indexOf(script);
+      scriptsListModel.removeElementAt(index);
+      scriptsListModel.insertElementAt(editedScript, index);
+      fireStateChanged();
+    }
+
+    // An attempt at a workaround for bug report
+    // https://sourceforge.net/tracker/index.php?func=detail&aid=803455&group_id=50386&atid=459537
+    SwingUtilities.windowForComponent(this).toFront();
+  }
+
+
+
+
+  /**
+   * Removes the specified <code>Script</code>.
+   */
+
+  private void deleteScript(Script script){
+    scriptsListModel.removeElement(script);
+    fireStateChanged();
+  }
+
+
+
+
+  /**
+   * Returns an implementation of <code>ScriptDialog</code> for the specified
+   * script type.
+   */
+
+  private ScriptDialog scriptDialogForType(String scriptType, Script templateScript){
+    if ("commands".equals(scriptType))
+      return new CommandsScriptDialog(this, scripter, (CommandScript)templateScript);
+    else if ("beanshell".equals(scriptType))
+      return new BeanShellScriptDialog(this, scripter, (BeanShellScript)templateScript);
+
+    return null;
+  }
+
+
+
+
+
+  /**
+   * Creates the user interface of this preferences panel.
+   */
+
+  protected void createUI(){
+    setLayout(new BorderLayout(10, 5));
+
+    final JList list = new JList(scriptsListModel);
+    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    list.addMouseListener(new MouseAdapter(){
+      public void mouseClicked(MouseEvent evt){
+        if ((evt.getClickCount() == 2) && (evt.getModifiers() == KeyEvent.BUTTON1_MASK)){
+          int selectedIndex = list.getSelectedIndex();
+          if (selectedIndex != -1)
+            editScript((Script)scriptsListModel.getElementAt(selectedIndex));
+        }
+      }
+    });
+
+    JScrollPane scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,  JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.setPreferredSize(new Dimension(200, 70));
+
+    JLabel listLabel = new JLabel("Scripts");
+    listLabel.setDisplayedMnemonic('S');
+    listLabel.setLabelFor(listLabel);
+
+    final JButton add = new JButton("Add Script");
+    final JButton edit = new JButton("Edit Script");
+    final JButton remove = new JButton("Remove Script");
+    final JCheckBox enabled = new JCheckBox("Script Enabled", false);
+
+    edit.setEnabled(false);
+    remove.setEnabled(false);
+    enabled.setEnabled(false);
+
+    list.addListSelectionListener(new ListSelectionListener(){
+      public void valueChanged(ListSelectionEvent evt){
+        if (evt.getValueIsAdjusting())
+          return;
+
+        int selectedIndex = list.getSelectedIndex();
+        if (selectedIndex == -1){
+          edit.setEnabled(false);
+          remove.setEnabled(false);
+          enabled.setEnabled(false);
+        }
+        else{
+          Script script = (Script)scriptsListModel.getElementAt(selectedIndex);
+          edit.setEnabled(true);
+          remove.setEnabled(true);
+          enabled.setEnabled(true);
+          enabled.setSelected(script.isEnabled());
+        }
+      }
+    });
+
+    add.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent evt){
+        addScript();
+      }
+    });
+
+    edit.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent evt){
+        int selectedIndex = list.getSelectedIndex();
+        editScript((Script)scriptsListModel.getElementAt(selectedIndex));
+      }
+    });
+
+    remove.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent evt){
+        int selectedIndex = list.getSelectedIndex();
+        deleteScript((Script)scriptsListModel.getElementAt(selectedIndex));
+
+        if (selectedIndex < scriptsListModel.getSize())
+          list.setSelectedIndex(selectedIndex);
+        else if (scriptsListModel.getSize() != 0)
+          list.setSelectedIndex(scriptsListModel.getSize() - 1);
+        else{
+          edit.setEnabled(false);
+          remove.setEnabled(false);
+          enabled.setEnabled(false);
+        }
+      }
+    });
+
+    enabled.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent evt){
+        int selectedIndex = list.getSelectedIndex();
+        Script script = (Script)scriptsListModel.getElementAt(selectedIndex);
+        scriptsListModel.removeElementAt(selectedIndex);
+        Script copy = script.createCopy();
+        copy.setEnabled(enabled.isSelected());
+        scriptsListModel.insertElementAt(copy, selectedIndex);
+        list.setSelectedIndex(selectedIndex);
+        fireStateChanged();
+      }
+    });
+
+    add.setMnemonic('A');
+    edit.setMnemonic('E');
+    remove.setMnemonic('R');
+    enabled.setMnemonic('n');
+
+    add.setDefaultCapable(false);
+    edit.setDefaultCapable(false);
+    remove.setDefaultCapable(false);
+
+    JPanel buttonsPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+    buttonsPanel.add(add);
+    buttonsPanel.add(edit);
+    buttonsPanel.add(remove);
+    buttonsPanel.setMaximumSize(buttonsPanel.getPreferredSize());
+
+    Box buttonsWrapper = Box.createVerticalBox();
+    buttonsWrapper.add(Box.createVerticalGlue());
+    buttonsWrapper.add(buttonsPanel);
+    buttonsWrapper.add(Box.createVerticalGlue());
+
+    add(listLabel, BorderLayout.NORTH);
+    add(scrollPane, BorderLayout.CENTER);
+    add(buttonsWrapper, BorderLayout.EAST);
+    add(enabled, BorderLayout.SOUTH);
+  }
+
+
+
+  /**
+   * Applies the changes made by the user.
+   */
+
+  public void applyChanges() throws BadChangesException{
+    Script [] oldScripts = scripter.getScripts();
+    Script [] newScripts = new Script[scriptsListModel.getSize()];
+    scriptsListModel.copyInto(newScripts);
+
+    for (int i = 0; i < oldScripts.length; i++){
+      Script script = oldScripts[i];
+      int index = Utilities.indexOf(newScripts, script);
+      if (index == -1) // This script was removed/edited
+        scripter.removeScript(script);
+      else
+        newScripts[index] = null;
+    }
+
+    for (int i = 0; i < newScripts.length; i++){
+      Script script = newScripts[i];
+      if (script != null)
+        scripter.addScript(script);
+    }
+  }
+
+
+
+
+  /**
+   * A dialog which queries the user about his choice of script type.
+   */
+
+  private class ScriptTypeSelectionDialog extends JDialog{
+
+
+    /**
+     * Text explaining the "commands" script type.
+     */
+
+    private static final String commandsText =
+      "Allows specifying a condition and a list of commands\n"+
+      "which will be sent to the server when the condition is met.\n"+
+      "This is the simplest script type and requires no previous\n"+
+      "knowledge of any programming/scripting languages.";
+
+
+
+    /**
+     * Text explaining the "beanshell" script type.
+     */
+
+    private static final String beanshellText =
+      "Allows specifying a BeanShell script which will be run\n"+
+      "when a certain event occurs. BeanShell is essentially a Java\n"+
+      "source interpreter with certain scripting features. BeanShell\n"+
+      "scripts are therefore simply small pieces of Java code that\n"+
+      "can be run without compiling. For more information about\n"+
+      "BeanShell see http://www.beanshell.org/. Use this script\n"+
+      "type if you have at least basic knowledge of Java.";
+
+
+
+    /**
+     * The currently chosen script type.
+     */
+
+    private String scriptType;
+
+
+
+    /**
+     * The listener that closes the dialog when the user cancels.
+     */
+
+     WindowDisposingListener closer = new WindowDisposingListener(this){
+      public void beforeDisposing(EventObject evt){
+        scriptType = null;
+      }
+    };
+
+
+
+    /**
+     * The constructor, duh.
+     */
+
+    public ScriptTypeSelectionDialog(Component parent){
+      super(AWTUtilities.frameForComponent(parent), "Choose script type", true);
+
+      setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+      KeyStroke closeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+      this.getRootPane().registerKeyboardAction(closer, closeKeyStroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+      addWindowListener(closer);
+
+      createUI();
+    }
+
+
+
+    /**
+     * Creates the user interface for this dialog.
+     */
+
+    private void createUI(){
+      JPanel content = new JPanel(new BorderLayout(10, 10));
+      setContentPane(content);
+      content.setBorder(new EmptyBorder(5, 5, 0, 5));
+
+      JRadioButton commands = new JRadioButton("Server Commands");
+      JRadioButton beanshell = new JRadioButton("BeanShell Script (Java)");
+
+      commands.setActionCommand("commands");
+      beanshell.setActionCommand("beanshell");
+
+      commands.setMnemonic('S');
+      beanshell.setMnemonic('B');
+
+      final ButtonGroup buttonGroup = new ButtonGroup();
+      buttonGroup.add(commands);
+      buttonGroup.add(beanshell);
+
+      JPanel boxesPanel = new JPanel(new GridLayout(2, 1));
+      boxesPanel.add(commands);
+      boxesPanel.add(beanshell);
+
+      final JTextArea typeExplanationTextArea = new FixedJTextArea(){
+        public boolean isFocusTraversable(){return false;}
+      };
+      typeExplanationTextArea.setPreferredSize(new Dimension(370, 150));
+      typeExplanationTextArea.setFont(new Font("Serif", Font.PLAIN, 16));
+      typeExplanationTextArea.setEditable(false);
+      typeExplanationTextArea.setOpaque(false);
+
+      ActionListener selectionListener = new ActionListener(){
+        public void actionPerformed(ActionEvent evt){
+          ButtonModel selectedModel = buttonGroup.getSelection();
+          scriptType = selectedModel.getActionCommand();
+
+          String text = null;
+          if ("commands".equals(scriptType))
+            text = commandsText;
+          else if ("beanshell".equals(scriptType))
+            text = beanshellText;
+
+          typeExplanationTextArea.setText(text);
+        }
+      };
+
+      commands.addActionListener(selectionListener);
+      beanshell.addActionListener(selectionListener);
+
+      JButton next = new JButton("Next");
+      JButton cancel = new JButton("Cancel");
+
+      JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      buttonsPanel.add(next);
+      buttonsPanel.add(cancel);
+
+      next.addActionListener(new WindowDisposingListener(this));
+      cancel.addActionListener(closer);
+
+      content.add(boxesPanel, BorderLayout.NORTH);
+      content.add(typeExplanationTextArea, BorderLayout.CENTER);
+      content.add(buttonsPanel, BorderLayout.SOUTH);
+
+      this.getRootPane().setDefaultButton(next);
+    }
+
+
+
+
+    /**
+     * Displays the dialog, waits for the user to make his selection. Returns
+     * the selected script type or <code>null</code> if none.
+     */
+
+    public String askScriptType(){
+      this.setVisible(true);
+      return scriptType;
+    }
+
+  }
+
+}

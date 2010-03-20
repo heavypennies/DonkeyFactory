@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board
+END
+ChessclubBoardManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/ChessclubBoardManager.java
+END
+WoodenBoardPainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/WoodenBoardPainter.java
+END
+ChessclubVectorPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/ChessclubVectorPiecePainter.java
+END
+Dyche3PiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/Dyche3PiecePainter.java
+END
+ChessclubBoardPanel.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/ChessclubBoardPanel.java
+END
+Dyche2PiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/Dyche2PiecePainter.java
+END
+Dyche1PiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/Dyche1PiecePainter.java
+END
+ChessclubJBoard.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/ChessclubJBoard.java
+END
+BookupPiecePainter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/DonkeyFactory/!svn/ver/1/src/free/jin/chessclub/board/BookupPiecePainter.java
+END

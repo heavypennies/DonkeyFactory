@@ -1,0 +1,31 @@
+  BeanShell is a Java source interpreter, meaning that beanshell scripts are
+essentially pieces of Java code. BeanShell, however, also has scripting features
+which extend (or break, depends on how you feel) the Java language. This means,
+for example, that you don't have to declare the type of a variable when you use
+it. You can also hold different types of objects in the same variable at
+different times. You can find a complete description of the BeanShell language
+at http://www.beanshell.org/docs.html.
+
+  Your code doesn't start running in a blank environment - you already have a
+bunch of useful variables and methods defined which you can use. The most useful
+is the sendCommand(String) method which simply sends the specified string to the
+server. You can also use various variables whose exact identity and values are
+determined by the type and subtype of the event that your script is running on.
+A list of the "built-in" methods and variables is available at
+http://www.jinchess.com/docs/scripter/
+
+  An interesting property of how your BeanShell scripts are executed is that
+they are stateful - they keep their state between separate runs of the same
+script. Let's look at the following user invoked script, for example:
+
+if (start)
+  var = 0;
+else
+  var++;
+
+sendCommand("tell fishbait "+var);
+
+When you first run it, you can pass true as the value for start and false on
+consecutive executions. Each time you execute it, the value of var will be
+increased and fishbait will receive tells with "0", "1", "2" etc. (which might
+annoy him quite a bit, so I recommend trying it on yourself instead ;-)).

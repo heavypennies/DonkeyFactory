@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins
+END
+ChessclubSoughtGraphPlugin.properties
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubSoughtGraphPlugin.properties
+END
+ChessclubScripter.properties
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubScripter.properties
+END
+ChessclubBoardManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubBoardManager.properties
+END
+ChessclubConsoleManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubConsoleManager.properties
+END
+FreechessScripter.properties
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessScripter.properties
+END
+FreechessBoardManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessBoardManager.properties
+END
+FreechessConsoleManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessConsoleManager.properties
+END
+ChessclubGameLogger.properties
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubGameLogger.properties
+END
+FreechessGameLogger.properties
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessGameLogger.properties
+END
+ChessclubSoundManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/ChessclubSoundManager.properties
+END
+FreechessSoughtGraphPlugin.properties
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessSoughtGraphPlugin.properties
+END
+FreechessSoundManager.properties
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/DonkeyFactory/!svn/ver/1/src/free/jin/resources/plugins/FreechessSoundManager.properties
+END

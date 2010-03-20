@@ -1,0 +1,32 @@
+/* $Id$ */
+
+package chess.engine.search;
+
+/**
+ * @author Joshua Levine <jlevine@theladders.com>
+ * @version $Revision$ $Name$ $Date$
+ */
+public class SearchStats
+{
+  public int nodes;
+  public int evals;
+  public int quiescenceHashHits;
+  public int searchHashHits;
+  public double time;
+
+  public String toString()
+  {
+    return "n: " + nodes + ", e: " + evals + ", qHH: " + quiescenceHashHits + ", sHH: " + searchHashHits + ", t: " + time + ", E/S: " + (int)((double)evals / time)  + ", N/S: " + (int)((double)nodes / time);
+  }
+
+
+  public void reset()
+  {
+    nodes = 0;
+    evals = 0;
+    quiescenceHashHits = 0;
+    searchHashHits = 0;
+    time = 0;
+  }
+}
+

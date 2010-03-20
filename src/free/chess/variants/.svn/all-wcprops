@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/DonkeyFactory/!svn/ver/1/src/free/chess/variants
+END
+NoCastlingVariant.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/DonkeyFactory/!svn/ver/1/src/free/chess/variants/NoCastlingVariant.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/DonkeyFactory/!svn/ver/1/src/free/chess/variants/package.html
+END
+BothSidesCastlingVariant.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/DonkeyFactory/!svn/ver/1/src/free/chess/variants/BothSidesCastlingVariant.java
+END
