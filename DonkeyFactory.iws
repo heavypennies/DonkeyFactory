@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project relativePaths="false" version="4">
+<project version="4">
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
     <option name="markExternalChangeAsUpToDate" value="true" />
@@ -28,200 +28,15 @@
     <option name="USE_USER_FILTER" value="false" />
     <option name="USER" value="" />
   </component>
-  <component name="ChangeListManager">
-    <list default="true" readonly="true" name="Default" comment="Updates - who knows if it works better or worse.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/bot/CommandEvent.java" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/CommandEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/ColorChooserButton.java" afterPath="$PROJECT_DIR$/src/free/util/swing/ColorChooserButton.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/audio/JavaxSampledAudioPlayer.java" afterPath="$PROJECT_DIR$/src/free/util/audio/JavaxSampledAudioPlayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/art/XBoardPiecePainter.java" afterPath="$PROJECT_DIR$/src/free/chess/art/XBoardPiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/ChessclubJinListenerManager.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/ChessclubJinListenerManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/seek/event/SeekSelectionEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/seek/event/SeekSelectionEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche1PiecePainter.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche1PiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/JinFocusManager.java" afterPath="$PROJECT_DIR$/src/free/jin/JinFocusManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/ConsoleTextPane.java" afterPath="$PROJECT_DIR$/src/free/jin/console/ConsoleTextPane.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/gamelogger/GameLogger.java" afterPath="$PROJECT_DIR$/src/free/jin/gamelogger/GameLogger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Square.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Square.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/fischerrandom/FischerRandom.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/fischerrandom/FischerRandom.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/ScriptDialog.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/ScriptDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/PipedInputStream.java" afterPath="$PROJECT_DIR$/src/free/util/PipedInputStream.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Nand.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Nand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/MoveStruct.java" afterPath="$PROJECT_DIR$/src/free/chessclub/MoveStruct.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/ServerSpecificUserFileFilter.java" afterPath="$PROJECT_DIR$/src/free/jin/ServerSpecificUserFileFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Not.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Not.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/BoardEvaluator.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/BoardEvaluator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/plugin/PluginContext.java" afterPath="$PROJECT_DIR$/src/free/jin/plugin/PluginContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/BeanShellScript.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/BeanShellScript.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/EqualToInteger.java" afterPath="$PROJECT_DIR$/src/free/util/bool/EqualToInteger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/And.java" afterPath="$PROJECT_DIR$/src/free/util/bool/And.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/UrlDisplayingAction.java" afterPath="$PROJECT_DIR$/src/free/util/swing/UrlDisplayingAction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Position.java" afterPath="$PROJECT_DIR$/src/free/chess/Position.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/BasicJinListenerManager.java" afterPath="$PROJECT_DIR$/src/free/jin/event/BasicJinListenerManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/UserInvokedScriptMenuItem.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/UserInvokedScriptMenuItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/event/CircleEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/event/CircleEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/BoardFlipEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/BoardFlipEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/UnaryBooleanConditional.java" afterPath="$PROJECT_DIR$/src/free/util/bool/UnaryBooleanConditional.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/chess/engine/search/PawnWingScorer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/StandardLoginDialog.java" afterPath="$PROJECT_DIR$/src/free/jin/StandardLoginDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Move.java" afterPath="$PROJECT_DIR$/src/free/chess/Move.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/event/ChessEventEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/event/ChessEventEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/BackgroundChooser.java" afterPath="$PROJECT_DIR$/src/free/util/swing/BackgroundChooser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/board/ChessclubBoardPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/board/ChessclubBoardPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/IllegalMoveEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/IllegalMoveEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/audio/JDK1_2AudioPlayer.java" afterPath="$PROJECT_DIR$/src/free/util/audio/JDK1_2AudioPlayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/ImagePiecePainter.java" afterPath="$PROJECT_DIR$/src/free/chess/ImagePiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/BoardPreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/board/BoardPreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/kriegspiel/KriegspielMove.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/kriegspiel/KriegspielMove.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/JinChessclubConnection.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/JinChessclubConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Move.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Move.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/ChatEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/ChatEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/MateEvaluator.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/MateEvaluator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/LookAndFeelMenu.java" afterPath="$PROJECT_DIR$/src/free/util/swing/LookAndFeelMenu.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/True.java" afterPath="$PROJECT_DIR$/src/free/util/bool/True.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/TableLayout.java" afterPath="$PROJECT_DIR$/src/free/util/TableLayout.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/JChessClock.java" afterPath="$PROJECT_DIR$/src/free/chess/JChessClock.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/atomic/Atomic.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/atomic/Atomic.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/GameEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/GameEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/GameListTableModel.java" afterPath="$PROJECT_DIR$/src/free/jin/console/GameListTableModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/Jin.java" afterPath="$PROJECT_DIR$/src/free/jin/Jin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/BiggerThanOrEqualToInteger.java" afterPath="$PROJECT_DIR$/src/free/util/bool/BiggerThanOrEqualToInteger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/InternalFrameSwitcher.java" afterPath="$PROJECT_DIR$/src/free/jin/InternalFrameSwitcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/CommandScript.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/CommandScript.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/event/ArrowEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/event/ArrowEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/GameListTable.java" afterPath="$PROJECT_DIR$/src/free/jin/console/GameListTable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/BinaryIntegerConditional.java" afterPath="$PROJECT_DIR$/src/free/util/bool/BinaryIntegerConditional.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/FriendsEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/FriendsEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/PlainTextDialog.java" afterPath="$PROJECT_DIR$/src/free/util/swing/PlainTextDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/ConsoleTextField.java" afterPath="$PROJECT_DIR$/src/free/jin/console/ConsoleTextField.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/gamelogger/GameLoggerPreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/gamelogger/GameLoggerPreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/GameEndEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/GameEndEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/giveaway/Giveaway.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/giveaway/Giveaway.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/TextStyleChooserPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/console/TextStyleChooserPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/PlayerManagingConnection.java" afterPath="$PROJECT_DIR$/src/free/chessclub/PlayerManagingConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/WindowDisposingListener.java" afterPath="$PROJECT_DIR$/src/free/util/WindowDisposingListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/freechess/scripter/FreechessScripter.java" afterPath="$PROJECT_DIR$/src/free/jin/freechess/scripter/FreechessScripter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/bot/SimpleCommandHandler.java" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/SimpleCommandHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/bot/AbstractCommandHandler.java" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/AbstractCommandHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/workarounds/FixUtils.java" afterPath="$PROJECT_DIR$/src/free/workarounds/FixUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/art/ProxyPiecePainter.java" afterPath="$PROJECT_DIR$/src/free/chess/art/ProxyPiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/PipedStreams.java" afterPath="$PROJECT_DIR$/src/free/util/PipedStreams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/BiggerThanInteger.java" afterPath="$PROJECT_DIR$/src/free/util/bool/BiggerThanInteger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/ChesslikeGenericVariant.java" afterPath="$PROJECT_DIR$/src/free/chess/ChesslikeGenericVariant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/shuffleboth/ShuffleBoth.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/shuffleboth/ShuffleBoth.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/ExtensionFileFilter.java" afterPath="$PROJECT_DIR$/src/free/util/swing/ExtensionFileFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/JinRootPane.java" afterPath="$PROJECT_DIR$/src/free/jin/JinRootPane.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/Link.java" afterPath="$PROJECT_DIR$/src/free/jin/console/Link.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/Console.java" afterPath="$PROJECT_DIR$/src/free/jin/console/Console.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Xor.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Xor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Chess.java" afterPath="$PROJECT_DIR$/src/free/chess/Chess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/JinFrameMenuBar.java" afterPath="$PROJECT_DIR$/src/free/jin/JinFrameMenuBar.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/ConsolePreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/console/ConsolePreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/IntegerStrictPlainDocument.java" afterPath="$PROJECT_DIR$/src/free/util/swing/IntegerStrictPlainDocument.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Player.java" afterPath="$PROJECT_DIR$/src/free/chess/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/PumpThread.java" afterPath="$PROJECT_DIR$/src/free/util/PumpThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/ExaminedGameButtonPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/board/ExaminedGameButtonPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/freechess/FreechessConnection.java" afterPath="$PROJECT_DIR$/src/free/freechess/FreechessConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/Pair.java" afterPath="$PROJECT_DIR$/src/free/util/Pair.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/PieceIcon.java" afterPath="$PROJECT_DIR$/src/free/chess/PieceIcon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/FlipBoardEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/FlipBoardEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/ConsoleManager.java" afterPath="$PROJECT_DIR$/src/free/jin/console/ConsoleManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/freechess/JinFreechessConnection.java" afterPath="$PROJECT_DIR$/src/free/jin/freechess/JinFreechessConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Constants.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Constants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/audio/SunAudioPlayer.java" afterPath="$PROJECT_DIR$/src/free/util/audio/SunAudioPlayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/ImageBoardPainter.java" afterPath="$PROJECT_DIR$/src/free/chess/ImageBoardPainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Piece.java" afterPath="$PROJECT_DIR$/src/free/chess/Piece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Xnor.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Xnor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/audio/AudioClip.java" afterPath="$PROJECT_DIR$/src/free/util/audio/AudioClip.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/ArrayEnumeration.java" afterPath="$PROJECT_DIR$/src/free/util/ArrayEnumeration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/PipedOutputStream.java" afterPath="$PROJECT_DIR$/src/free/util/PipedOutputStream.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/SmallerThanOrEqualToInteger.java" afterPath="$PROJECT_DIR$/src/free/util/bool/SmallerThanOrEqualToInteger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/SolidColorIcon.java" afterPath="$PROJECT_DIR$/src/free/util/swing/SolidColorIcon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/UserImageInternalFrame.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/UserImageInternalFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/plugin/BadChangesException.java" afterPath="$PROJECT_DIR$/src/free/jin/plugin/BadChangesException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/CommandsScriptDialog.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/CommandsScriptDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/ChessclubConnection.java" afterPath="$PROJECT_DIR$/src/free/chessclub/ChessclubConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/PlayedGameButtonPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/board/PlayedGameButtonPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/Scripter.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/Scripter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Identity.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Identity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/ExtensionFilenameFilter.java" afterPath="$PROJECT_DIR$/src/free/util/ExtensionFilenameFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/BoardPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/board/BoardPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/BoardManager.java" afterPath="$PROJECT_DIR$/src/free/jin/board/BoardManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/PositionChangedEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/PositionChangedEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/Command.java" afterPath="$PROJECT_DIR$/src/free/jin/console/Command.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/ImageUtilities.java" afterPath="$PROJECT_DIR$/src/free/util/ImageUtilities.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/FormatException.java" afterPath="$PROJECT_DIR$/src/free/util/FormatException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/MemoryFile.java" afterPath="$PROJECT_DIR$/src/free/util/MemoryFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/False.java" afterPath="$PROJECT_DIR$/src/free/util/bool/False.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Implies.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Implies.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/BinaryBooleanConditional.java" afterPath="$PROJECT_DIR$/src/free/util/bool/BinaryBooleanConditional.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/MoveMadeEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/MoveMadeEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/ServerChoiceDialog.java" afterPath="$PROJECT_DIR$/src/free/jin/ServerChoiceDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/JinFrame.java" afterPath="$PROJECT_DIR$/src/free/jin/JinFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/MultiOutputStream.java" afterPath="$PROJECT_DIR$/src/free/util/MultiOutputStream.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/BlockingQueue.java" afterPath="$PROJECT_DIR$/src/free/util/BlockingQueue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/Player.java" afterPath="$PROJECT_DIR$/src/free/chessclub/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/freechess/FreechessJinListenerManager.java" afterPath="$PROJECT_DIR$/src/free/jin/freechess/FreechessJinListenerManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/AdvancedJDesktopPane.java" afterPath="$PROJECT_DIR$/src/free/util/swing/AdvancedJDesktopPane.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/RawTelnet.java" afterPath="$PROJECT_DIR$/src/free/util/RawTelnet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/PieceChooser.java" afterPath="$PROJECT_DIR$/src/free/chess/PieceChooser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/SmallerThanInteger.java" afterPath="$PROJECT_DIR$/src/free/util/bool/SmallerThanInteger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/bool/Or.java" afterPath="$PROJECT_DIR$/src/free/util/bool/Or.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Board.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Board.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/ClockAdjustmentEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/ClockAdjustmentEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/scripter/ChessclubScripter.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/scripter/ChessclubScripter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/JBoard.java" afterPath="$PROJECT_DIR$/src/free/chess/JBoard.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/Script.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/Script.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/PlainTextEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/PlainTextEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/SafeRunnable.java" afterPath="$PROJECT_DIR$/src/free/util/SafeRunnable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/TakebackEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/TakebackEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/Connection.java" afterPath="$PROJECT_DIR$/src/free/util/Connection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/BeanProperties.java" afterPath="$PROJECT_DIR$/src/free/util/BeanProperties.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche2PiecePainter.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche2PiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/Struct.java" afterPath="$PROJECT_DIR$/src/free/util/Struct.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/plugin/PreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/plugin/PreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/JinBoard.java" afterPath="$PROJECT_DIR$/src/free/jin/board/JinBoard.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/console/ChannelConsolePreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/console/ChannelConsolePreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/ReaderThread.java" afterPath="$PROJECT_DIR$/src/free/chessclub/ReaderThread.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/GameListItem.java" afterPath="$PROJECT_DIR$/src/free/jin/GameListItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/seek/SoughtGraph.java" afterPath="$PROJECT_DIR$/src/free/jin/seek/SoughtGraph.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/LicenseDialog.java" afterPath="$PROJECT_DIR$/src/free/jin/LicenseDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/level2/Datagram.java" afterPath="$PROJECT_DIR$/src/free/chessclub/level2/Datagram.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/ChessEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/ChessEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/ChessPiece.java" afterPath="$PROJECT_DIR$/src/free/chess/ChessPiece.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/FontSelectorPanel.java" afterPath="$PROJECT_DIR$/src/free/util/swing/FontSelectorPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/ChessMove.java" afterPath="$PROJECT_DIR$/src/free/chess/ChessMove.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGenerationConstants.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGenerationConstants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/util/swing/SwingUtils.java" afterPath="$PROJECT_DIR$/src/free/util/swing/SwingUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/board/BookupPiecePainter.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/board/BookupPiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/GameListEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/GameListEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/board/event/UserMoveEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/board/event/UserMoveEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/Searcher.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/Searcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/sound/SoundManager.java" afterPath="$PROJECT_DIR$/src/free/jin/sound/SoundManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/SeekEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/SeekEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/kriegspiel/Kriegspiel.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/kriegspiel/Kriegspiel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/scripter/ScripterPreferencesPanel.java" afterPath="$PROJECT_DIR$/src/free/jin/scripter/ScripterPreferencesPanel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/variants/suicide/Suicide.java" afterPath="$PROJECT_DIR$/src/free/chess/variants/suicide/Suicide.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/event/ConnectionEvent.java" afterPath="$PROJECT_DIR$/src/free/jin/event/ConnectionEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/JinDesktopManager.java" afterPath="$PROJECT_DIR$/src/free/jin/JinDesktopManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chess/Square.java" afterPath="$PROJECT_DIR$/src/free/chess/Square.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche3PiecePainter.java" afterPath="$PROJECT_DIR$/src/free/jin/chessclub/board/Dyche3PiecePainter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/User.java" afterPath="$PROJECT_DIR$/src/free/jin/User.java" />
-    </list>
-    <list name="Failed commit: Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/chess/controller" afterPath="" />
-    </list>
-    <list name="ignore" comment="" />
+  <component name="ChangeListManager" verified="true">
+    <list default="true" readonly="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="Updates - who knows if it works better or worse." />
+    <list id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
+    <list id="3b10a3ad-2cd0-4b08-b5df-deb7fcf90fe8" name="ignore" comment="" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="Commander">
@@ -375,8 +190,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -393,12 +208,13 @@
       </PATH>
     </subPane>
   </component>
+  <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="SimpleEvaluator.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="42" selection-start="672" selection-end="672" vertical-scroll-proportion="0.009689922">
+            <state line="19" column="82" selection-start="435" selection-end="435" vertical-scroll-proportion="0.23391813">
               <folding />
             </state>
           </provider>
@@ -656,6 +472,11 @@
   </component>
   <component name="PerforceDirect.Settings">
     <option name="useNativeApi" value="true" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state />
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="true" id="Add" />
@@ -973,31 +794,57 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="0.16666667" version="1" splitterProportion="0.5">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
       <showMembers />
       <showModules />
       <showLibraryContents />
       <hideEmptyPackages ProjectPane="false" />
       <abbreviatePackageNames />
-      <showStructure PackagesPane="false" Scope="false" Favorites="false" ProjectPane="false" />
       <autoscrollToSource ProjectPane="true" />
       <autoscrollFromSource ProjectPane="true" />
       <sortByType />
     </navigator>
+    <panes>
+      <pane id="Favorites" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="cvs_file_history_treeOrder2" value="2" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="cvs_file_history_treeOrder2" value="2" />
     <property name="cvs_file_history_treeOrder1" value="1" />
     <property name="RunManagerConfig.showSettingsBeforeRunnig" value="true" />
     <property name="cvs_file_history_treeOrder3" value="3" />
-    <property name="MemberChooser.sorted" value="false" />
+    <property name="recentsLimit" value="5" />
     <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cvs_file_history_treeWidth0" value="375" />
     <property name="cvs_file_history_treeWidth1" value="375" />
     <property name="cvs_file_history_treeWidth2" value="375" />
@@ -1012,17 +859,17 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="RunManagerConfig.compileBeforeRunning" value="true" />
-    <property name="options.lastSelected" value="project.propCompiler" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="cvs_file_history_flatOrder2" value="2" />
     <property name="cvs_file_history_flatOrder3" value="3" />
     <property name="cvs_file_history_flatOrder0" value="0" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="cvs_file_history_flatOrder1" value="1" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GenerateAntBuildDialog.backupFiles" value="true" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -1040,6 +887,11 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
@@ -1052,8 +904,16 @@
       <option name="VM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
     </configuration>
-    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false" runner="emma">
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" runner="emma" />
+      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
@@ -1066,10 +926,15 @@
       <module name="" />
       <envs />
       <method>
-        <option name="Make" value="true" />
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false" runner="emma">
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" runner="emma" />
+      <extension name="snapshooter" />
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -1082,16 +947,20 @@
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="ADDITIONAL_CLASS_PATH" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="wholeProject" />
       </option>
       <envs />
       <method>
-        <option name="Make" value="true" />
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="Live DonkeyFactory" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
+    <configuration default="false" name="Live DonkeyFactory" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="free.chessclub.bot.Bot" />
       <option name="VM_PARAMETERS" value="-Xms256m -Xmx1024m" />
       <option name="PROGRAM_PARAMETERS" value="freechess.org 5000 donkeyfactory dexmab tarabas donkeyfactory n3r0song" />
@@ -1114,11 +983,11 @@
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
+      <method />
     </configuration>
-    <configuration default="false" name="IterativeSearchTest" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
+    <configuration default="false" name="IterativeSearchTest" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="chess.engine.search.IterativeSearchTest" />
       <option name="VM_PARAMETERS" value="-Xms256m -Xmx512m" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -1142,9 +1011,7 @@
       <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Profile " />
       <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
+      <method />
     </configuration>
     <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Application.Live DonkeyFactory" />
@@ -1180,11 +1047,6 @@
   <component name="StructuralSearchPlugin">
     <replaceConfiguration name="user defined" text="int index1 = index;&#10;int originalIndex1 = index1;&#10;moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);&#10;moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);&#10;moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);&#10;moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);&#10;index += index1 - originalIndex1;&#10;" recursive="false" caseInsensitive="true" reformatAccordingToStyle="true" shortenFQN="true" replacement="moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);&#10;moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);&#10;moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);&#10;moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);&#10;" history="1" />
   </component>
-  <component name="StructureViewFactory">
-    <option name="AUTOSCROLL_MODE" value="true" />
-    <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
-    <option name="ACTIVE_ACTIONS" value="" />
-  </component>
   <component name="Struts Assistant">
     <option name="showInputs" value="true" />
     <option name="resources">
@@ -1216,10 +1078,57 @@
     <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
     <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
     <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="DETECT_NESTED_COPIES" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <configuration useDefault="true">C:\Documents and Settings\jlevine\Application Data\Subversion</configuration>
     <upgradeMode>auto</upgradeMode>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
     <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
+          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\sounds" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
+          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\src" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
+          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\sounds" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
+          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\src" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <created>1269136412524</created>
+      <updated>1269136412524</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Failed commit: Default">
+      <changelist id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
+      <created>1269136400586</created>
+      <updated>1269136400586</updated>
+    </task>
+    <task id="LOCAL-00002" summary="ignore">
+      <changelist id="3b10a3ad-2cd0-4b08-b5df-deb7fcf90fe8" name="ignore" comment="" />
+      <created>1269136400586</created>
+      <updated>1269136400586</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1242,41 +1151,41 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1598" height="1170" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1604" height="1172" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="5" side_tool="false" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32672334" sideWeight="0.5" order="16" side_tool="false" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.08290155" sideWeight="0.6688868" order="1" side_tool="false" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31779256" sideWeight="0.5" order="1" side_tool="false" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4154863" sideWeight="0.5" order="4" side_tool="false" />
-      <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298279" sideWeight="0.5" order="8" side_tool="false" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="12" side_tool="false" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32402235" sideWeight="0.5" order="9" side_tool="false" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288719" sideWeight="0.5" order="7" side_tool="false" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.665392" order="1" side_tool="false" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="4" side_tool="false" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2091969" sideWeight="0.6688868" order="0" side_tool="false" />
-      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" />
-      <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="10" side_tool="false" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="2" side_tool="false" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" />
-      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="14" side_tool="false" />
-      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" />
-      <window_info id="SVN Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.5" order="15" side_tool="false" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" />
-      <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" />
-      <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" />
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="18" side_tool="false" />
-      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32668567" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32945737" sideWeight="0.6666667" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4154863" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288719" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.665392" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20865633" sideWeight="0.6666667" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298279" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="SVN Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31779256" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32402235" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
+      <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VCS.FileViewConfiguration">
@@ -1294,9 +1203,13 @@
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="LAST_COMMIT_MESSAGE" value="Updates - who knows if it works better or worse." />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
     <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
@@ -1480,87 +1393,44 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="42" selection-start="672" selection-end="672" vertical-scroll-proportion="0.009689922">
+        <state line="19" column="82" selection-start="435" selection-end="435" vertical-scroll-proportion="0.23391813">
           <folding />
         </state>
       </provider>
     </entry>
   </component>
   <component name="masterDetails">
-    <option name="states">
-      <map>
-        <entry key="Copyright.UI">
-          <value>
-            <UIState>
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl>
               <option name="proportions">
-                <SplitterProportionsDataImpl />
+                <list>
+                  <option value="0.2" />
+                </list>
               </option>
-            </UIState>
-          </value>
-        </entry>
-        <entry key="Errors.UI">
-          <value>
-            <UIState>
-              <option name="proportions">
-                <SplitterProportionsDataImpl />
-              </option>
-            </UIState>
-          </value>
-        </entry>
-        <entry key="ScopeChooserConfigurable.UI">
-          <value>
-            <UIState>
-              <option name="proportions">
-                <SplitterProportionsDataImpl>
-                  <option name="proportions">
-                    <list>
-                      <option value="0.2" />
-                    </list>
-                  </option>
-                </SplitterProportionsDataImpl>
-              </option>
-            </UIState>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="myStates">
-      <map>
-        <entry key="Copyright.UI">
-          <value>
-            <UIState>
-              <option name="proportions">
-                <SplitterProportionsDataImpl />
-              </option>
-            </UIState>
-          </value>
-        </entry>
-        <entry key="Errors.UI">
-          <value>
-            <UIState>
-              <option name="proportions">
-                <SplitterProportionsDataImpl />
-              </option>
-            </UIState>
-          </value>
-        </entry>
-        <entry key="ScopeChooserConfigurable.UI">
-          <value>
-            <UIState>
-              <option name="proportions">
-                <SplitterProportionsDataImpl>
-                  <option name="proportions">
-                    <list>
-                      <option value="0.2" />
-                    </list>
-                  </option>
-                </SplitterProportionsDataImpl>
-              </option>
-            </UIState>
-          </value>
-        </entry>
-      </map>
-    </option>
+            </SplitterProportionsDataImpl>
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+      <state key="Copyright.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+        </UIState>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <UIState>
+          <splitter-proportions>
+            <SplitterProportionsDataImpl />
+          </splitter-proportions>
+          <settings />
+        </UIState>
+      </state>
+    </states>
   </component>
 </project>
 
