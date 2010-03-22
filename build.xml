@@ -1,4 +1,4 @@
-<project name="Jin2" default="dist">
+<project name="DonkeyFactory FICS Bot" default="dist">
 
 	<property name="source.dir" value="src"/>
 	<property name="build.dir" value="build/"/>	
