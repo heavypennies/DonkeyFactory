@@ -1,2 +1,0 @@
-icc.server
-fics.server
