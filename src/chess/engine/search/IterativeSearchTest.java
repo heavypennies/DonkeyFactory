@@ -106,8 +106,10 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 
 //    Board searchBoard = new Board();
 
+/*
    Board searchBoard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
    searchBoard.turn = 1;
+*/
 
 /*
    Board searchBoard = new Board("rnbqkbnr/ppp1pppp/8/8/2pPP3/8/PP3PPP/RNBQKBNR");
@@ -238,12 +240,10 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.stats.blackCastleFlag = 1;
 */
     // can't see mate?
-/*
     Board searchBoard = new Board("4rrk1/3b1p1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R");
     searchBoard.turn = 0;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 2;
-*/
 /*
     Board searchBoard = new Board("8/p5kp/8/2p2K2/P7/8/1P3P2/8");
     searchBoard.turn = 0;

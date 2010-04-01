@@ -668,6 +668,13 @@ public class ABSearch implements Searcher
       }
 
 /*
+      if(Math.abs(score - scoreEstimate) > 100)
+      {
+        System.out.println("LE score vs. estimate [" + score + ", " + scoreEstimate + "]: +/-(* " + Math.abs(score - scoreEstimate) + ")\n" + board);
+      }
+*/
+
+/*
       stats.evals++;
       score = eval.scorePosition(board, alpha, beta);
 */
