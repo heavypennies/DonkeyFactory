@@ -18,7 +18,7 @@ public class Piece implements Cloneable, Comparable<Piece>
   public static final int QUEEN = 4;
   public static final int KING = 5;
 
-  public static int[] TYPE_VALUES = { 100, 300, 312, 500, 900, 0 };
+  public static int[] TYPE_VALUES = { 100, 311, 323, 500, 900, 0 };
   public static int[] MATERIAL_VALUES = { 1, 3, 3, 5, 9, 0 };
   public static int[] MASKS = { 1, 2, 4, 8, 16, 32 };
   public static boolean[][] TYPE_INDEX =
