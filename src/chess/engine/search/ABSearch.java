@@ -28,20 +28,19 @@ public class ABSearch implements Searcher
   private Move NULL_MOVE = new Move();
   private boolean running = false;
   private boolean inPawnEnding = false;
-  private static final int[] MARGIN = {
-          100,  200,  300,  500,  500,
-          900,  900, 1500, 1500, 1500,
-          2200, 2200, 2200, 2200, 2200,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000, 
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000,
-          3000, 3000, 3000, 3000, 3000
+  private static final int[] MARGIN = { 100,  200,  300,  500,  500,
+                                        900,  900, 1500, 1500, 1500,
+                                        2200, 2200, 2200, 2200, 2200,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000,
+                                        3000, 3000, 3000, 3000, 3000
   };
 
 
@@ -73,6 +72,7 @@ public class ABSearch implements Searcher
 
   private Move[] killer1 = Move.createMoves(100);
   private Move[] killer2 = Move.createMoves(100);
+  private Move[] killer3 = Move.createMoves(100);
   private boolean[] inCheck = new boolean[100];
   private int checks = 0;
 
@@ -98,9 +98,17 @@ public class ABSearch implements Searcher
       moveLists[i] = Move.createMoves(100);
       pv[i] = Move.createMoves(100);
     }
-
   }
 
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////// ROOT SEARCH /////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
 
   public final int search(Board board, int depth)
   {
@@ -113,7 +121,7 @@ public class ABSearch implements Searcher
 
     ply = 0;
     inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
-    int score = abSearch(-MATE, MATE, depth, board, true);
+    int score = rootSearch(-MATE, MATE, depth, board);
 
     long time = System.currentTimeMillis() - start;
 
@@ -125,7 +133,272 @@ public class ABSearch implements Searcher
   }
 
 
-  public final int abSearch(int alpha, int beta, int depth, Board board, boolean doNull)
+  public final int rootSearch(int alpha, int beta, int depth, Board board)
+  {
+    if (done)
+    {
+      return -INFINITY;
+    }
+
+    if (depth < 1)
+    {
+      return quiescenceSearch(alpha, beta, board);
+    }
+
+    stats.nodes++;
+
+    boolean whiteToMove = board.turn == 1;
+
+    // Hash Probe
+    boolean mateThreat = false;
+    PositionHashtable.HashEntry hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
+
+    if(hashEntry != null)
+    {
+      mateThreat = hashEntry.mateThreat;
+      stats.softHashHits++;
+    }
+    else
+    {
+      stats.hashMisses++;
+      // IID
+/*
+      if (depth > 2)
+      {
+        int score = abSearch(alpha, beta, depth - 2, board, doNull);
+        if(depth < 3 && alpha > score + MARGIN[depth])
+        {
+          stats.reductions++;
+          depth--;
+        }
+      }
+*/
+    }
+
+    int score;
+
+    boolean pvFound = false;
+    Move[] moveList = moveLists[ply];
+    int movesGenerated;
+//    moveGeneration.setHashEntry(hashEntry);
+    if (inCheck[ply])
+    {
+      movesGenerated = moveGeneration.generateEvasions(moveList, board);
+    }
+    else
+    {
+      movesGenerated = moveGeneration.generateMoves(moveList, board);
+    }
+
+    Move move;
+    for (int i = 0; i < movesGenerated; i++)
+    {
+      move = moveList[i];
+
+      if (hashEntry != null && move.matches(hashEntry.move))
+      {
+        move.score = INFINITY;
+      }
+/*
+      else if(move.matches(killer1[ply]))
+      {
+        move.score = INFINITY - 1;
+      }
+      else if(move.matches(killer1[ply + 2]))
+      {
+        move.score = INFINITY - 3;
+      }
+      else if(move.matches(killer2[ply]))
+      {
+        move.score = INFINITY - 30000;
+      }
+      else if(move.matches(killer2[ply + 2]))
+      {
+        move.score = INFINITY - 30002;
+      }
+*/
+      else if(move.taken != null)
+      {
+        int swap = swap(board, move);
+        if(swap <= -100)
+        {
+          move.score += board.moveHistory[move.moved.type][move.toSquare.index64] - 40000;
+        }
+      }
+      else if(move.promoteTo != -1)
+      {
+        if(swap(board, move) <= -100)
+        {
+          move.score += board.moveHistory[move.moved.type][move.toSquare.index64] - 50000;
+        }
+      }
+      else
+      {
+        move.score += Math.min(board.moveHistory[move.moved.type][move.toSquare.index64], 8000);
+      }
+    }
+
+    ////////////////////////////////////////////////////////
+    //////////////// LOOP THROUGH ALL MOVES ////////////////
+    ////////////////////////////////////////////////////////
+    int moveCount = 0;
+
+    for (int moveIndex = 0; moveIndex < movesGenerated; moveIndex++)
+    {
+      Move.nextMove(moveList, moveIndex);
+      move = moveList[moveIndex];
+
+//      System.out.print("Root: " + move + "("+move.score+")");
+
+      // make the move
+      board.make(move);
+
+      // unmake if we are in check
+      if (board.isSquareCheckedByColor(!whiteToMove ?
+                                       board.blackKing.square :
+                                       board.whiteKing.square, board.turn))
+      {
+        board.unmake(move);
+        continue;
+      }
+
+      currentLine[ply].reset(move);
+      currentLine[ply + 1].moved = null;
+
+      // if no check, count this move, and then recurse
+      moveCount++;
+
+      ply++;
+      pv[ply][ply].moved = null;
+
+      int extend = 0;
+      inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
+      if (searchExtensions < MAX_EXTENSIONS && extensions[move.fromSquare.index64][move.toSquare.index64] == 0)
+      {
+        // Extend Check
+        if (inCheck[ply])
+        {
+          extend++;
+          stats.checkExtensions++;
+        }
+        // Extend mate threat from null-move
+        else if(mateThreat)
+        {
+          extend++;
+        }
+        // Extend promotion
+        else if(move.promoteTo == Piece.QUEEN || (move.moved.type == Piece.PAWN && (move.toSquare.rank == 6 || move.toSquare.rank == 1)))
+        {
+          extend++;
+          stats.promotionExtensions++;
+        }
+      }
+
+      extensions[move.fromSquare.index64][move.toSquare.index64]+=extend;
+      searchExtensions += extend;
+
+      if(!pvFound)
+      {
+        score = -abSearch(-beta, -alpha, (depth - 1) + extend, board);
+      }
+      else
+      {
+        score = -zwSearch(-alpha, (depth - 1) + extend, board, true, true);
+        if (score > alpha && score < beta)
+        {
+          score = -abSearch(-beta, -alpha, (depth - 1) + extend, board);
+        }
+      }
+
+//      System.out.println(" s:("+score+")");
+
+      extensions[move.fromSquare.index64][move.toSquare.index64]-=extend;
+      searchExtensions -= extend;
+      extend = 0;
+
+/*
+      if(ply == 1)
+      {
+        System.err.println("S: " + score + " O: " + move.score + " Moves: " + move + " " + Move.toString(pv[ply+1],1));
+      }
+*/
+
+
+      ply--;
+      currentLine[ply].check = move.check = inCheck[ply+1];
+
+      // unmake move
+      board.unmake(move);
+
+      if (score > alpha && !done)
+      {
+        if (move.taken == null && move.promoteTo == -1)
+        {
+          killer2[ply].reset(move);
+        }
+
+        move.score = score;
+        pv[ply][ply].reset(move);
+
+        int t = ply + 1;
+        pv[ply][t].reset(pv[ply + 1][t]);
+        while (pv[ply + 1][t++].moved != null)
+        {
+          pv[ply][t].reset(pv[ply + 1][t]);
+        }
+
+        System.err.println("depth: " + depth + " -> pv: " + Move.toString(pv[ply]));
+
+        alpha = score;
+      }
+      else
+      {
+//        board.moveHistory[move.moved.type][move.toSquare.index64]--;
+      }
+      pvFound = true;
+    }
+
+    ////////////////////////////////////////////////////////
+    //////////////// TEST FOR MATE OR DRAW /////////////////
+    ////////////////////////////////////////////////////////
+
+    if (!done)
+    {
+      if (moveCount == 0)
+      {
+        if (inCheck[ply])
+        {
+          alpha = -MATE + ply;
+        }
+        else
+        {
+          alpha = 0;
+        }
+        pv[ply][ply].reset(NULL_MOVE);
+        abHashtable.putEntry(depth, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+      }
+      else
+      {
+        abHashtable.putEntry(depth, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+      }
+      pv[ply][ply].score = alpha;
+    }
+
+    return alpha;
+  }
+
+
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  /////////////////// AB SEARCH //////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+
+  public final int abSearch(int alpha, int beta, int depth, Board board)
   {
     if (done)
     {
@@ -174,11 +447,11 @@ public class ABSearch implements Searcher
 
     if(hashEntry != null)
     {
-      if(hashEntry.depth >= depth && ply > 0)
+      if(hashEntry.depth >= depth)
       {
         switch (hashEntry.type)
         {
-          case PositionHashtable.UPPER_BOUND:
+          case PositionHashtable.LOWER_BOUND:
           {
             if (hashEntry.score >= beta)
             {
@@ -187,7 +460,7 @@ public class ABSearch implements Searcher
             }
             break;
           }
-          case PositionHashtable.LOWER_BOUND:
+          case PositionHashtable.UPPER_BOUND:
           {
             if (hashEntry.score <= alpha)
             {
@@ -211,18 +484,6 @@ public class ABSearch implements Searcher
     else
     {
       stats.hashMisses++;
-      // IID
-/*
-      if (depth > 2)
-      {
-        int score = abSearch(alpha, beta, depth - 2, board, doNull);
-        if(depth < 3 && alpha > score + MARGIN[depth])
-        {
-          stats.reductions++;
-          depth--;
-        }
-      }
-*/
     }
 
     int score;
@@ -234,43 +495,10 @@ public class ABSearch implements Searcher
       inPawnEnding = true;
       searchExtensions += 3;
       stats.endgameExtensions++;
-      score = abSearch(alpha, beta, depth + 3, board, false);
-      abHashtable.putEntry(depth + 3, pv[ply][ply].moved == null ? PositionHashtable.LOWER_BOUND : PositionHashtable.EXACT_VALUE, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+      score = abSearch(alpha, beta, depth + 3, board);
       searchExtensions -= 3;
       inPawnEnding = false;
       return score;
-    }
-
-    // Null Move
-    if (doNull && ply > 0 && !inCheck[ply] && !mateThreat && board.stats.originalMaterial > 5 && depth > 1)
-    {
-//      long oldHashKey = whiteToMove ? board.hash1 : ~board.hash1;
-      int nullMoveReducation = depth > 6 && board.stats.originalMaterial > 8 ?
-                               2 :
-                               1;
-
-      board.moveIndex++;
-      board.turn ^= 1;
-      board.repetitionTable[board.moveIndex] = 1;
-      ply++;
-      inCheck[ply] = false;
-      score = -abSearch(-beta, 1-beta, (depth - nullMoveReducation) - 1, board, false);
-      ply--;
-      board.turn ^= 1;
-      board.repetitionTable[board.moveIndex] = whiteToMove ? board.hash1 : ~board.hash1;
-      board.moveIndex--;
-
-      if (score < -MATE + 300)
-      {
-        mateThreat = true;
-        //depth++;
-      }
-      if (score >= beta)
-      {
-        abHashtable.putEntry(depth, PositionHashtable.UPPER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
-        pv[ply][ply].moved = null;
-        return score;
-      }
     }
 
     boolean pvFound = false;
@@ -284,6 +512,16 @@ public class ABSearch implements Searcher
     else
     {
       movesGenerated = moveGeneration.generateMoves(moveList, board);
+    }
+
+    if(hashEntry == null || (hashEntry != null && hashEntry.move == NULL_MOVE))
+    {
+      // IID
+      if (depth > 2)
+      {
+        abSearch(-alpha, -beta, depth - 2, board);
+      }
+      hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
 
     Move move;
@@ -303,10 +541,6 @@ public class ABSearch implements Searcher
       {
         move.score = INFINITY - 2;
       }
-      else if(move.matches(killer1[ply + 2]))
-      {
-        move.score = INFINITY - 3;
-      }
       else if(move.matches(killer2[ply]))
       {
         move.score = INFINITY - 30000;
@@ -315,13 +549,23 @@ public class ABSearch implements Searcher
       {
         move.score = INFINITY - 30001;
       }
-      else if(move.matches(killer2[ply + 2]))
+      else if(move.taken != null)
       {
-        move.score = INFINITY - 30002;
+        if(move.score - 40000 <= 0 && swap(board, move) <= -100)
+        {
+          move.score -= 40000;
+        }
       }
-      else if(move.taken == null && move.promoteTo == -1)
+      else if(move.promoteTo != -1)
       {
-        move.score += Math.min(board.moveHistory[move.fromSquare.index64][move.toSquare.index64], 8000);
+        if(swap(board, move) <= -100)
+        {
+          move.score -= 50000;
+        }
+      }
+      else
+      {
+        move.score += Math.min(board.moveHistory[move.moved.type][move.toSquare.index64], 8000);
       }
     }
 
@@ -404,32 +648,35 @@ public class ABSearch implements Searcher
           extend++;
         }
         // Extend promotion
-        else if(move.promoteTo == Piece.QUEEN || (move.moved.type == Piece.PAWN && (move.toSquare.rank == 6 || move.toSquare.rank == 1)))
+        else if(move.promoteTo == Piece.QUEEN  || (move.moved.type == Piece.PAWN && (move.toSquare.rank == 6 || move.toSquare.rank == 1)))
         {
           extend++;
           stats.promotionExtensions++;
         }
       }
 
-      if(ply > 0 &&
-         !inCheck[ply] &&
+      if(!inCheck[ply] &&
          !inCheck[ply-1] &&
          extend == 0 &&
+         depth < 4 && 
+         move.moved.type != Piece.PAWN &&
          move.taken == null &&
          move.promoteTo != Piece.QUEEN &&
          alpha > mateDistance &&
          moveCount > 2 * depth &&
-         board.moveHistory[move.fromSquare.index64][move.toSquare.index64] <= 0)
+         board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)
       {
         int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
         if(alpha > scoreEstimate + MARGIN[depth])
         {
-//        String line = Move.toString(currentLine);
-//        System.err.println("Prune " + move + " [" + -abSearch(-MATE, MATE, (depth - 1) + extend, board, doNull) + "] : " + line);
-          ply--;
-          stats.prunes++;
-          board.unmake(move);
-          continue;
+/*
+          String line = Move.toString(currentLine);
+          System.err.println("Prune " + move + " [" + -abSearch(-MATE, MATE, (depth - 1) + extend, board) + "] : " + line);
+*/
+
+          stats.reductions++;
+          searchExtensions--;
+          extend--;
         }
       }
 
@@ -455,15 +702,15 @@ public class ABSearch implements Searcher
 
       if(!pvFound)
       {
-        score = -abSearch(-beta, -alpha, (depth - 1) + extend, board, doNull);
+        score = -abSearch(-beta, -alpha, (depth - 1) + extend, board);
       }
       else
       {
 
-        score = -abSearch(-alpha - 1, -alpha, (depth - 1) + extend, board, doNull);
+        score = -zwSearch(-alpha, (depth - 1) + extend, board, true, true);
         if (score > alpha && score < beta)
         {
-          score = -abSearch(-beta, -alpha, (depth - 1) + extend, board, doNull);
+          score = -abSearch(-beta, -alpha, (depth - 1) + extend, board);
         }
       }
       extensions[move.fromSquare.index64][move.toSquare.index64]-=extend;
@@ -488,7 +735,7 @@ public class ABSearch implements Searcher
       {
         if (score >= beta)
         {
-          abHashtable.putEntry(depth, PositionHashtable.UPPER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
+          abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
 
           if (score > MATE - 300)
           {
@@ -498,18 +745,12 @@ public class ABSearch implements Searcher
           {
             killer2[ply].reset(move);
           }
-          board.moveHistory[move.fromSquare.index64][move.toSquare.index64]++;
+          board.moveHistory[move.moved.type][move.toSquare.index64]++;
 
           return score;
         }
 
-        if (move.taken == null && move.promoteTo == -1)
-        {
-          killer2[ply].reset(move);
-        }
-
-        pvFound = true;
-        move.score = score;
+//        move.score = score;
         pv[ply][ply].reset(move);
 
         int t = ply + 1;
@@ -519,14 +760,13 @@ public class ABSearch implements Searcher
           pv[ply][t].reset(pv[ply + 1][t]);
         }
 
-        if(ply == 0) System.err.println("depth: " + depth + " -> pv: " + Move.toString(pv[ply]));
-
         alpha = score;
       }
       else
       {
-        board.moveHistory[move.fromSquare.index64][move.toSquare.index64]--;
+        board.moveHistory[move.moved.type][move.toSquare.index64]--;
       }
+      pvFound = true;
     }
 
     ////////////////////////////////////////////////////////
@@ -548,16 +788,400 @@ public class ABSearch implements Searcher
         pv[ply][ply].reset(NULL_MOVE);
         abHashtable.putEntry(depth, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
       }
-      else if (!pvFound)
-      {
-        pv[ply][ply].moved = null;
-        abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, alpha, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
-      }
       else
       {
         abHashtable.putEntry(depth, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
       }
       pv[ply][ply].score = alpha;
+    }
+
+    return alpha;
+  }
+
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  /////////////////// ZW SEARCH //////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+
+  public final int zwSearch(int beta, int depth, Board board, boolean doNull, boolean cut)
+  {
+    int alpha = beta-1;
+    if (done)
+    {
+      return -INFINITY;
+    }
+
+    if (depth < 1)
+    {
+      return quiescenceSearch(alpha, beta, board);
+    }
+
+
+    stats.nodes++;
+    stats.zwNodes++;
+
+    boolean whiteToMove = board.turn == 1;
+    if (ply > 0 && board.isApproachingDraw())
+    {
+      pv[ply][ply].moved = null;
+      return 0;
+    }
+
+
+    // make quicker mates better
+    int mateDistance = MATE - ply;
+    if (beta > mateDistance)
+    {
+      beta = mateDistance;
+      if (alpha >= mateDistance)
+      {
+        pv[ply][ply].moved = null;
+        return mateDistance;
+      }
+    }
+    mateDistance = -MATE + ply;
+    if(alpha < mateDistance) {
+       alpha = mateDistance;
+       if(mateDistance >= beta)
+       {
+         pv[ply][ply].moved = null;
+         return mateDistance;
+       }
+    }
+
+    // Hash Probe
+    boolean mateThreat = false;
+    PositionHashtable.HashEntry hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
+
+    if(hashEntry != null)
+    {
+      if(hashEntry.depth >= depth)
+      {
+        switch (hashEntry.type)
+        {
+          case PositionHashtable.LOWER_BOUND:
+          {
+            if (hashEntry.score >= beta)
+            {
+              stats.hardHashHits++;
+              return hashEntry.score;
+            }
+            break;
+          }
+          case PositionHashtable.UPPER_BOUND:
+          {
+            if (hashEntry.score <= alpha)
+            {
+              stats.hardHashHits++;
+              return hashEntry.score;
+            }
+            break;
+          }
+          case PositionHashtable.EXACT_VALUE:
+          {
+            stats.hardHashHits++;
+            return hashEntry.score;
+          }
+        }
+      }
+      mateThreat = hashEntry.mateThreat;
+      stats.softHashHits++;
+    }
+    else
+    {
+      stats.hashMisses++;
+    }
+
+    int score;
+
+    // Null Move
+    if (doNull && ply > 0 && !inCheck[ply] && !mateThreat && board.stats.originalMaterial > 5 && depth > 1)
+    {
+//      long oldHashKey = whiteToMove ? board.hash1 : ~board.hash1;
+      int nullMoveReducation = depth > 6 && board.stats.originalMaterial > 8 ?
+                               3 :
+                               2;
+
+      board.moveIndex++;
+      board.turn ^= 1;
+      board.repetitionTable[board.moveIndex] = 1;
+      ply++;
+      inCheck[ply] = false;
+      score = -zwSearch(1-beta, (depth - nullMoveReducation) - 1, board, false, true);
+      ply--;
+      board.turn ^= 1;
+      board.repetitionTable[board.moveIndex] = whiteToMove ? board.hash1 : ~board.hash1;
+      board.moveIndex--;
+
+      if (score < -MATE + 300)
+      {
+        mateThreat = true;
+        //depth++;
+      }
+      if (score >= beta)
+      {
+        abHashtable.putEntry(depth - nullMoveReducation, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
+        pv[ply][ply].moved = null;
+        return score;
+      }
+    }
+
+    // Pawn Ending Extension
+    if((board.allPieces ^ (board.whiteKing.square.mask_on | board.blackKing.square.mask_on | board.pieceBoards[0][Piece.PAWN] | board.pieceBoards[1][Piece.PAWN])) == 0 && !inPawnEnding  &&
+       board.stats.originalMaterial > 0)
+    {
+      inPawnEnding = true;
+      searchExtensions += 3;
+      stats.endgameExtensions++;
+      score = zwSearch(1-beta, depth + 3, board, doNull, true);
+      searchExtensions -= 3;
+      inPawnEnding = false;
+      return score;
+    }
+
+    Move[] moveList = moveLists[ply];
+    int movesGenerated;
+//    moveGeneration.setHashEntry(hashEntry);
+    if (inCheck[ply])
+    {
+      movesGenerated = moveGeneration.generateEvasions(moveList, board);
+    }
+    else
+    {
+      movesGenerated = moveGeneration.generateMoves(moveList, board);
+    }
+
+    if(cut && (hashEntry == null || (hashEntry != null && hashEntry.move == NULL_MOVE)))
+    {
+      // IID
+      if (depth > 2)
+      {
+        abSearch(-beta, 1 - beta, depth - 2, board);
+      }
+      hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
+    }
+
+    Move move;
+    for (int i = 0; i < movesGenerated; i++)
+    {
+      move = moveList[i];
+
+      if (hashEntry != null && move.matches(hashEntry.move))
+      {
+        move.score = INFINITY;
+      }
+      else if(move.matches(killer1[ply]))
+      {
+        move.score = INFINITY - 1;
+      }
+      else if(ply > 1 && move.matches(killer1[ply - 2]))
+      {
+        move.score = INFINITY - 2;
+      }
+      else if(move.matches(killer2[ply]))
+      {
+        move.score = INFINITY - 40000;
+      }
+      else if(ply > 1 && move.matches(killer2[ply - 2]))
+      {
+        move.score = INFINITY - 40001;
+      }
+      else if(move.matches(killer3[ply]))
+      {
+        move.score = INFINITY - 45000;
+      }
+      else if(move.taken != null)
+      {
+        if(move.score - 40000 <= 0 && swap(board, move) <= -100)
+        {
+          move.score -= 40000;
+        }
+      }
+      else if(move.promoteTo != -1)
+      {
+        if(swap(board, move) <= -100)
+        {
+          move.score -= 50000;
+        }
+      }
+      else
+      {
+        move.score += Math.min(board.moveHistory[move.moved.type][move.toSquare.index64], 8000);
+      }
+    }
+
+    ////////////////////////////////////////////////////////
+    //////////////// LOOP THROUGH ALL MOVES ////////////////
+    ////////////////////////////////////////////////////////
+    int moveCount = 0;
+
+    for (int moveIndex = 0; moveIndex < movesGenerated; moveIndex++)
+    {
+      Move.nextMove(moveList, moveIndex);
+      move = moveList[moveIndex];
+
+      // make the move
+      board.make(move);
+
+      // unmake if we are in check
+      if (board.isSquareCheckedByColor(!whiteToMove ?
+                                       board.blackKing.square :
+                                       board.whiteKing.square, board.turn))
+      {
+        board.unmake(move);
+        continue;
+      }
+
+      currentLine[ply].reset(move);
+      currentLine[ply + 1].moved = null;
+
+      // if no check, count this move, and then recurse
+      moveCount++;
+
+      ply++;
+      pv[ply][ply].moved = null;
+      int extend = 0;
+      inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
+      if (searchExtensions < MAX_EXTENSIONS && extensions[move.fromSquare.index64][move.toSquare.index64] == 0)
+      {
+        // Extend Check
+        if (inCheck[ply])
+        {
+          extend++;
+          stats.checkExtensions++;
+        }
+        // Extend recapture
+        else if(ply > 1 && move.taken != null &&
+                           currentLine[ply - 2].taken != null &&
+                           (move.toSquare == currentLine[ply - 2].takenSquare) &&
+                           move.taken.materialValue >= -currentLine[ply - 2].taken.materialValue)
+
+        {
+          extend++;
+          stats.recaptureExtensions++;
+        }
+        // Extend mate threat from null-move
+        else if(mateThreat)
+        {
+          extend++;
+        }
+        // Extend promotion
+        else if(move.promoteTo == Piece.QUEEN || (move.moved.type == Piece.PAWN && (move.toSquare.rank == 6 || move.toSquare.rank == 1)))
+        {
+          extend++;
+          stats.promotionExtensions++;
+        }
+      }
+
+      if(!inCheck[ply] &&
+         !inCheck[ply-1] &&
+         extend == 0 &&
+         move.taken == null &&
+         move.moved.type != Piece.PAWN &&
+         alpha > mateDistance &&
+         moveCount > 2 * depth &&
+         board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)
+      {
+        int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
+        if(alpha > scoreEstimate + MARGIN[depth])
+        {
+//        String line = Move.toString(currentLine);
+//        System.err.println("Prune " + move + " [" + -abSearch(-MATE, MATE, (depth - 1) + extend, board, doNull) + "] : " + line);
+          ply--;
+          stats.prunes++;
+          board.unmake(move);
+          continue;
+        }
+      }
+
+      int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
+      if(!inCheck[ply] &&
+         move.moved.type != Piece.PAWN &&
+         extend == 0 &&
+         !mateThreat &&
+         alpha > scoreEstimate + MARGIN[depth] &&
+         move.score <= 0 &&
+         depth < 4)
+      {
+        stats.reductions++;
+        searchExtensions--;
+        extend--;
+      }
+
+      extensions[move.fromSquare.index64][move.toSquare.index64]+=extend;
+      searchExtensions += extend;
+
+      score = -zwSearch(1-beta, (depth - 1) + extend, board, doNull, !cut);
+      extensions[move.fromSquare.index64][move.toSquare.index64]-=extend;
+      searchExtensions -= extend;
+      extend = 0;
+
+/*
+      if(ply == 1)
+      {
+        System.err.println("S: " + score + " O: " + move.score + " Moves: " + move + " " + Move.toString(pv[ply+1],1));
+      }
+*/
+
+
+      ply--;
+      currentLine[ply].check = move.check = inCheck[ply+1];
+
+      // unmake move
+      board.unmake(move);
+
+      if (score >= beta)
+      {
+        abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
+
+        if (score > MATE - 300)
+        {
+          killer1[ply].reset(move);
+        }
+        else if (move.taken == null && move.promoteTo == -1)
+        {
+          killer2[ply].reset(move);
+        }
+        return score;
+      }
+
+/*
+      if (move.taken == null && move.promoteTo == -1)
+      {
+        killer2[ply].reset(move);
+      }
+*/
+    }
+
+    ////////////////////////////////////////////////////////
+    //////////////// TEST FOR MATE OR DRAW /////////////////
+    ////////////////////////////////////////////////////////
+
+    if (!done)
+    {
+      if (moveCount == 0)
+      {
+        if (inCheck[ply])
+        {
+          alpha = -MATE + ply;
+        }
+        else
+        {
+          alpha = 0;
+        }
+        pv[ply][ply].reset(NULL_MOVE);
+        abHashtable.putEntry(depth, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+      }
+      else
+      {
+        pv[ply][ply].moved = null;
+        abHashtable.putEntry(depth, PositionHashtable.UPPER_BOUND, alpha, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
+      }
     }
 
     return alpha;
@@ -582,6 +1206,7 @@ public class ABSearch implements Searcher
       return -INFINITY;
     }
     stats.nodes++;
+    stats.qNodes++;
 
     int score = alpha;
 
@@ -604,7 +1229,8 @@ public class ABSearch implements Searcher
       }
     }
     mateDistance = -MATE + ply;
-    if(alpha < mateDistance) {
+    if(alpha < mateDistance)
+    {
        alpha = mateDistance;
        if(mateDistance >= beta)
        {
@@ -619,7 +1245,7 @@ public class ABSearch implements Searcher
       stats.qHashHits++;
       switch (hashEntry.type)
       {
-        case PositionHashtable.UPPER_BOUND:
+        case PositionHashtable.LOWER_BOUND:
         {
           if (hashEntry.score >= beta)
           {
@@ -627,7 +1253,7 @@ public class ABSearch implements Searcher
           }
           break;
         }
-        case PositionHashtable.LOWER_BOUND:
+        case PositionHashtable.UPPER_BOUND:
         {
           if (hashEntry.score <= alpha)
           {
@@ -655,8 +1281,9 @@ public class ABSearch implements Searcher
 
     if(!inCheck[ply])
     {
+/*
       int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
-      if(alpha > scoreEstimate + MARGIN[3])
+      if(false && alpha > scoreEstimate + MARGIN[3])
       {
         stats.lazyEvals++;
         score = scoreEstimate;
@@ -666,6 +1293,7 @@ public class ABSearch implements Searcher
         stats.evals++;
         score = eval.scorePosition(board, alpha, beta);
       }
+*/
 
 /*
       if(Math.abs(score - scoreEstimate) > 100)
@@ -674,10 +1302,8 @@ public class ABSearch implements Searcher
       }
 */
 
-/*
       stats.evals++;
       score = eval.scorePosition(board, alpha, beta);
-*/
 
 
       if (score > alpha)
@@ -685,7 +1311,7 @@ public class ABSearch implements Searcher
         if (score >= beta)
         {
 //        if(debug) System.err.println("QSearch Initial Cut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
-          abHashtable.putEntry(-100, PositionHashtable.UPPER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
+          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
           return score;
         }
         alpha = score;
@@ -744,7 +1370,7 @@ public class ABSearch implements Searcher
         if (score >= beta)
         {
 //          if(debug) System.err.println("QSearch BCut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
-          abHashtable.putEntry(-100, PositionHashtable.UPPER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
           pv[ply][ply].moved = null;
           return score;
         }
@@ -769,7 +1395,7 @@ public class ABSearch implements Searcher
     }
 
 //    if(debug) System.out.println("QSearch Return(" + (whiteToMove ? alpha : -alpha)+ "): " + Move.toString(currentLine));
-    abHashtable.putEntry(-100, !foundScore ? PositionHashtable.LOWER_BOUND : PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+    abHashtable.putEntry(-100, !foundScore ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
 
     return alpha;
   }

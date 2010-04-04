@@ -12,6 +12,8 @@ public class SearchStats
 
   public double time;
   public int nodes;
+  public int zwNodes;
+  public int qNodes;
   public int evals;
   public int lazyEvals;
 
@@ -33,7 +35,7 @@ public class SearchStats
   public String toString()
   {
     return " T: " + pad(time,8) + "  E/S: " + pad((int)((double)evals / time),8)  + "  N/S: " + pad((int)((double)nodes / time),8) +
-           "\nSearch      |   N: " + pad(nodes,8) + "    E: " + pad(evals,8) +
+           "\nSearch      |   N: " + pad(nodes,8) + "    E: " + pad(evals,8) + "  ZWN: " + pad(zwNodes,8) + "   QN: " + pad(qNodes,8) +
            "\nHash        | HHH: " + pad(hardHashHits,8) + "  SHH: " + pad(softHashHits, 8) + "  QHH: " + pad(qHashHits, 8) + "  Miss: " + pad(hashMisses,8) +
            "\nExtensions  |  EX: " + pad(endgameExtensions, 8) + "   PX: " + pad(promotionExtensions, 8) + "   CX: " + pad(checkExtensions, 8) + "   DCX: " + pad(doubleCheckExtensions, 8) + "   RX: " + pad(recaptureExtensions, 8) +
            "\nReductions  |  LE: " + pad(lazyEvals, 8) + "    R: " + pad(reductions, 8) + "    P: " + pad(prunes, 8);

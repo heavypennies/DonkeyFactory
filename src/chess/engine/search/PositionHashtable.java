@@ -10,11 +10,11 @@ import chess.engine.model.Move;
  */
 public class PositionHashtable
 {
-  public static final int UPPER_BOUND = 1;
-  public static final int LOWER_BOUND = 0;
+  public static final int UPPER_BOUND = 0;
+  public static final int LOWER_BOUND = 1;
   public static final int EXACT_VALUE = 2;
 
-  public static int HASH_SIZE = (int)1L<<17;
+  public static int HASH_SIZE = (int)1L<<18;
   public static int HASH_MASK = HASH_SIZE - 1;
 
   public static class HashEntry

@@ -1592,21 +1592,20 @@ public class MoveGeneration implements MoveGenerationConstants {
   public long getAllAttackers(Board board, Square square, int color) {
     long attackers = 0;
     Square attackerSquare;
-    for (long bishopAttacker = attackVectors[color][Piece.BISHOP][square.index64] & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
-         bishopAttacker != 0;
-         bishopAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(bishopAttacker);
-      attackerSquare = Board.SQUARES[squareIndex];
+    long candidateAttackers = 0;
+    for (candidateAttackers = attackVectors[color][Piece.BISHOP][square.index64] & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
+         candidateAttackers != 0;
+         candidateAttackers ^= attackerSquare.mask_on) {
+      attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
       if (((board.allPieces ^ (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
     }
 
-    for (long rookAttacker = attackVectors[color][Piece.ROOK][square.index64] & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
-         rookAttacker != 0;
-         rookAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(rookAttacker);
-      attackerSquare = Board.SQUARES[squareIndex];
+    for (candidateAttackers = attackVectors[color][Piece.ROOK][square.index64] & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
+         candidateAttackers != 0;
+         candidateAttackers ^= attackerSquare.mask_on) {
+      attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
       if (((board.allPieces ^ (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
