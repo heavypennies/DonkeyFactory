@@ -818,11 +818,13 @@ public class Board
     return index;
   }
 
+  static final long debruijn64 = 0x07EDD5E59A4E28C2L;
+
 
   // Get the index of a set bit
   public static int getLeastSignificantBit(long board)
   {
-
+//    return index64[(int)(((board & -board) * debruijn64) >>> 58)];
 /*
     int fold = ((int) (board ^ (board - 1))) ^ ((int) ((board ^ (board - 1)) >>> 32));
     return lsz64_tbl[(fold * 0x78291ACF) >>> (32 - 6)];
@@ -842,6 +844,34 @@ public class Board
     }
     return (MoveGeneration.first_one[(int)(board & 65535)]);
   }
+
+
+  private static final int[] index64 = {
+     63,  0, 58,  1, 59, 47, 53,  2,
+     60, 39, 48, 27, 54, 33, 42,  3,
+     61, 51, 37, 40, 49, 18, 28, 20,
+     55, 30, 34, 11, 43, 14, 22,  4,
+     62, 57, 46, 52, 38, 26, 32, 41,
+     50, 36, 17, 19, 29, 10, 13, 21,
+     56, 45, 25, 31, 35, 16,  9, 12,
+     44, 24, 15,  8, 23,  7,  6,  5
+  };
+
+  /**
+   * bitScanForward
+   * @author Charles E. Leiserson
+   *         Harald Prokop
+   *         Keith H. Randall
+   * "Using de Bruijn Sequences to Index a 1 in a Computer Word"
+   * @param bb bitboard to scan
+   * @precondition bb != 0
+   * @return index (0..63) of least significant one bit
+   */
+  int bitScanForward(long bb) {
+     assert (bb != 0);
+     return index64[(int)((bb & -bb) * debruijn64) >>> 58];
+  }
+
 
   public static int[] lsz64_tbl = {
           63, 30, 3, 32, 59, 14, 11, 33,

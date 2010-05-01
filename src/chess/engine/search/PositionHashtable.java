@@ -79,7 +79,7 @@ public class PositionHashtable
 
     HashEntry depthFirstEntry = DEPTH_FIRST_HASH[index];
 
-    if(depth > depthFirstEntry.depth || depthFirstEntry.hash == 0 || (type > depthFirstEntry.type && depthFirstEntry.hash == boardHash))
+    if(depth > depthFirstEntry.depth || depthFirstEntry.hash == 0 || (depth == depthFirstEntry.depth && type > depthFirstEntry.type && depthFirstEntry.hash == boardHash))
     {
       depthFirstEntry.hash = boardHash;
       depthFirstEntry.depth = depth;

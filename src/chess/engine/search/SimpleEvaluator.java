@@ -24,7 +24,7 @@ public class SimpleEvaluator implements BoardEvaluator
   private static int TRADE_WHEN_UP_PAWNS_VALUE = 30;
 
   // Opening values
-  private static int DEVELOPMENT_VALUE = 6;
+  private static int DEVELOPMENT_VALUE = 7;
   private static int PIECE_DOUBLE_MOVE_VALUE = 2;
   private static int QUEEN_TOO_EARLY_VALUE = 16;
 
@@ -1892,12 +1892,12 @@ public class SimpleEvaluator implements BoardEvaluator
         if(!board.isSquareAttackedByColor(square, defenderColor))
         {
           // undefended square in the staging area
-          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 1;
+          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 2;
         }
         else
         {
           // defended square in the staging area
-          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 2;
+          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 3;
           defendedSquareCount++;
         }
       }
@@ -1912,7 +1912,7 @@ public class SimpleEvaluator implements BoardEvaluator
 */
       }
     }
-    squares = KING_PAWN_AREA[defenderColor][kingSquare.index64];
+    squares = KING_PAWN_AREA[defenderColor][kingSquare.index64] | KING_TINY_AREA[defenderColor][kingSquare.index64];
 
     while(squares != 0)
     {
@@ -1939,38 +1939,6 @@ public class SimpleEvaluator implements BoardEvaluator
         if(piece == null || piece.color != defenderColor)
         {
           safeSquareCount ++;
-        }
-      }
-    }
-
-    squares = KING_TINY_AREA[defenderColor][kingSquare.index64];
-
-    while(squares != 0)
-    {
-      square = Board.SQUARES[Board.getLeastSignificantBit(squares)];
-      squares &= square.mask_off;
-
-      attackers = moveGeneration.getAllAttackers(board, square, attackerColor);
-      if((attackers) != 0)
-      {
-        if(!board.isSquareAttackedByColor(square, defenderColor) && (attackers & (attackers-1)) != 0)
-        {
-          // undefended square next to or behind the king
-          undefendedScore += scoreAttacksToSquare(board, attackers, attackerColor);
-        }
-        else
-        {
-          // defended square next to or behind the king
-          adjacentScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 1;
-          defendedSquareCount++;
-        }
-      }
-      else
-      {
-        Piece piece = board.boardSquares[square.index128].piece;
-        if(piece == null || piece.color != defenderColor)
-        {
-          safeSquareCount++;
         }
       }
     }
@@ -2042,9 +2010,9 @@ public class SimpleEvaluator implements BoardEvaluator
     int pieces = (pawns + minors + rooks + king);
     int piecesAndQueens = pieces + queens;
     int pawnValue = 10 * (pawns * piecesAndQueens);
-    int minorValue = 30 * (minors * piecesAndQueens);
-    int rookValue = 50 * (rooks * piecesAndQueens);
-    int queenValue = 90 * (queens * pieces);
+    int minorValue = 33 * (minors * piecesAndQueens);
+    int rookValue = 60 * (rooks * piecesAndQueens);
+    int queenValue = 104 * (queens * pieces);
 
     return (pawns * pawnValue) + (minors * minorValue) + (rooks * rookValue) + (queens * queenValue) + king;
   }

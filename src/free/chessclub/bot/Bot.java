@@ -359,11 +359,11 @@ public class Bot extends JinFreechessConnection implements GameListener {
                   movedType = pv[i].moved.type;
                 }
               }
-              if(pv[i].taken == null)
+              else if(pv[i].taken == null)
               {
                 complexity += 1;
               }
-              if(!pv[i].check)
+              else if(!pv[i].check)
               {
                 complexity += 1;
               }
@@ -375,7 +375,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
             {
               complexity += 1;
             }
-            if(movedType2 != pv[i].moved.type)
+            else if(movedType2 != pv[i].moved.type)
             {
               complexity  += 1;
               movedType2 = pv[i].moved.type;
