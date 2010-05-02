@@ -342,7 +342,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
         int color = pv[0].moved.color;
         int movedType = pv[0].moved.type;
         int movedType2 = pv[1].moved.type;
-        int complexity = -Math.abs(eval.scorePosition(gameBoard,0,0)) / 500;
+        int complexity = -Math.abs(eval.scorePosition(gameBoard,0,0)) / 900;
         System.err.println("MatePV: " + Move.toString(pv));
 
         for(int i = 0;i < 100 && pv[i].moved != null;i++)

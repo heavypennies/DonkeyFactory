@@ -682,9 +682,8 @@ public class ABSearch implements Searcher
          !inCheck[ply-1] &&
          extend == 0 &&
          depth < 4 &&
-         move.moved.type != Piece.PAWN &&
+         (move.moved.type != Piece.QUEEN) &&
          move.taken == null &&
-         move.promoteTo != Piece.QUEEN &&
          alpha > mateDistance &&
          moveCount > 2 * depth &&
          board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)
@@ -692,12 +691,16 @@ public class ABSearch implements Searcher
         int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
         if(alpha > scoreEstimate + MARGIN[depth])
         {
-/*
-          String line = Move.toString(currentLine);
-          System.err.println("Prune " + move + " [" + -abSearch(-MATE, MATE, (depth - 1) + extend, board) + "] : " + line);
-*/
 
-
+          if(depth < 3)
+          {
+            ply--;
+            stats.prunes++;
+            board.unmake(move);
+            continue;
+          }
+//        String line = Move.toString(currentLine);
+//        System.err.println("Prune " + move + " [" + -abSearch(-MATE, MATE, (depth - 1) + extend, board, doNull) + "] : " + line);
           stats.reductions++;
           searchExtensions--;
           extend--;
@@ -1086,7 +1089,8 @@ public class ABSearch implements Searcher
          !inCheck[ply-1] &&
          extend == 0 &&
          move.taken == null &&
-         move.moved.type != Piece.PAWN &&
+         (move.moved.type != Piece.QUEEN) &&
+         depth < 4 &&
          alpha > mateDistance &&
          moveCount > 2 * depth &&
          board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)

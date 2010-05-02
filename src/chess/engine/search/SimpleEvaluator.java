@@ -26,7 +26,7 @@ public class SimpleEvaluator implements BoardEvaluator
   // Opening values
   private static int DEVELOPMENT_VALUE = 7;
   private static int PIECE_DOUBLE_MOVE_VALUE = 2;
-  private static int QUEEN_TOO_EARLY_VALUE = 16;
+  private static int QUEEN_TOO_EARLY_VALUE = 13;
 
   // Pawn values
   private static int[] WHITE_PASSED_PAWN_VALUES = new int[]{0,  7, 14, 40, 90, 140, 260, 650};
@@ -1277,6 +1277,7 @@ public class SimpleEvaluator implements BoardEvaluator
       if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 + 8].mask_on) != 0)
       {
         pawnHashEntry.pawnFlags.lockedFiles |= FILES[pawnSquare.file];
+        whitePawnScore -= whitePawnValueTable[pawnSquareIndex];
         //if(DEBUG)System.err.println("    Locked File");
 //        continue;
       }
@@ -1381,6 +1382,7 @@ public class SimpleEvaluator implements BoardEvaluator
       if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 - 8].mask_on) != 0)
       {
         pawnHashEntry.pawnFlags.lockedFiles |= FILES[pawnSquare.file];
+        blackPawnScore -= blackPawnValueTable[pawnSquareIndex];
         //if(DEBUG)System.err.println("    Locked File");
 //        continue;
       }
@@ -1854,7 +1856,7 @@ public class SimpleEvaluator implements BoardEvaluator
         }
       }
     }
-    return 4 * pawnScore * PIECE_VALUE_TABLES[0][Piece.KING][kingSquare.index64];
+    return 5 * pawnScore * PIECE_VALUE_TABLES[0][Piece.KING][kingSquare.index64];
   }
 
   /**
@@ -1892,12 +1894,12 @@ public class SimpleEvaluator implements BoardEvaluator
         if(!board.isSquareAttackedByColor(square, defenderColor))
         {
           // undefended square in the staging area
-          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 2;
+          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 1;
         }
         else
         {
           // defended square in the staging area
-          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 3;
+          stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 2;
           defendedSquareCount++;
         }
       }
@@ -1922,10 +1924,10 @@ public class SimpleEvaluator implements BoardEvaluator
       attackers = moveGeneration.getAllAttackers(board, square, attackerColor);
       if(attackers != 0)
       {
-        if(!board.isSquareAttackedByColor(square, defenderColor) && (attackers & (attackers-1)) != 0)
+        if(!board.isSquareAttackedByColor(square, defenderColor))
         {
           // undefended square in the pawn area
-          undefendedScore += scoreAttacksToSquare(board, attackers, attackerColor);
+          undefendedScore += scoreAttacksToSquare(board, attackers, attackerColor) >> (attackers & (attackers-1)) != 0 ? 0 : 1;
         }
         else
         {

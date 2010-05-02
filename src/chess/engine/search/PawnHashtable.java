@@ -9,10 +9,6 @@ import chess.engine.model.Board;
  * Time: 9:38:11 PM
  */
 public class PawnHashtable {
-  public static int UPPER_BOUND = 0;
-  public static int LOWER_BOUND = 1;
-  public static int EXACT_VALUE = 2;
-
   private static int HASH_SIZE = PositionHashtable.HASH_SIZE;
   private static int HASH_MASK = HASH_SIZE - 1;
 
