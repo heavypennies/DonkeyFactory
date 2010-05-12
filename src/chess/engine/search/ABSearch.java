@@ -516,7 +516,7 @@ public class ABSearch implements Searcher
       board.repetitionTable[board.moveIndex] = 1;
       ply++;
       inCheck[ply] = false;
-      score = -abSearch(-beta, 1-beta, (depth - nullMoveReducation) - 1, board, false);
+      score = -zwSearch(1-beta, (depth - nullMoveReducation) - 1, board, false, true);
       ply--;
       board.turn ^= 1;
       board.repetitionTable[board.moveIndex] = whiteToMove ? board.hash1 : ~board.hash1;
@@ -910,7 +910,7 @@ public class ABSearch implements Searcher
     int score;
 
     // Pawn Ending Extension
-    if(false && (board.allPieces ^ (board.whiteKing.square.mask_on | board.blackKing.square.mask_on | board.pieceBoards[0][Piece.PAWN] | board.pieceBoards[1][Piece.PAWN])) == 0 && !inPawnEnding  &&
+    if((board.allPieces ^ (board.whiteKing.square.mask_on | board.blackKing.square.mask_on | board.pieceBoards[0][Piece.PAWN] | board.pieceBoards[1][Piece.PAWN])) == 0 && !inPawnEnding  &&
        board.stats.originalMaterial > 0)
     {
       inPawnEnding = true;
@@ -936,7 +936,7 @@ public class ABSearch implements Searcher
       board.repetitionTable[board.moveIndex] = 1;
       ply++;
       inCheck[ply] = false;
-      score = -zwSearch(-alpha, (depth - nullMoveReducation) - 1, board, false, true);
+      score = -zwSearch(1-beta, (depth - nullMoveReducation) - 1, board, false, true);
       ply--;
       board.turn ^= 1;
       board.repetitionTable[board.moveIndex] = whiteToMove ? board.hash1 : ~board.hash1;

@@ -1710,7 +1710,7 @@ public class SimpleEvaluator implements BoardEvaluator
       }
       else
       {
-        kingsidePawnShelter = pawnShelter+1;
+        kingsidePawnShelter = pawnShelter+20;
       }
 
       if(board.stats.whiteQueensideRookMoves == 0)
@@ -1719,7 +1719,7 @@ public class SimpleEvaluator implements BoardEvaluator
       }
       else
       {
-        queensidePawnShelter = pawnShelter+1;
+        queensidePawnShelter = pawnShelter+20;
       }
 
       pawnShelter = (kingsidePawnShelter + queensidePawnShelter + pawnShelter) / 3;
@@ -1765,7 +1765,7 @@ public class SimpleEvaluator implements BoardEvaluator
       }
       else
       {
-        kingsidePawnShelter = pawnShelter + 1;
+        kingsidePawnShelter = pawnShelter + 20;
       }
 
       if(board.stats.blackQueensideRookMoves == 0)
@@ -1774,7 +1774,7 @@ public class SimpleEvaluator implements BoardEvaluator
       }
       else
       {
-        queensidePawnShelter = pawnShelter + 1;
+        queensidePawnShelter = pawnShelter + 20;
       }
 
       pawnShelter = (kingsidePawnShelter + queensidePawnShelter + pawnShelter) / 3;

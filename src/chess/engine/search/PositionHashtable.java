@@ -10,9 +10,9 @@ import chess.engine.model.Move;
  */
 public class PositionHashtable
 {
-  public static final int UPPER_BOUND = 0;
-  public static final int LOWER_BOUND = 1;
-  public static final int EXACT_VALUE = 2;
+  public static final byte UPPER_BOUND = 0;
+  public static final byte LOWER_BOUND = 1;
+  public static final byte EXACT_VALUE = 2;
 
   public static int HASH_SIZE = (int)1L<<18;
   public static int HASH_MASK = HASH_SIZE - 1;
@@ -22,7 +22,7 @@ public class PositionHashtable
 
     public int depth;
     public long hash = 0;
-    public int type = -1;
+    public byte type = -1;
     public int score = 0;
     public Move move = new Move();
     public boolean mateThreat;
@@ -73,7 +73,7 @@ public class PositionHashtable
     return null;
   }
 
-  public void putEntry(int depth, int type, int score, long boardHash, Move move, boolean mateThreat)
+  public void putEntry(int depth, byte type, int score, long boardHash, Move move, boolean mateThreat)
   {
     int index = (int)(boardHash & HASH_MASK);
 
