@@ -29,8 +29,7 @@ public class ABSearch implements Searcher
   private Move NULL_MOVE = new Move();
   private boolean running = false;
   private boolean inPawnEnding = false;
-  private static final int[] MARGIN = { 100,  200,  300,  500,  500,
-                                        900,  900, 1500, 1500, 1500,
+  private static final int[] MARGIN = {   25,   50,  100,  200,  300,  500,  500, 900,  900, 1500, 1500, 1500,
                                         2200, 2200, 2200, 2200, 2200,
                                         3000, 3000, 3000, 3000, 3000,
                                         3000, 3000, 3000, 3000, 3000,
@@ -678,21 +677,13 @@ public class ABSearch implements Searcher
         }
       }
 
-      if(REDUCE && !inCheck[ply] &&
-         !inCheck[ply-1] &&
-         extend == 0 &&
-         depth < 4 &&
-         (move.moved.type != Piece.QUEEN) &&
-         move.taken == null &&
-         alpha > mateDistance &&
-         moveCount > 2 * depth &&
-         board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)
+      if(canBeReducedOrPruned(depth, board, alpha, mateDistance, move, moveCount, extend))
       {
         int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
         if(alpha > scoreEstimate + MARGIN[depth])
         {
 
-          if(depth < 3)
+          if(depth < 2)
           {
             ply--;
             stats.prunes++;
@@ -972,7 +963,7 @@ public class ABSearch implements Searcher
       // IID
       if (depth > 2)
       {
-        zwSearch(-alpha, depth - 2, board, false, true);
+        zwSearch(-alpha, depth - 2, board, false, false);
       }
       hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
@@ -1085,21 +1076,13 @@ public class ABSearch implements Searcher
         }
       }
 
-      if(REDUCE && !inCheck[ply] &&
-         !inCheck[ply-1] &&
-         extend == 0 &&
-         move.taken == null &&
-         (move.moved.type != Piece.QUEEN) &&
-         depth < 4 &&
-         alpha > mateDistance &&
-         moveCount > 2 * depth &&
-         board.moveHistory[move.moved.type][move.toSquare.index64] <= 0)
+      if(canBeReducedOrPruned(depth, board, alpha, mateDistance, move, moveCount, extend))
       {
         int scoreEstimate = (board.materialScore + board.positionScore) * (whiteToMove ? 1 : -1);
         if(alpha > scoreEstimate + MARGIN[depth])
         {
 
-          if(depth < 3)
+          if(depth < 2)
           {
             ply--;
             stats.prunes++;
@@ -1195,6 +1178,20 @@ public class ABSearch implements Searcher
     return alpha;
   }
 
+  private boolean canBeReducedOrPruned(int depth, Board board, int alpha, int mateDistance, Move move, int moveCount, int extend)
+  {
+    return REDUCE &&
+       !inCheck[ply] &&
+       !inCheck[ply-1] &&
+       extend == 0 &&
+       move.taken == null &&
+       (move.moved.type != Piece.QUEEN) &&
+       depth < 4 &&
+       alpha > mateDistance &&
+       moveCount > 2 * depth &&
+       board.moveHistory[move.moved.type][move.toSquare.index64] <= 0;
+  }
+
   ////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////
@@ -1257,6 +1254,8 @@ public class ABSearch implements Searcher
         {
           if (hashEntry.score >= beta)
           {
+            pv[ply][ply].reset(hashEntry.move);
+            pv[ply][ply+1].moved = null;
             return hashEntry.score;
           }
           break;
@@ -1265,6 +1264,8 @@ public class ABSearch implements Searcher
         {
           if (hashEntry.score <= alpha)
           {
+            pv[ply][ply].reset(hashEntry.move);
+            pv[ply][ply+1].moved = null;
             return hashEntry.score;
           }
           break;
