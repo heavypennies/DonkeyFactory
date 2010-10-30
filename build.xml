@@ -17,6 +17,8 @@
     <pathelement path="twitter4j/lib/rome-0.9.jar"/>
     <pathelement path="twitter4j/lib/slf4j-api-1.5.0.jar"/>
     <pathelement path="twitter4j/twitter4j-2.0.8.jar"/>
+    <pathelement path="signpost/signpost-core-1.2.1.1.jar"/>
+    <pathelement path="signpost/signpost-commonshttp4-1.2.1.1.jar"/>
   </path>
 	
 	<target name="init">

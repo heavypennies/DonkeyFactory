@@ -29,7 +29,7 @@ public class ABSearch implements Searcher
   private Move NULL_MOVE = new Move();
   private boolean running = false;
   private boolean inPawnEnding = false;
-  private static final int[] MARGIN = {   25,   50,  100,  200,  300,  500,  500, 900,  900, 1500, 1500, 1500,
+  private static final int[] MARGIN = {   50,   100,  200,  300,  500,  500,  900, 900,  900, 1500, 1500, 1500,
                                         2200, 2200, 2200, 2200, 2200,
                                         3000, 3000, 3000, 3000, 3000,
                                         3000, 3000, 3000, 3000, 3000,
@@ -334,7 +334,9 @@ public class ABSearch implements Searcher
           pv[ply][t].reset(pv[ply + 1][t]);
         }
 
-        System.err.println("depth: " + depth + " -> pv: " + Move.toString(pv[ply]));
+/*
+        System.err.println(new StringBuilder("depth: ").append(depth).append(" -> pv: ").append(Move.toString(pv[ply])).toString());
+*/
 
         alpha = score;
         pvFound = true;
@@ -489,19 +491,6 @@ public class ABSearch implements Searcher
       return score;
     }
 
-    boolean pvFound = false;
-    Move[] moveList = moveLists[ply];
-    int movesGenerated;
-//    moveGeneration.setHashEntry(hashEntry);
-    if (inCheck[ply])
-    {
-      movesGenerated = moveGeneration.generateEvasions(moveList, board);
-    }
-    else
-    {
-      movesGenerated = moveGeneration.generateMoves(moveList, board);
-    }
-
     // Null Move
     if (doNull && ply > 0 && !inCheck[ply] && !mateThreat && board.stats.originalMaterial > 5 && depth > 1)
     {
@@ -545,6 +534,19 @@ public class ABSearch implements Searcher
       hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
 */
+    boolean pvFound = false;
+    Move[] moveList = moveLists[ply];
+    int movesGenerated;
+//    moveGeneration.setHashEntry(hashEntry);
+    if (inCheck[ply])
+    {
+      movesGenerated = moveGeneration.generateEvasions(moveList, board);
+    }
+    else
+    {
+      movesGenerated = moveGeneration.generateMoves(moveList, board);
+    }
+
 
     Move move;
     for (int i = 0; i < movesGenerated; i++)
@@ -683,7 +685,7 @@ public class ABSearch implements Searcher
         if(alpha > scoreEstimate + MARGIN[depth])
         {
 
-          if(depth < 2)
+          if(depth < 3)
           {
             ply--;
             stats.prunes++;
@@ -967,7 +969,7 @@ public class ABSearch implements Searcher
       }
       hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
-    
+
     Move move;
     for (int i = 0; i < movesGenerated; i++)
     {
@@ -1082,7 +1084,7 @@ public class ABSearch implements Searcher
         if(alpha > scoreEstimate + MARGIN[depth])
         {
 
-          if(depth < 2)
+          if(depth < 3)
           {
             ply--;
             stats.prunes++;
@@ -1320,7 +1322,7 @@ public class ABSearch implements Searcher
         if (score >= beta)
         {
 //        if(debug) System.err.println("QSearch Initial Cut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
-          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
+          abHashtable.putEntry(-100, PositionHashtable.EXACT_VALUE, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
           return score;
         }
         alpha = score;

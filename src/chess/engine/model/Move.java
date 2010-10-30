@@ -226,12 +226,12 @@ public class Move
     }
 
 
-    return pieceString
-         + (taken != null ? "x" : "")
-         + toSquare.toString().toLowerCase()
-         + (promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : ""
-         + (check ? "+" : "")
-         /*+ " (" + score + ")"*/);
+    return new StringBuffer(pieceString)
+         .append(taken != null ? "x" : "")
+         .append(toSquare.toString().toLowerCase())
+         .append(promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : "")
+         .append(check ? "+" : "").toString()
+         /*+ " (" + score + ")"*/;
   }
 
   public String toFICSString()
@@ -241,10 +241,10 @@ public class Move
       return "null move";
     }
 
-    return fromSquare.toString().toLowerCase()
-         + "-"
-         + toSquare.toString().toLowerCase()
-         + (promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : "");
+    return new StringBuilder(fromSquare.toString().toLowerCase())
+         .append("-")
+         .append(toSquare.toString().toLowerCase())
+         .append((promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : "")).toString();
   }
 
   public static void nextMove(Move[] moves, int moveIndex)
@@ -275,7 +275,7 @@ public class Move
   }
   public static String toString(Move[] moves, int startIndex)
   {
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     int count = 1;
     for(Move move : moves)
     {
@@ -297,7 +297,7 @@ public class Move
         buffer.append(" ");
         if(move.moved.color == 1)
         {
-          buffer.append((count++) + ". ");
+          buffer.append((count++)).append(". ");
         }
       }
       else
@@ -305,11 +305,11 @@ public class Move
         // first move
         if(move.moved.color == 1)
         {
-          buffer.append((count++) + ". ");
+          buffer.append((count++)).append(". ");
         }
         else
         {
-          buffer.append((count++) + ". ... ");
+          buffer.append((count++)).append(". ... ");
         }
       }
 

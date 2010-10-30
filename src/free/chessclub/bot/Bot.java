@@ -27,20 +27,23 @@ import chess.engine.model.Move;
 import chess.engine.model.Piece;
 import chess.engine.search.*;
 import chess.engine.utils.MoveGeneration;
+import free.jin.Game;
 import free.jin.JinConnection;
 import free.jin.JinFrame;
-import free.jin.Game;
 import free.jin.event.*;
 import free.jin.freechess.FreechessJinListenerManager;
 import free.jin.freechess.JinFreechessConnection;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.http.AccessToken;
 import twitter4j.http.HttpClient;
 import twitter4j.http.Response;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Bot extends JinFreechessConnection implements GameListener {
 
@@ -99,16 +102,15 @@ public class Bot extends JinFreechessConnection implements GameListener {
     public int draws;
     public int incomplete;
 
-    public boolean isPlaying()
-    {
+    public boolean isPlaying() {
       return currentGame != null;
     }
 
-    public Game getGame()
-    {
+    public Game getGame() {
       return isPlaying() ? currentGame : lastGame;
     }
   }
+
   private TwitterStatus twitterStatus = new TwitterStatus();
 
 
@@ -165,12 +167,26 @@ public class Bot extends JinFreechessConnection implements GameListener {
     setStyle(12);
     super.onLogin();
 
-    if(autoseek)
-    {
+    if (autoseek) {
       seek();
     }
 
-    twitter = twitterUser != null && twitterUser.length() > 0 ? new Twitter(twitterUser, twitterPassword) : null;
+    twitter = twitterUser != null && twitterUser.length() > 0 ? new Twitter() : null;
+    try {
+      File configInfo = new File("twitter_Auth.cfg");
+      Scanner fileReader = new Scanner(configInfo);
+      String consumerKey = fileReader.nextLine().trim();
+      String consumerSecret = fileReader.nextLine().trim();
+      String accessToken = fileReader.nextLine().trim();
+      String tokenSecret = fileReader.nextLine().trim();
+      String pin = fileReader.nextLine().trim();
+
+      twitter.setOAuthConsumer(consumerKey, consumerSecret);
+      twitter.setOAuthAccessToken(new AccessToken(accessToken, tokenSecret));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+
   }
 
   /**
@@ -186,14 +202,12 @@ public class Bot extends JinFreechessConnection implements GameListener {
     System.out.println("  java " + Bot.class.getName() + " hostname port username password");
   }
 
-  private class SearchThread implements Runnable
-  {
+  private class SearchThread implements Runnable {
     private JinConnection connection;
     private Searcher searcher;
     private Board searchBoard;
 
-    public SearchThread(JinConnection connection, Searcher searcher, Board searchBoard)
-    {
+    public SearchThread(JinConnection connection, Searcher searcher, Board searchBoard) {
       this.connection = connection;
       this.searcher = searcher;
       this.searchBoard = searchBoard;
@@ -203,16 +217,14 @@ public class Bot extends JinFreechessConnection implements GameListener {
       int score = searcher.search(searchBoard, 50);
 
       SearchStats stats = search.getStats();
-      if(stats.nodes <100 && score == 0)
-      {
+      if (stats.nodes < 100 && score == 0) {
         connection.sendCommand("draw");
         connection.sendCommand("tell " + owner + " Detected Draw");
       }
 
-      if(tellOwner) connection.sendCommand("tell " + owner + " s: " + formatScore(score));
-      if(tellOwner) connection.sendCommand("tell " + owner + " Moves: " + Move.toString(searcher.getPV()));
-      if(tellOwner)
-      {
+      if (tellOwner) connection.sendCommand("tell " + owner + " s: " + formatScore(score));
+      if (tellOwner) connection.sendCommand("tell " + owner + " Moves: " + Move.toString(searcher.getPV()));
+      if (tellOwner) {
         connection.sendCommand("tell " + owner + " Stats: " + stats);
       }
       connection = null;
@@ -224,15 +236,13 @@ public class Bot extends JinFreechessConnection implements GameListener {
     }
   }
 
-  private class SearchTimerThread implements Runnable
-  {
+  private class SearchTimerThread implements Runnable {
     private JinConnection connection;
     private Searcher searcher;
     private long maxTime;
     private String fen;
 
-    public SearchTimerThread(JinConnection connection, IterativeSearch searcher, long maxTime, String fen)
-    {
+    public SearchTimerThread(JinConnection connection, IterativeSearch searcher, long maxTime, String fen) {
       this.connection = connection;
       this.searcher = searcher;
       this.maxTime = maxTime;
@@ -244,27 +254,19 @@ public class Bot extends JinFreechessConnection implements GameListener {
       long end = System.currentTimeMillis();
       boolean extended = false;
       boolean spoken = false;
-      while((end - start <= maxTime))
-      {
-        if(maxTime > 2000)
-        {
-          try
-          {
-            Thread.sleep(maxTime/4);
+      while ((end - start <= maxTime)) {
+        if (maxTime > 2000) {
+          try {
+            Thread.sleep(maxTime / 4);
           }
-          catch(InterruptedException e)
-          {
+          catch (InterruptedException e) {
 
           }
-        }
-        else
-        {
-          try
-          {
-            Thread.sleep(maxTime+1);
+        } else {
+          try {
+            Thread.sleep(maxTime + 1);
           }
-          catch(InterruptedException e)
-          {
+          catch (InterruptedException e) {
 
           }
         }
@@ -272,15 +274,12 @@ public class Bot extends JinFreechessConnection implements GameListener {
         Move pvMove = searcher.getPV()[0];
         int score = pvMove.score;
 
-        if(maxTime > 700)
-        {
-          if(maxTime > 10 && score < lastScore - 45 && score > -Searcher.MATE + 100)
-          {
+        if (maxTime > 700) {
+          if (maxTime > 10 && score < lastScore - 45 && score > -Searcher.MATE + 100) {
             lastScore = searcher.getPV()[0].score;
             maxTime += maxTime / 2;
             String thinkComment = getThinkComment();
-            if(tellOwner)
-            {
+            if (tellOwner) {
               connection.sendCommand("tell " + owner + " " + thinkComment);
             }
             boolean playingWhite = twitterStatus.getGame().getWhiteName().equals(getUsername());
@@ -290,31 +289,23 @@ public class Bot extends JinFreechessConnection implements GameListener {
           }
         }
 
-        if(!spoken)
-        {
-          if(score > lastScore + 10000)
-          {
+        if (!spoken) {
+          if (score > lastScore + 10000) {
             connection.sendCommand("kib Hee-Haw (" + formatScore(score) + ") - " + Move.toString(searcher.getPV()));
             spoken = true;
-          }
-          else if(score > lastScore + 900)
-          {
+          } else if (score > lastScore + 900) {
             connection.sendCommand("kib Zoiks! (" + formatScore(score) + ") - " + Move.toString(searcher.getPV()));
             spoken = true;
-          }
-          else if(score > lastScore + 300)
-          {
+          } else if (score > lastScore + 300) {
             connection.sendCommand("kib Ruh roh... (" + formatScore(score) + ") - " + Move.toString(searcher.getPV()));
             spoken = true;
           }
         }
 
-        if(Math.abs(score) < Searcher.MATE &&
-           Math.abs(score) > Searcher.MATE - 300)
-        {
+        if (Math.abs(score) < Searcher.MATE &&
+                Math.abs(score) > Searcher.MATE - 300) {
           System.err.println("Found Mate");
-          if(score > Searcher.MATE - 300)
-          {
+          if (score > Searcher.MATE - 300) {
             foundMate = true;
           }
           break;
@@ -326,58 +317,42 @@ public class Bot extends JinFreechessConnection implements GameListener {
       System.err.println("Stopping Search");
       lastScore = searcher.getPV()[0].score;
       connection.sendCommand(searcher.getPV()[0].toFICSString());
-      if(foundMate)
-      {
+      if (foundMate) {
         maybeTweetMatePuzzle();
       }
       searcher.stop();
     }
 
     private void maybeTweetMatePuzzle() {
-      if(!talkedMate)
-      {
+      if (!talkedMate) {
         talkedMate = true;
         Move[] pv = searcher.getPV();
         int movesToMate = 1;
         int color = pv[0].moved.color;
         int movedType = pv[0].moved.type;
         int movedType2 = pv[1].moved.type;
-        int complexity = -Math.abs(eval.scorePosition(gameBoard,0,0)) / 900;
+        int complexity = -Math.abs(eval.scorePosition(gameBoard, 0, 0)) / 900;
         System.err.println("MatePV: " + Move.toString(pv));
 
-        for(int i = 0;i < 100 && pv[i].moved != null;i++)
-        {
-          if(pv[i].moved.color == color)
-          {
-            if(pv[i].promoteTo == -1)
-            {
-              if(pv[i].moved.type != Piece.QUEEN && pv[i].moved.type != Piece.ROOK)
-              {
-                if(movedType != pv[i].moved.type)
-                {
-                  complexity  += 1;
+        for (int i = 0; i < 100 && pv[i].moved != null; i++) {
+          if (pv[i].moved.color == color) {
+            if (pv[i].promoteTo == -1) {
+              if (pv[i].moved.type != Piece.QUEEN && pv[i].moved.type != Piece.ROOK) {
+                if (movedType != pv[i].moved.type) {
+                  complexity += 1;
                   movedType = pv[i].moved.type;
                 }
-              }
-              else if(pv[i].taken == null)
-              {
+              } else if (pv[i].taken == null) {
                 complexity += 1;
-              }
-              else if(!pv[i].check)
-              {
+              } else if (!pv[i].check) {
                 complexity += 1;
               }
             }
-          }
-          else
-          {
-            if(pv[i].taken != null)
-            {
+          } else {
+            if (pv[i].taken != null) {
               complexity += 1;
-            }
-            else if(movedType2 != pv[i].moved.type)
-            {
-              complexity  += 1;
+            } else if (movedType2 != pv[i].moved.type) {
+              complexity += 1;
               movedType2 = pv[i].moved.type;
             }
           }
@@ -385,12 +360,11 @@ public class Bot extends JinFreechessConnection implements GameListener {
         }
         movesToMate /= 2;
 
-        String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0,fen.indexOf(" "));
+        String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0, fen.indexOf(" "));
         String tinyUrl = getTinyUrl(boardURL);
 
 
-        if(tinyUrl != null && complexity > 0 && movesToMate > 2)
-        {
+        if (tinyUrl != null && complexity > 0 && movesToMate > 2) {
           // New DonkeyFactory Chess position
           // Tweet
           System.err.println("Tiny URL: " + tinyUrl);
@@ -401,9 +375,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
           // tweet
           connection.sendCommand("say Thank You! You helped me create a new DonkeyFactory chess puzzle (Mate in " + movesToMate + ", Complexity: " + complexity + ")");
           connection.sendCommand("say http://twitter.com/donkeyfactory");
-        }
-        else
-        {
+        } else {
           System.err.println/*tweet*/("(DF-" + complexity + ")-[" + dateFormat.format(new Date()) + "] I found Mate in " + movesToMate + " -> " + boardURL + " #donkeyfactory #chess @ me the solution!");
         }
       }
@@ -411,46 +383,38 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
     private String getThinkComment() {
       String thinkComment;
-      switch(thinkCommentIndex)
-      {
-        case 0 :
-        {
+      switch (thinkCommentIndex) {
+        case 0: {
           thinkComment = "Let me look at this position for " + (maxTime / 2) + " more milliseconds (" + "you may wish i'd tell u what i'm thinking..." + ")";
           thinkCommentIndex++;
           break;
         }
-        case 1 :
-        {
+        case 1: {
           thinkComment = "Gimme " + (maxTime / 2) + " milliseconds...this line looks interesting: " + "you may wish i'd tell u what i'm thinking...";
           thinkCommentIndex++;
           break;
         }
-        case 2 :
-        {
+        case 2: {
           thinkComment = "Please allow me to concentrate for just " + (maxTime / 2) + " more milliseconds (" + "you may wish i'd tell u what i'm thinking..." + ")";
           thinkCommentIndex++;
           break;
         }
-        case 3 :
-        {
-          thinkComment = "Hmmm... I'm gonna take an extra "+ (maxTime / 2) + " milliseconds to think - this line looks interesting: " + "you may wish i'd tell u what i'm thinking...";
+        case 3: {
+          thinkComment = "Hmmm... I'm gonna take an extra " + (maxTime / 2) + " milliseconds to think - this line looks interesting: " + "you may wish i'd tell u what i'm thinking...";
           thinkCommentIndex++;
           break;
         }
-        case 4 :
-        {
-          thinkComment = "Interesting...I'll need " + (maxTime / 2) + " milliseconds more time to ponder this ("+"you may wish i'd tell u what i'm thinking..."+")";
+        case 4: {
+          thinkComment = "Interesting...I'll need " + (maxTime / 2) + " milliseconds more time to ponder this (" + "you may wish i'd tell u what i'm thinking..." + ")";
           thinkCommentIndex++;
           break;
         }
-        case 5 :
-        {
+        case 5: {
           thinkComment = "I'll need to think on this for " + (maxTime / 2) + " milliseconds longer. (" + "you may wish i'd tell u what i'm thinking..." + ")";
           thinkCommentIndex = 0;
           break;
         }
-        default :
-        {
+        default: {
           thinkComment = "You may have something there, perhaps continuing with " + "you may wish i'd tell u what i'm thinking...";
           thinkCommentIndex = 0;
         }
@@ -465,22 +429,21 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
   public void gameStarted(GameStartEvent evt) {
     System.err.println("game started");
-    if(tellOwner) evt.getConnection().sendCommand("tell " + owner + " Game Started: " + evt.getGame().getID());
+    if (tellOwner) evt.getConnection().sendCommand("tell " + owner + " Game Started: " + evt.getGame().getID());
     evt.getConnection().sendCommand("say Heee Haw!!");
     Integer gameNumber = findMyGame();
     JinFreechessConnection.InternalGameData gameData =
-            (JinFreechessConnection.InternalGameData)ongoingGamesData.get(gameNumber);
+            (JinFreechessConnection.InternalGameData) ongoingGamesData.get(gameNumber);
 
     search = new ABSearch(moveGeneration, eval);
     iterativeSearch = new IterativeSearch(search, moveGeneration, eval);
-    
+
     gameBoard = new Board();
     //((SimpleEvaluator)eval).pawnHash.clear();
     gameBoard.setEPDPosition(evt.getGame().getInitialPosition().getFEN());
     System.err.println("Board: " + evt.getGame().getInitialPosition().getFEN());
 
-    if(gameData != null && gameData.boardData != null)
-    {
+    if (gameData != null && gameData.boardData != null) {
       gameBoard.stats.whiteKingsideRookMoves = gameData.boardData.canWhiteCastleKingside() ? 0 : 1;
       gameBoard.stats.whiteQueensideRookMoves = gameData.boardData.canWhiteCastleQueenside() ? 0 : 1;
       gameBoard.stats.blackKingsideRookMoves = gameData.boardData.canBlackCastleKingside() ? 0 : 1;
@@ -494,8 +457,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
   public void gameEnded(GameEndEvent evt) {
     twitterStatus.gameCount++;
-    if(autoseek)
-    {
+    if (autoseek) {
       sendCommand("rem");
       seek();
     }
@@ -512,43 +474,31 @@ public class Bot extends JinFreechessConnection implements GameListener {
     boolean iWin = ((lastGame.getResult() == Game.WHITE_WINS && playingWhite) || (lastGame.getResult() == Game.BLACK_WINS && !playingWhite));
     boolean iLost = ((lastGame.getResult() == Game.WHITE_WINS && !playingWhite) || (lastGame.getResult() == Game.BLACK_WINS && playingWhite));
 
-    if(iWin)
-    {
+    if (iWin) {
       twitterStatus.wins++;
 
-      if(oppRating - myRating > 50)
-      {
+      if (oppRating - myRating > 50) {
         tweetGreatVictory(oppName, oppRating, myRating);
       }
-    }
-    else if(iLost)
-    {
+    } else if (iLost) {
       twitterStatus.losses++;
-      if(oppRating < myRating - 200)
-      {
+      if (oppRating < myRating - 200) {
         tweetStunningDefeat(oppName, oppRating, myRating);
       }
-    }
-    else if(lastGame.getResult() == Game.DRAW)
-    {
+    } else if (lastGame.getResult() == Game.DRAW) {
       twitterStatus.draws++;
-    }
-    else
-    {
+    } else {
       twitterStatus.incomplete++;
     }
-    if(twitterStatus.gameCount > lastGameCount + 9)
-    {
+    if (twitterStatus.gameCount > lastGameCount + 9) {
       lastGameCount = twitterStatus.gameCount;
       tweetCurrentStatus();
     }
 
     System.err.println("Stopping search on game end");
     iterativeSearch.stop();
-    if(searchThread != null)
-    {
-      try
-      {
+    if (searchThread != null) {
+      try {
         searchThread.join();
       }
       catch (InterruptedException e) {
@@ -570,24 +520,20 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
     Integer gameNumber = findMyGame();
     JinFreechessConnection.InternalGameData gameData =
-            (JinFreechessConnection.InternalGameData)ongoingGamesData.get(gameNumber);
+            (JinFreechessConnection.InternalGameData) ongoingGamesData.get(gameNumber);
     Move move = makeGameMovesOnBoard(gameData, gameBoard);
 
-    if(gameBoard.isDraw())
-    {
-      if(tellOwner) sendCommand("tell " + owner + " Claiming draw");
+    if (gameBoard.isDraw()) {
+      if (tellOwner) sendCommand("tell " + owner + " Claiming draw");
       evt.getConnection().sendCommand("draw");
     }
 
 //    if(move != null) evt.getConnection().sendCommand("tell " + owner + " board move: " + move.toString());
-    if(evt.getGame().isUserAllowedToMovePieces(evt.getPosition().getCurrentPlayer()) &&
-            (!currentSearchEPD.equals(evt.getGame().getInitialPosition().getFEN()) || evt.getGame().getPliesSinceStart() == 0))
-    {
-      if(!iterativeSearch.isDone())
-      {
+    if (evt.getGame().isUserAllowedToMovePieces(evt.getPosition().getCurrentPlayer()) &&
+            (!currentSearchEPD.equals(evt.getGame().getInitialPosition().getFEN()) || evt.getGame().getPliesSinceStart() == 0)) {
+      if (!iterativeSearch.isDone()) {
         System.err.println("Waiting for search...");
-        try
-        {
+        try {
           searchThread.join();
         }
         catch (InterruptedException e) {
@@ -610,10 +556,8 @@ public class Bot extends JinFreechessConnection implements GameListener {
       searchBoard.repetitionTable = gameBoard.repetitionTable;
       searchBoard.moveIndex = gameBoard.moveIndex;
 
-      for(int t = 0;t < 128;t++)
-      {
-        if(gameBoard.boardSquares[t] == null)
-        {
+      for (int t = 0; t < 128; t++) {
+        if (gameBoard.boardSquares[t] == null) {
           continue;
         }
         System.arraycopy(
@@ -639,7 +583,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
       System.err.println("GB Approaching Draw: " + gameBoard.isApproachingDraw());
       System.err.println("SB Approaching Draw: " + searchBoard.isApproachingDraw());
       System.err.println("Board: " + fen);
-      System.err.println("Stats: " + searchBoard.stats);      
+      System.err.println("Stats: " + searchBoard.stats);
 
       int score = eval.scorePosition(searchBoard, -Searcher.INFINITY, Searcher.INFINITY);
 
@@ -652,90 +596,69 @@ public class Bot extends JinFreechessConnection implements GameListener {
       Thread searchTimerThread = new Thread(new SearchTimerThread(evt.getConnection(), iterativeSearch, maxTime, fen));
       searchTimerThread.setPriority(7);
       searchTimerThread.start();
-    }
-    else
-    {
+    } else {
       System.err.println("Waiting for opponent...");
 //      System.gc();
     }
   }
 
   private Move makeGameMovesOnBoard(InternalGameData gameData, Board board) {
-    if(gameData.moveList.size() == 0)
-    {
+    if (gameData.moveList.size() == 0) {
       return null;
     }
-    free.chess.Move move = (free.chess.Move)gameData.moveList.lastElement();
+    free.chess.Move move = (free.chess.Move) gameData.moveList.lastElement();
     int toSquareIndex = (move.getEndingSquare().getRank() * 8) + move.getEndingSquare().getFile();
     int fromSquareIndex = (move.getStartingSquare().getRank() * 8) + move.getStartingSquare().getFile();
 
-    try
-    {
+    try {
       moveGeneration.generateFullMoves(availableMoves, board);
     }
-    catch (Exception e)
-    {
+    catch (Exception e) {
       return null;
     }
 
     Move actualMove = null;
-    for(Move possibleMove : availableMoves)
-    {
-      if(possibleMove.fromSquare == null)
-      {
+    for (Move possibleMove : availableMoves) {
+      if (possibleMove.fromSquare == null) {
         break;
       }
-      if(possibleMove.fromSquare.index64 == fromSquareIndex &&
-         possibleMove.toSquare.index64 == toSquareIndex)
-      {
-        if(move.getMoveString().indexOf("=") > -1)
-        {
+      if (possibleMove.fromSquare.index64 == fromSquareIndex &&
+              possibleMove.toSquare.index64 == toSquareIndex) {
+        if (move.getMoveString().indexOf("=") > -1) {
           char promoteTo = move.getMoveString().toLowerCase().substring(move.getMoveString().indexOf("=") + 1).charAt(0);
-          switch(promoteTo)
-          {
-            case 'n':
-            {
-              if(possibleMove.promoteTo == Piece.KNIGHT)
-              {
+          switch (promoteTo) {
+            case 'n': {
+              if (possibleMove.promoteTo == Piece.KNIGHT) {
                 actualMove = possibleMove;
               }
               break;
             }
-            case 'b':
-            {
-              if(possibleMove.promoteTo == Piece.BISHOP)
-              {
+            case 'b': {
+              if (possibleMove.promoteTo == Piece.BISHOP) {
                 actualMove = possibleMove;
               }
               break;
             }
-            case 'r':
-            {
-              if(possibleMove.promoteTo == Piece.ROOK)
-              {
+            case 'r': {
+              if (possibleMove.promoteTo == Piece.ROOK) {
                 actualMove = possibleMove;
               }
               break;
             }
-            case 'q':
-            {
-              if(possibleMove.promoteTo == Piece.QUEEN)
-              {
+            case 'q': {
+              if (possibleMove.promoteTo == Piece.QUEEN) {
                 actualMove = possibleMove;
               }
               break;
             }
           }
-        }
-        else
-        {
+        } else {
           actualMove = possibleMove;
           break;
         }
       }
     }
-    if(actualMove != null && actualMove.moved != null)
-    {
+    if (actualMove != null && actualMove.moved != null) {
       board.make(actualMove);
 /*
       if(actualMove.moved.type == Piece.PAWN || actualMove.taken != null)
@@ -753,16 +676,11 @@ public class Bot extends JinFreechessConnection implements GameListener {
             gameData.boardData.getBlackTime());
 
     long maxTime;
-    if(gameData.boardData.getNextMoveNumber() < 2)
-    {
+    if (gameData.boardData.getNextMoveNumber() < 2) {
       maxTime = timeLeft / 36;
-    }
-    else if(gameData.boardData.getNextMoveNumber() < 12)
-    {
+    } else if (gameData.boardData.getNextMoveNumber() < 12) {
       maxTime = timeLeft / 32;
-    }
-    else if(gameData.boardData.getNextMoveNumber() > 30 && timeLeft < 5000)
-    {
+    } else if (gameData.boardData.getNextMoveNumber() > 30 && timeLeft < 5000) {
       maxTime = timeLeft / 34;
     }
 /*
@@ -771,8 +689,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
       maxTime = 1000;
     }
 */
-    else
-    {
+    else {
       maxTime = timeLeft / 29;
     }
 
@@ -795,9 +712,8 @@ public class Bot extends JinFreechessConnection implements GameListener {
   public void boardFlipped(BoardFlipEvent evt) {
   }
 
-  public void tweet(String tweet)
-  {
-    if(twitter == null) return;
+  public void tweet(String tweet) {
+    if (twitter == null) return;
     try {
       twitter.updateStatus(tweet);
       sendCommand("tell " + owner + " tweet complete.");
@@ -807,32 +723,26 @@ public class Bot extends JinFreechessConnection implements GameListener {
     }
   }
 
-  public void tweetStunningDefeat(String winnersName, int winnersRating, int myRating)
-  {
+  public void tweetStunningDefeat(String winnersName, int winnersRating, int myRating) {
     tweet("Defeat - I (" + myRating + ") was beaten by " + winnersName + " (" + winnersRating + ") :(");
   }
 
-  public void tweetGreatVictory(String winnersName, int winnersRating, int myRating)
-  {
+  public void tweetGreatVictory(String winnersName, int winnersRating, int myRating) {
     tweet("Victory - I (" + myRating + ") beat " + winnersName + " (" + winnersRating + ")!");
   }
 
-  public void tweetCurrentStatus()
-  {
+  public void tweetCurrentStatus() {
     Game game = twitterStatus.getGame();
-    if(game != null)
-    {
+    if (game != null) {
       boolean playingWhite = game.getWhiteName().equals(getUsername());
       int myRating = playingWhite ? game.getWhiteRating() : game.getBlackRating();
       tweet(myRating + " - My W/D/L is " + twitterStatus.wins + "-" + twitterStatus.draws + "-" + twitterStatus.losses + " for the past " + twitterStatus.gameCount + " games (" + twitterStatus.incomplete + " games were incomplete).");
     }
   }
 
-  public void tweetCurrentGameStatus()
-  {
+  public void tweetCurrentGameStatus() {
     Game game = twitterStatus.getGame();
-    if(game != null)
-    {
+    if (game != null) {
       boolean playingWhite = game.getWhiteName().equals(getUsername());
       int myRating = playingWhite ? game.getWhiteRating() : game.getBlackRating();
       int oppRating = !playingWhite ? game.getWhiteRating() : game.getBlackRating();
@@ -840,21 +750,16 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
       String play = "played";
       String scoreStatement = "";
-      if(twitterStatus.isPlaying())
-      {
+      if (twitterStatus.isPlaying()) {
 
         String score = formatScore(lastScore);
         play = "am playing";
-        if(lastScore == 0)
-        {
+        if (lastScore == 0) {
           scoreStatement = " and I think its an even game";
         }
-        if(Math.abs(lastScore) > Searcher.MATE - 300 && Math.abs(lastScore) < Searcher.MATE)
-        {
+        if (Math.abs(lastScore) > Searcher.MATE - 300 && Math.abs(lastScore) < Searcher.MATE) {
           scoreStatement = " and I see " + score;
-        }
-        else
-        {
+        } else {
           scoreStatement = " and I think I am " + (lastScore > 0 ? "ahead" : "behind") + " by " + score + " pawns ";
         }
         tweet("DonkeyFactory: (" + myRating + ") I " + play + " " + oppName + " (" + oppRating + ") " + scoreStatement);
@@ -864,13 +769,10 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
   private String formatScore(int score) {
 
-    if(score > Searcher.MATE - 300)
-    {
+    if (score > Searcher.MATE - 300) {
       int mateDistance = (Searcher.MATE - score + 1) / 2;
       return "+MATE in " + mateDistance;
-    }
-    else if(score < -Searcher.MATE + 300)
-    {
+    } else if (score < -Searcher.MATE + 300) {
       int mateDistance = (Searcher.MATE + score) / 2;
       return "-MATE in " + mateDistance;
     }
@@ -880,8 +782,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
 
   protected void processLine(String line) {
-    if(line.indexOf("(adjourned)") > -1)
-    {
+    if (line.indexOf("(adjourned)") > -1) {
       sendCommand("accept");
     }
     super.processLine(line);
@@ -970,43 +871,38 @@ public class Bot extends JinFreechessConnection implements GameListener {
       commandHandler.handleCommand(command);
   }
 
-  private void seek()
-  {
+  private void seek() {
     sendCommand("seek 1 0 r f");
     sendCommand("seek 3 0 r f");
-    sendCommand("seek 5 0 r f");   
+    sendCommand("seek 5 0 r f");
   }
 
   protected boolean processPersonalTell(String username, String titles, String message) {
     super.processPersonalTell(username, titles, message);
 
-    if(username.equals(owner))
-    {
-      if(message.indexOf("tellme") > -1)
-      {
+    if (username.equals(owner)) {
+      if (message.indexOf("tellme") > -1) {
         tellOwner = !tellOwner;
         sendCommand("tell " + owner + " tellme: " + tellOwner);
-      }
-      else if(message.indexOf("test") > -1)
-      {
+      } else if (message.indexOf("test") > -1) {
         sendCommand("tell " + owner + " challenging testdonkeyfactory");
         sendCommand("ma testdonkeyfactory 3 0 u");
-      }
-      else if(message.indexOf("seek") > -1)
-      {
+      } else if (message.indexOf("tweet") > -1) {
+        sendCommand("tell " + owner + " tweeting '" + message.substring(6) + "'");
+        try {
+          twitter.updateStatus(message.substring(6));
+        } catch (TwitterException e) {
+          e.printStackTrace();
+        }
+      } else if (message.indexOf("seek") > -1) {
         autoseek = !autoseek;
         sendCommand("tell " + owner + " autoseek: " + autoseek);
-        if(autoseek)
-        {
+        if (autoseek) {
           seek();
         }
-      }
-      else if(message.indexOf("tweet") > -1)
-      {
+      } else if (message.indexOf("tweet") > -1) {
         tweetCurrentGameStatus();
-      }
-      else
-      {
+      } else {
         sendCommand(message);
       }
     }
@@ -1016,9 +912,8 @@ public class Bot extends JinFreechessConnection implements GameListener {
   public static String getTinyUrl(String fullUrl) {
     HttpClient httpclient = new HttpClient();
 
-    try
-    {
-      Response response = httpclient.get("http://tinyurl.com/api-create.php?url="+ fullUrl);
+    try {
+      Response response = httpclient.get("http://tinyurl.com/api-create.php?url=" + fullUrl);
       return response.asString();
     }
     catch (TwitterException e) {

@@ -88,8 +88,8 @@ public class IterativeSearch implements Searcher
 
       if(currentDepth > 3)
       {
-        System.err.println("d[" + currentDepth + "] Stats: " + search.getStats());
-        System.err.println("Best: " + Move.toString(search.getPV()));
+        System.err.println(new StringBuilder("d[").append(currentDepth).append("] Stats: ").append(search.getStats()));
+        System.err.println(new StringBuilder("Best: ").append(Move.toString(search.getPV())).toString());
         System.err.println("Score: " + maybeScore);
       }
 //      System.err.println("LineScore: " + new LineScorer(moveGeneration, eval).scoreLine(board, search.getPV()) + "\n");
