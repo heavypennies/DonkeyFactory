@@ -7,6 +7,9 @@ import chess.engine.model.Piece;
 import chess.engine.model.Square;
 import chess.engine.utils.MoveGeneration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Joshua Levine <jlevine@theladders.com>
  * @version $Revision$ $Name$ $Date$
@@ -29,11 +32,11 @@ public class SimpleEvaluator implements BoardEvaluator
   private static int QUEEN_TOO_EARLY_VALUE = 13;
 
   // Pawn values
-  private static int[] WHITE_PASSED_PAWN_VALUES = new int[]{0,  7, 14, 40, 90, 140, 260, 650};
-  private static int[] BLACK_PASSED_PAWN_VALUES = new int[]{650, 260, 140, 90, 40, 14,  7, 0};
+  private static int[] WHITE_PASSED_PAWN_VALUES = new int[]{0,  7, 14, 40, 90, 140, 230, 450};
+  private static int[] BLACK_PASSED_PAWN_VALUES = new int[]{450, 230, 140, 90, 40, 14,  7, 0};
 
   private static int PAWN_DOUBLED_VALUE = 36;
-  private static int[] PAWN_BACKWARDS_VALUE = new int[]{ 15, 22, 25, 29, 29, 25, 22, 15};
+  private static int[] PAWN_BACKWARDS_VALUE = new int[]{ 15, 18, 21, 15, 15, 21, 18, 15};
   private static int UNMOVED_CENTER_PAWN = 3;
   private static int UNMOVED_CENTER_PAWN_BLOCKED = 35;
   private static int RUNAWAY_PAWN = 100;
@@ -46,7 +49,7 @@ public class SimpleEvaluator implements BoardEvaluator
 
   // Knight Values
   private static int KNIGHT_TRAPPED_VALUE = 50;
-  private static int KNIGHT_OUTPOST_VALUE = 14;
+  private static int KNIGHT_OUTPOST_VALUE = 8;
 
   // Bishop Values
   private static int TWO_BISHOPS_VALUE = 0;
@@ -95,9 +98,31 @@ public class SimpleEvaluator implements BoardEvaluator
 
       for(int color = 0;color < 2;color++)
       {
-        KING_PAWN_AREA[color][square] = getPawnKingArea(Board.SQUARES[square], color);
-        KING_TINY_AREA[color][square] = getTinyKingArea(Board.SQUARES[square], color);
-        KING_STAGING_AREA[color][square] = getStagingKingArea(Board.SQUARES[square], color);
+        long kingNearArea = getPawnKingArea(Board.SQUARES[square], color) | getTinyKingArea(Board.SQUARES[square], color);
+
+        List<Square> squareList = new ArrayList<Square>();
+
+        while(kingNearArea != 0)
+        {
+          int nearSquareIndex = Board.getLeastSignificantBit(kingNearArea);
+          kingNearArea ^= 1L << nearSquareIndex;
+
+          squareList.add(Board.SQUARES[nearSquareIndex]);
+        }
+        KING_NEAR_AREA[color][square] = squareList.toArray(new Square[0]);
+
+        squareList.clear();
+
+        long kingStagingArea = getStagingKingArea(Board.SQUARES[square], color);
+        while(kingStagingArea != 0)
+        {
+          int stagingSquareIndex = Board.getLeastSignificantBit(kingStagingArea);
+          kingStagingArea ^= 1L << stagingSquareIndex;
+
+          squareList.add(Board.SQUARES[stagingSquareIndex]);
+        }
+
+        KING_STAGING_AREA[color][square] = squareList.toArray(new Square[0]);
       }
       KING_AREA_A1_H8[square] = getKingAreaA1H8(Board.SQUARES[square]);
       KING_AREA_H1_A8[square] = getKingAreaH1A8(Board.SQUARES[square]);
@@ -386,7 +411,7 @@ public class SimpleEvaluator implements BoardEvaluator
   }
   int scorePawnWing(int whitePawns, int blackPawns)
   {
-    return PAWN_WING_SCORES[whitePawns][blackPawns] >> 1;
+    return PAWN_WING_SCORES[whitePawns][blackPawns] >> 2;
 
     //return new PawnWingScorer(moveGeneration, this).scorePawnWing(whitePawns, blackPawns);
   }
@@ -416,9 +441,8 @@ public class SimpleEvaluator implements BoardEvaluator
   private static long[] WHITE_KNIGHT_OUTPOST_MASK = new long[64];
   private static long[] BLACK_KNIGHT_OUTPOST_MASK = new long[64];
 
-  static long[][]  KING_PAWN_AREA = new long[2][64];
-  static long[][] KING_STAGING_AREA = new long[2][64];
-  static long[][] KING_TINY_AREA = new long[2][64];
+  static Square[][][]  KING_STAGING_AREA = new Square[2][64][];
+  static Square[][][] KING_NEAR_AREA = new Square[2][64][];
   static long[] KING_AREA_A1_H8 = new long[64];
   static long[] KING_AREA_H1_A8 = new long[64];
 
@@ -463,7 +487,6 @@ public class SimpleEvaluator implements BoardEvaluator
           WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank)].mask_on;
           WHITE_PASSED_MASK[square] |= Board.SQUARES[Board.SQUARES[square].file + (8 * rank) + 1].mask_on;
         }
-        
       }
 
       // Initialize black passed pawn masks
@@ -513,7 +536,7 @@ public class SimpleEvaluator implements BoardEvaluator
       {
         WHITE_ISO_MASK[square] |= Board.SQUARES[square + 1].mask_on;
       }
-      
+
       BLACK_ISO_MASK[square] = WHITE_PASSED_MASK[square];
       if(Board.SQUARES[square].file > 0)
       {
@@ -578,44 +601,6 @@ public class SimpleEvaluator implements BoardEvaluator
   static int[] PAWNSCORES = new int[64];
 
 
-  static int[] CHECK_VALUE_TABLE_WHITE_O_O = new int[]{
-          3, 3, 3, 5, 5, 7, 9, 9,
-          2, 4, 4, 5, 5, 6, 7, 7,
-          2, 2, 2, 4, 4, 5, 5, 5,
-          1, 1, 2, 3, 4, 4, 4, 3,
-  };
-  static int[] CHECK_VALUE_TABLE_BLACK_O_O = new int[]{
-          1, 1, 2, 3, 4, 4, 4, 3,
-          2, 2, 2, 4, 4, 5, 5, 5,
-          2, 4, 4, 5, 5, 6, 7, 7,
-          3, 3, 3, 5, 5, 7, 9, 9,
-  };
-  static int[] CHECK_VALUE_TABLE_WHITE_O_O_O = new int[]{
-          9, 9, 7, 5, 5, 3, 3, 3,
-          7, 7, 6, 5, 5, 4, 4, 2,
-          5, 5, 5, 4, 4, 2, 2, 2,
-          3, 4, 4, 4, 3, 2, 1, 1,
-  };
-  static int[] CHECK_VALUE_TABLE_BLACK_O_O_O = new int[]{
-          3, 4, 4, 4, 3, 2, 1, 1,
-          5, 5, 5, 4, 4, 2, 2, 2,
-          7, 7, 6, 5, 5, 4, 4, 2,
-          9, 9, 7, 5, 5, 3, 3, 3,
-  };
-  static int[] CHECK_VALUE_TABLE_WHITE_CENTER = new int[]{
-          5, 9, 9, 9, 9, 9, 9, 5,
-          2, 2, 5, 5, 5, 5, 2, 2,
-          1, 1, 3, 4, 4, 3, 1, 1,
-          1, 2, 3, 4, 4, 3, 2, 1,
-  };
-
-  static int[] CHECK_VALUE_TABLE_BLACK_CENTER = new int[]{
-          1, 2, 3, 4, 4, 3, 2, 1,
-          1, 1, 3, 4, 4, 3, 1, 1,
-          2, 2, 5, 5, 5, 5, 2, 2,
-          5, 7, 9, 9, 9, 9, 7, 5,
-  };
-
   static long mask2 = Square.A1.mask_on | Square.B1.mask_on;
   static long mask3 = Square.A1.mask_on | Square.B1.mask_on | Square.C1.mask_on;
 
@@ -653,7 +638,7 @@ public class SimpleEvaluator implements BoardEvaluator
     PIECE_VALUE_TABLES[1][Piece.KNIGHT] = new int[]{
             -10, -3, -7, -5, -5, -7, -3, -10,
             -8, 1, 3, 4, 4, 3, 1, -8,
-            -7, 8, 8, 10, 10, 9, 8, -7,
+            -13, 8, 8, 10, 10, 9, 8, -13,
             -6, 5,  9, 14, 14,  9, 5, -6,
             -6, 6, 16, 15, 15, 16, 6, -6,
             -6, 5, 10, 12, 16, 15, 5, -6,
@@ -667,7 +652,7 @@ public class SimpleEvaluator implements BoardEvaluator
             -6, 5, 10, 12, 16, 15, 5, -6,
             -6, 6, 13, 15, 15, 16, 6, -6,
             -6, 5, 9, 14, 14,  9, 5, -6,
-            -7, 8, 8, 10, 10, 9, 8, -7,
+            -13, 8, 8, 10, 10, 9, 8, -13,
             -8, 1, 3, 4, 4, 3, 1, -8,
             -10, -3, -7, -5, -5, -7, -3, -10,
     };
@@ -741,14 +726,14 @@ public class SimpleEvaluator implements BoardEvaluator
     };
     // King
     PIECE_VALUE_TABLES[0][Piece.KING] = new int[]{
-            2, 1, 1, 2, 1, 2, 1, 2,
-            3, 2, 2, 2, 2, 2, 2, 3,
+            2, 1, 1, 2, 1, 3, 1, 2,
+            2, 2, 2, 2, 2, 3, 2, 2,
             3, 3, 3, 3, 3, 3, 3, 3,
             3, 4, 4, 4, 4, 4, 4, 3,
             3, 4, 4, 4, 4, 4, 4, 3,
             3, 3, 3, 3, 3, 3, 3, 3,
-            2, 2, 2, 2, 2, 2, 2, 2,
-            2, 1, 1, 2, 1, 2, 1, 2,
+            2, 2, 2, 2, 2, 3, 2, 2,
+            2, 1, 1, 2, 1, 3, 1, 2,
     };
 
   }
@@ -792,20 +777,18 @@ public class SimpleEvaluator implements BoardEvaluator
   }
 
   long[] pawnAttackers = new long[2];
-  long[] tinyAttackers = new long[2]; 
-  long[] stagingAttackers = new long[2]; 
+  long[] tinyAttackers = new long[2];
+  long[] stagingAttackers = new long[2];
 
   public int scorePosition(Board board, int alpha, int beta)
   {
 //    moveGeneration.generateChecks(board);
     //if(DEBUG)System.err.println(board.toString());
 
-    int score = 0;
+    int score = board.materialScore;
 
     int whiteMaterial = 0;
     int blackMaterial = 0;
-
-    score += board.materialScore;
 
     // pawn position (with hash)
     PawnFlags pawnFlags = scorePawns(board);
@@ -813,27 +796,24 @@ public class SimpleEvaluator implements BoardEvaluator
     int pieceValueScore = board.positionScore;
 
     // Count Undeveloped Pieces
-    int undevelopedWhitePieceCount = Board.countBits((RANKS[0] & (board.pieceBoards[1][Piece.KNIGHT] | board.pieceBoards[1][Piece.BISHOP])) | (Square.E1.mask_on & board.pieceBoards[1][Piece.KING]));
-    int undevelopedBlackPieceCount = Board.countBits((RANKS[7] & (board.pieceBoards[0][Piece.KNIGHT] | board.pieceBoards[0][Piece.BISHOP])) | (Square.E8.mask_on & board.pieceBoards[0][Piece.KING]));
+    final long undevelopedWhitePieces = (RANKS[0] & (board.pieceBoards[1][Piece.KNIGHT] | board.pieceBoards[1][Piece.BISHOP])) | (Square.E1.mask_on & board.pieceBoards[1][Piece.KING]);
+    final long undevelopedBlackPieces = (RANKS[7] & (board.pieceBoards[0][Piece.KNIGHT] | board.pieceBoards[0][Piece.BISHOP])) | (Square.E8.mask_on & board.pieceBoards[0][Piece.KING]);
 
     // Eval Piece by piece
+    Square square;
     int squareIndex;
     long pieces = board.pieceBoards[1][Piece.KNIGHT];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
-      pieceValueScore -= PIECE_VALUE_TABLES[1][Piece.KNIGHT][squareIndex];
       whiteMaterial += 3;
 
-      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
-      pieceValueScore += ((Board.countBits(MoveGeneration.attackVectors[1][Piece.KNIGHT][squareIndex] & ~board.pieceBoards[1][6]))) - 6;
+      pieceValueScore -= Math.min(30, (board.boardSquares[square.index128].piece.moveCount - 1) * board.boardSquares[square.index128].piece.moveCount);
+//      pieceValueScore += (((Board.countBits(BLACK_HALF[squareIndex] & MoveGeneration.attackVectors[1][Piece.KNIGHT][squareIndex] & ~board.pieceBoards[1][6]))) - 3) << 1;
 
-      if ((WHITE_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[0][Piece.PAWN]) == 0 &&
-          square.rank >= 4 &&
-          square.file > 0 &&
-          square.file < 7)
+      if ((WHITE_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[0][Piece.PAWN]) == 0)
       {
         pieceValueScore += KNIGHT_OUTPOST_VALUE + (2 * (Board.rank(squareIndex) - 4));
       }
@@ -843,18 +823,14 @@ public class SimpleEvaluator implements BoardEvaluator
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
-      pieceValueScore += PIECE_VALUE_TABLES[0][Piece.KNIGHT][squareIndex];
       blackMaterial += 3;
 
-      pieceValueScore += (undevelopedBlackPieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
-      pieceValueScore -= ((Board.countBits(MoveGeneration.attackVectors[0][Piece.KNIGHT][squareIndex] & ~board.pieceBoards[0][6]))) - 6;
+      pieceValueScore += Math.min(30, (board.boardSquares[square.index128].piece.moveCount - 1) * board.boardSquares[square.index128].piece.moveCount);
+//      pieceValueScore -= (((Board.countBits(WHITE_HALF[squareIndex] & MoveGeneration.attackVectors[0][Piece.KNIGHT][squareIndex] & ~board.pieceBoards[0][6]))) - 3) << 1;
 
-      if ((BLACK_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[1][Piece.PAWN]) == 0 &&
-          square.rank <= 3 &&
-          square.file > 0 &&
-          square.file < 7)
+      if ((BLACK_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[1][Piece.PAWN]) == 0 )
       {
         pieceValueScore -= KNIGHT_OUTPOST_VALUE + (2 * (4-Board.rank(squareIndex)));
       }
@@ -864,7 +840,7 @@ public class SimpleEvaluator implements BoardEvaluator
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
 //      pieceValueScore -= PIECE_VALUE_TABLES[1][Piece.BISHOP][squareIndex];
       whiteMaterial += 3;
@@ -880,15 +856,15 @@ public class SimpleEvaluator implements BoardEvaluator
         pieceValueScore -= BISHOP_TRAPPED_VALUE;
       }
 */
-      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
-      pieceValueScore += ((board.bishopMobility(squareIndex)) << 1);
+      pieceValueScore -= Math.min(30, (board.boardSquares[square.index128].piece.moveCount - 1) * board.boardSquares[square.index128].piece.moveCount);
+      pieceValueScore += ((board.bishopMobility(squareIndex)));
     }
 
     pieces = board.pieceBoards[0][Piece.BISHOP];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
 //      pieceValueScore += PIECE_VALUE_TABLES[0][Piece.BISHOP][squareIndex];
       blackMaterial += 3;
@@ -903,15 +879,15 @@ public class SimpleEvaluator implements BoardEvaluator
         pieceValueScore += BISHOP_TRAPPED_VALUE;
       }
 */
-      pieceValueScore += (undevelopedBlackPieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
-      pieceValueScore -= ((board.bishopMobility(squareIndex)) << 1);
+      pieceValueScore += Math.min(30, (board.boardSquares[square.index128].piece.moveCount - 1) * board.boardSquares[square.index128].piece.moveCount);
+      pieceValueScore -= ((board.bishopMobility(squareIndex)));
     }
 
     pieces = board.pieceBoards[1][Piece.ROOK];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
       pieceValueScore += board.rookMobility(squareIndex) << 1;
       whiteMaterial += 5;
@@ -949,14 +925,14 @@ public class SimpleEvaluator implements BoardEvaluator
         pieceValueScore -= ROOK_ON_OPEN_FILE;
       }
 */
-      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
+      pieceValueScore -= (undevelopedWhitePieces == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
     }
 
     pieces = board.pieceBoards[0][Piece.ROOK];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
+      square = Board.SQUARES[squareIndex];
       pieces &= square.mask_off;
       pieceValueScore -= board.rookMobility(squareIndex) << 1;
       blackMaterial += 5;
@@ -989,40 +965,40 @@ public class SimpleEvaluator implements BoardEvaluator
         pieceValueScore -= ROOK_ON_HALF_OPEN_FILE;
       }
 
-      pieceValueScore += (undevelopedBlackPieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
+      pieceValueScore += Math.min(30, (undevelopedBlackPieces == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount);
     }
 
     pieces = board.pieceBoards[1][Piece.QUEEN];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
-      pieceValueScore -= PIECE_VALUE_TABLES[1][Piece.QUEEN][squareIndex];
+      square = Board.SQUARES[squareIndex];
+//      pieceValueScore -= PIECE_VALUE_TABLES[1][Piece.QUEEN][squareIndex];
       pieces &= square.mask_off;
       whiteMaterial += 9;
-      if(undevelopedWhitePieceCount == 0)
+      if(undevelopedWhitePieces == 0)
       {
         pieceValueScore += board.rookMobility(squareIndex);
         pieceValueScore += board.bishopMobility(squareIndex);
       }
-      pieceValueScore -= (undevelopedWhitePieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
+      pieceValueScore -= Math.min(30, (undevelopedWhitePieces == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount);
     }
 
     pieces = board.pieceBoards[0][Piece.QUEEN];
     while (pieces != 0)
     {
       squareIndex = Board.getLeastSignificantBit(pieces);
-      Square square = Board.SQUARES[squareIndex];
-      pieceValueScore += PIECE_VALUE_TABLES[0][Piece.QUEEN][squareIndex];
+      square = Board.SQUARES[squareIndex];
+//      pieceValueScore += PIECE_VALUE_TABLES[0][Piece.QUEEN][squareIndex];
       pieces &= square.mask_off;
       blackMaterial += 9;
-      if(undevelopedBlackPieceCount == 0)
+      if(undevelopedBlackPieces == 0)
       {
         pieceValueScore -= board.rookMobility(squareIndex);
         pieceValueScore -= board.bishopMobility(squareIndex);
       }
 
-      pieceValueScore += (undevelopedBlackPieceCount == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
+      pieceValueScore += Math.min(30, (undevelopedBlackPieces == 0 ? 2 : 4 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount);
     }
 
 
@@ -1034,7 +1010,7 @@ public class SimpleEvaluator implements BoardEvaluator
     score += pawnFlags.endgameScore * (pawnFlags.endgameScore > 0 ?  blackMaterialRatio : whiteMaterialRatio);
 
 
-    if(undevelopedBlackPieceCount + undevelopedWhitePieceCount > 0)
+    if(undevelopedWhitePieces != 0 || undevelopedBlackPieces != 0)
     {
 /*
       // Attack the center
@@ -1042,14 +1018,14 @@ public class SimpleEvaluator implements BoardEvaluator
 */
 
       // Develop pieces
-      score += Math.min(80, undevelopedBlackPieceCount - undevelopedWhitePieceCount * board.moveIndex);
+      score += Math.min(36, (Board.countBits(undevelopedWhitePieces) - Board.countBits(undevelopedBlackPieces) * board.moveIndex));
 
       // Dont move the queen too much too early
-      if (undevelopedWhitePieceCount > 0 && board.pieceBoards[1][Piece.QUEEN] != 0 && board.stats.whitePieceMoves[Piece.QUEEN] > 1)
+      if (undevelopedWhitePieces != 0 && board.pieceBoards[1][Piece.QUEEN] != 0 && board.stats.whitePieceMoves[Piece.QUEEN] > 1)
       {
         score -= min(44, board.stats.whitePieceMoves[Piece.QUEEN] * QUEEN_TOO_EARLY_VALUE);
       }
-      if (undevelopedBlackPieceCount > 0 && board.pieceBoards[0][Piece.QUEEN] != 0 && board.stats.blackPieceMoves[Piece.QUEEN] > 1)
+      if (undevelopedBlackPieces != 0 && board.pieceBoards[0][Piece.QUEEN] != 0 && board.stats.blackPieceMoves[Piece.QUEEN] > 1)
       {
         score += min(44, board.stats.blackPieceMoves[Piece.QUEEN] * QUEEN_TOO_EARLY_VALUE);
       }
@@ -1105,8 +1081,7 @@ public class SimpleEvaluator implements BoardEvaluator
     }
 
     // Pawns
-    int pawnScore = pawnFlags.score;
-    score += pawnScore;
+    score += pawnFlags.score;
 
     //if(DEBUG)System.err.println("Material Ratio: w: " + whiteMaterialRatio + " b: " + blackMaterialRatio);
     //if(DEBUG)System.err.println("Pawns: " + pawnScore);
@@ -1114,12 +1089,11 @@ public class SimpleEvaluator implements BoardEvaluator
     // Passed Pawns
     if ((pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns) != 0)
     {
-      int passedPawnScore = scorePassedPawns(board,
-                                             pawnFlags.whitePassedPawns,
-                                             pawnFlags.blackPassedPawns,
-                                             whiteMaterial,
-                                             blackMaterial);
-      score += passedPawnScore;
+      score += scorePassedPawns(board,
+                                pawnFlags.whitePassedPawns,
+                                pawnFlags.blackPassedPawns,
+                                whiteMaterialRatio,
+                                blackMaterialRatio);
       //if(DEBUG)System.err.println("Passed Pawns: " + passedPawnScore);
     }
 
@@ -1134,11 +1108,8 @@ public class SimpleEvaluator implements BoardEvaluator
 
 
     // King Evals
-    int whiteKingScore = evalWhiteKing(board, pawnFlags, blackMaterial);
-    int blackKingScore = evalBlackKing(board, pawnFlags, whiteMaterial);
-
-    score += whiteKingScore;
-    score -= blackKingScore;
+    score += evalWhiteKing(board, pawnFlags, blackMaterial);
+    score -= evalBlackKing(board, pawnFlags, whiteMaterial);
 
     //if(DEBUG)System.err.println("Pieces: " + pieceValueScore);
     //if(DEBUG)System.err.println("White King: " + whiteKingScore);
@@ -1210,10 +1181,10 @@ public class SimpleEvaluator implements BoardEvaluator
 
       //if(DEBUG)System.err.println("  P@" + pawnSquare.toString());
 //      whitePawnScore += Piece.TYPE_VALUES[Piece.PAWN];
-      pawnHashEntry.pawnFlags.whitePawnCount++;
+      ++pawnHashEntry.pawnFlags.whitePawnCount;
       pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
       pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
-//      whitePawnScore += whitePawnValueTable[pawnSquareIndex];
+      whitePawnScore += whitePawnValueTable[pawnSquareIndex];
       pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
 
       if (pawnSquare.file == 0)
@@ -1276,8 +1247,8 @@ public class SimpleEvaluator implements BoardEvaluator
       // locked files
       if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 + 8].mask_on) != 0)
       {
+        pawnHashEntry.pawnFlags.closedFiles[1] |= FILES[pawnSquare.file] & WHITE_HALF[pawnSquare.index64];
         pawnHashEntry.pawnFlags.lockedFiles |= FILES[pawnSquare.file];
-        whitePawnScore -= whitePawnValueTable[pawnSquareIndex];
         //if(DEBUG)System.err.println("    Locked File");
 //        continue;
       }
@@ -1288,12 +1259,12 @@ public class SimpleEvaluator implements BoardEvaluator
           (board.pieceBoards[1][Piece.PAWN] & WHITE_ISO_MASK[pawnSquare.index64]) == 0)
       {
         //if(DEBUG)System.err.println("    Double Backwards");
-        whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 2;
+        whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
         //if(DEBUG)System.err.println("    Backwards");
         if((board.pieceBoards[0][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
         {
           //if(DEBUG)System.err.println("    Double Backwards");
-          whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
+          whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
         }
       }
 
@@ -1322,10 +1293,10 @@ public class SimpleEvaluator implements BoardEvaluator
       //if(DEBUG)System.err.println("  p@" + pawnSquare.toString());
 
 //      blackPawnScore += Piece.TYPE_VALUES[Piece.PAWN];
-      pawnHashEntry.pawnFlags.blackPawnCount++;
+      ++pawnHashEntry.pawnFlags.blackPawnCount;
       pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
       pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
-//      blackPawnScore += blackPawnValueTable[pawnSquareIndex];
+      blackPawnScore += blackPawnValueTable[pawnSquareIndex];
       pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
 
       if (pawnSquare.file == 0)
@@ -1381,23 +1352,22 @@ public class SimpleEvaluator implements BoardEvaluator
       // locked files
       if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[pawnSquare.index64 - 8].mask_on) != 0)
       {
+        pawnHashEntry.pawnFlags.closedFiles[0] |= FILES[pawnSquare.file] & BLACK_HALF[pawnSquare.index64];
         pawnHashEntry.pawnFlags.lockedFiles |= FILES[pawnSquare.file];
-        blackPawnScore -= blackPawnValueTable[pawnSquareIndex];
         //if(DEBUG)System.err.println("    Locked File");
 //        continue;
       }
-
 
       // black backward pawns
       // black isolated pawns
       if ((board.pieceBoards[0][Piece.PAWN] & BLACK_BACKWARDS_MASK[pawnSquare.index64]) == 0 ||
           (board.pieceBoards[0][Piece.PAWN] & BLACK_ISO_MASK[pawnSquare.index64]) == 0)
       {
-        blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 2;
+        blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
         //if(DEBUG)System.err.println("    Backwards");
         if((board.pieceBoards[1][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
         {
-          blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
+          blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
           //if(DEBUG)System.err.println("    Doubled Backwards");
         }
       }
@@ -1571,8 +1541,8 @@ public class SimpleEvaluator implements BoardEvaluator
   public int scorePassedPawns(Board board,
                                long whitePassedPawns,
                                long blackPassedPawns,
-                               int whiteMaterial,
-                               int blackMaterial)
+                               double whiteMaterialRatio,
+                               double blackMaterialRatio)
   {
 /*
     if(whiteMaterial > 21 || blackMaterial > 21)
@@ -1580,8 +1550,6 @@ public class SimpleEvaluator implements BoardEvaluator
       return 0;
     }
 */
-    double whiteMaterialRatio = 1 - (whiteMaterial / 38D);
-    double blackMaterialRatio = 1 - (blackMaterial / 38D);
 
     int whiteScore = 0;
     int blackScore = 0;
@@ -1603,28 +1571,27 @@ public class SimpleEvaluator implements BoardEvaluator
       }
 */
 
-      int passedPawnValue = WHITE_PASSED_PAWN_VALUES[pawnSquareIndex >> 3];
-      whiteScore += passedPawnValue >> 1;
+      whiteScore += WHITE_PASSED_PAWN_VALUES[square.rank] >> 1;
 
       Square advancingSquare = Board.SQUARES[pawnSquareIndex + 8];
-      if(board.boardSquares[advancingSquare.index128].piece == null)
+      if(board.boardSquares[advancingSquare.index128].piece == null && advancingSquare.rank > 5)
       {
-        whiteScore += passedPawnValue >> 3;
+        whiteScore += WHITE_PASSED_PAWN_VALUES[square.rank] >> 3;
         int swap = swapMove(board, square, advancingSquare, 0, 100, 0);
         if (swap >= 0)
         {
-          whiteScore += passedPawnValue >> 2;
+          whiteScore += WHITE_PASSED_PAWN_VALUES[square.rank] >> 1;
           Square queeningSquare = Board.SQUARES[((pawnSquareIndex & 7) + 56)];
           swap = swapMove(board, square, queeningSquare, 0, 100, 0);
           if (swap >= 0)
           {
-            whiteScore += passedPawnValue >> 3;
+            whiteScore += WHITE_PASSED_PAWN_VALUES[square.rank] >> 1;
           }
 
-          if(blackMaterial == 0 && (board.pieceBoards[0][6] & board.blackKing.square.mask_off) == 0 && (board.blackKing.square.mask_on & WHITE_RUNAWAY_PAWN_MASK[pawnSquareIndex - (board.turn == 1 ? 0 : 8)]) == 0)
+          if(blackMaterialRatio == 1 && (board.pieceBoards[0][6] & board.blackKing.square.mask_off) == 0 && (board.blackKing.square.mask_on & WHITE_RUNAWAY_PAWN_MASK[pawnSquareIndex - (board.turn == 1 ? 0 : 8)]) == 0)
           {
             // lone pawn, can the king intercept it?
-            whiteScore += passedPawnValue >> 2;
+            whiteScore += WHITE_PASSED_PAWN_VALUES[square.rank] ;
           }
         }
       }
@@ -1647,28 +1614,27 @@ public class SimpleEvaluator implements BoardEvaluator
       }
 */
 
-      int passedPawnValue = BLACK_PASSED_PAWN_VALUES[pawnSquareIndex >> 3];
-      blackScore += passedPawnValue >> 1;
+      blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 1;
 
       Square advancingSquare = Board.SQUARES[pawnSquareIndex - 8];
-      if(board.boardSquares[advancingSquare.index128].piece == null)
+      if(board.boardSquares[advancingSquare.index128].piece == null && advancingSquare.rank < 2)
       {
-        blackScore += passedPawnValue >> 3;
+        blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 2;
         int swap = swapMove(board, square, advancingSquare, 1, 100, 0);
         if (swap >= 0)
         {
-          blackScore += passedPawnValue >> 2;
+          blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 1;
           Square queeningSquare = Board.SQUARES[(pawnSquareIndex & 7)];
           swap = swapMove(board, square, queeningSquare, 1, 100, 0);
           if (swap >= 0)
           {
-            blackScore += passedPawnValue >> 3;
+            blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 1;
           }
 
-          if(whiteMaterial == 0 && (board.pieceBoards[1][6] & board.whiteKing.square.mask_off) == 0 && (board.whiteKing.square.mask_on & BLACK_RUNAWAY_PAWN_MASK[pawnSquareIndex + (board.turn == 0 ? 0 : 8)]) == 0)
+          if(whiteMaterialRatio == 1 && (board.pieceBoards[1][6] & board.whiteKing.square.mask_off) == 0 && (board.whiteKing.square.mask_on & BLACK_RUNAWAY_PAWN_MASK[pawnSquareIndex + (board.turn == 0 ? 0 : 8)]) == 0)
           {
             // lone pawn, can the king intercept it?
-            blackScore += passedPawnValue >> 2;
+            blackScore += BLACK_PASSED_PAWN_VALUES[square.rank];
           }
         }
       }
@@ -1686,19 +1652,18 @@ public class SimpleEvaluator implements BoardEvaluator
 
   public int evalWhiteKing(Board board, PawnFlags pawnFlags, int blackMaterial)
   {
-    Square kingSquare = board.whiteKing.square;
     int score = 0;
 
     if ((board.pieceBoards[0][Piece.QUEEN] == 0 && blackMaterial < 17))
     {
-      score += PIECE_VALUE_TABLES[1][Piece.KNIGHT][kingSquare.index64];
-      int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[1][Piece.KING][kingSquare.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
-      score += nearbyPassedPawns * kingSquare.rank * 3;
+      score += PIECE_VALUE_TABLES[1][Piece.KNIGHT][board.whiteKing.square.index64];
+      int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[1][Piece.KING][board.whiteKing.square.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
+      score += nearbyPassedPawns * board.whiteKing.square.rank * 3;
 
       return score;
     }
 
-    int pawnShelter = scorePawnShelter(pawnFlags, board, kingSquare, 0, blackMaterial);
+    int pawnShelter = scorePawnShelter(pawnFlags, board, board.whiteKing.square, 0, blackMaterial);
     if(board.stats.whiteKingMoves == 0 && board.stats.whiteCastleFlag == 0)
     {
       int queensidePawnShelter = 0;
@@ -1724,14 +1689,13 @@ public class SimpleEvaluator implements BoardEvaluator
 
       pawnShelter = (kingsidePawnShelter + queensidePawnShelter + pawnShelter) / 3;
     }
-    else if(kingSquare.file < 6 && kingSquare.file > 2)
+    else if(board.whiteKing.square.file < 6 && board.whiteKing.square.file > 2)
     {
       score -= KING_FORFEIT_CASTLE_VALUE;
     }
 
     score -= pawnShelter;
-    int attackers = scoreAttackingPieces(board, kingSquare, 0);
-    score -= attackers;
+    score -= scoreAttackingPieces(board, board.whiteKing.square, 0);
 
     return score;
   }
@@ -1742,18 +1706,17 @@ public class SimpleEvaluator implements BoardEvaluator
 
   public int evalBlackKing(Board board, PawnFlags pawnFlags, int whiteMaterial)
   {
-    Square kingSquare = board.blackKing.square;
     int score = 0;
 
     if ((board.pieceBoards[1][Piece.QUEEN] == 0 && whiteMaterial < 17))
     {
-      score += PIECE_VALUE_TABLES[0][Piece.KNIGHT][kingSquare.index64];
-      int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[0][Piece.KING][kingSquare.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
-      score += nearbyPassedPawns * (7-kingSquare.rank) * 3;
+      score += PIECE_VALUE_TABLES[0][Piece.KNIGHT][board.blackKing.square.index64];
+      int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[0][Piece.KING][board.blackKing.square.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
+      score += nearbyPassedPawns * (7-board.blackKing.square.rank) * 3;
       return score;
     }
 
-    int pawnShelter = scorePawnShelter(pawnFlags, board, kingSquare, 1, whiteMaterial);
+    int pawnShelter = scorePawnShelter(pawnFlags, board, board.blackKing.square, 1, whiteMaterial);
     if(board.stats.blackKingMoves == 0 && board.stats.blackCastleFlag == 0)
     {
       int queensidePawnShelter = 0;
@@ -1779,13 +1742,12 @@ public class SimpleEvaluator implements BoardEvaluator
 
       pawnShelter = (kingsidePawnShelter + queensidePawnShelter + pawnShelter) / 3;
     }
-    else if(kingSquare.file < 6 && kingSquare.file > 2)
+    else if(board.blackKing.square.file < 6 && board.blackKing.square.file > 2)
     {
       score -= KING_FORFEIT_CASTLE_VALUE;
     }
     score -= pawnShelter;
-    int attackers = scoreAttackingPieces(board, kingSquare, 1);
-    score -= attackers;
+    score -= scoreAttackingPieces(board, board.blackKing.square, 1);
 
     return score;
   }
@@ -1822,12 +1784,12 @@ public class SimpleEvaluator implements BoardEvaluator
                                int attackerColor,
                                int attackerMaterial)
   {
-    int pawnScore = 0;
+    int pawnScore = 1;
     int defenderColor = attackerColor ^ 1;
     Board.BoardSquare boardSquare;
     int squareIndex;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; ++i)
     {
       squareIndex = kingSquare.index128 + KING_SAFETY_PAWN_AREA[defenderColor][i];
       if ((squareIndex & 0x88) != 0)
@@ -1841,19 +1803,20 @@ public class SimpleEvaluator implements BoardEvaluator
       {
         if((pawnFlags.openFiles & FILES[boardSquare.square.file]) != 0)
         {
-          pawnScore += 10;
+          pawnScore += 7;
         }
         else
         {
-          if((pawnFlags.closedFiles[attackerColor] & FILES[boardSquare.square.file]) == 0)
+          long colorHalf = attackerColor == 1 ? BLACK_HALF[Square.H5.index64] : WHITE_HALF[Square.H4.index64];
+          if((board.pieceBoards[attackerColor][Piece.PAWN] & FILES[boardSquare.square.file]) == 0)
           {
-            pawnScore += 1;
+            pawnScore += 2;
           }
-          if((pawnFlags.closedFiles[defenderColor] & FILES[boardSquare.square.file]) == 0)
+          if((board.pieceBoards[defenderColor][Piece.PAWN] & FILES[boardSquare.square.file] & colorHalf) == 0 )
           {
-            pawnScore += 3;
+            pawnScore += 4;
           }
-          pawnScore ++;
+          ++pawnScore;
         }
       }
     }
@@ -1873,26 +1836,20 @@ public class SimpleEvaluator implements BoardEvaluator
                                   Square kingSquare,
                                   int attackerColor)
   {
-    int defenderColor = attackerColor ^ 1;
-    Square square;
     long attackers;
-
     int adjacentScore = 0;
     int stagingScore = 0;
     int undefendedScore = 0;
-    int defendedSquareCount = 0;
     int safeSquareCount = 0;
+    int defendedSquareCount = 0;
 
-    long squares = KING_STAGING_AREA[defenderColor][kingSquare.index64];
-    while(squares != 0)
+    for(int i = 0;i < KING_STAGING_AREA[attackerColor ^ 1][kingSquare.index64].length;i++)
     {
-      square = Board.SQUARES[Board.getLeastSignificantBit(squares)];
-      squares &= square.mask_off;
-
-      attackers = moveGeneration.getAllAttackers(board, square, attackerColor);
+      attackers = moveGeneration.getAllAttackers(board, KING_STAGING_AREA[attackerColor ^ 1][kingSquare.index64][i], attackerColor);
       if(attackers != 0)
       {
-        if(!board.isSquareAttackedByColor(square, defenderColor))
+        attackers |= (board.pieceBoards[attackerColor][6] & KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i].mask_on);
+        if(!board.isSquareAttackedByColor(KING_STAGING_AREA[attackerColor ^ 1][kingSquare.index64][i], attackerColor ^ 1))
         {
           // undefended square in the staging area
           stagingScore += scoreAttacksToSquare(board, attackers, attackerColor) >> 1;
@@ -1906,29 +1863,24 @@ public class SimpleEvaluator implements BoardEvaluator
       }
       else
       {
-/*
-        Piece piece = board.boardSquares[square.index128].piece;
-        if(piece == null || piece.color != defenderColor)
+        if(!board.isSquareAttackedByColor(KING_STAGING_AREA[attackerColor ^ 1][kingSquare.index64][i], attackerColor ^ 1))
         {
-          stagingSquareCount ++;
+          // undefended square in the staging area
+          stagingScore += scoreAttacksToSquare(board, (board.pieceBoards[attackerColor][6] & KING_STAGING_AREA[attackerColor ^ 1][kingSquare.index64][i].mask_on), attackerColor);
         }
-*/
       }
     }
-    squares = KING_PAWN_AREA[defenderColor][kingSquare.index64] | KING_TINY_AREA[defenderColor][kingSquare.index64];
-
-    while(squares != 0)
+    for(int i = 0;i < KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64].length;i++)
     {
-      square = Board.SQUARES[Board.getLeastSignificantBit(squares)];
-      squares &= square.mask_off;
 
-      attackers = moveGeneration.getAllAttackers(board, square, attackerColor);
+      attackers = moveGeneration.getAllAttackers(board, KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i], attackerColor);
       if(attackers != 0)
       {
-        if(!board.isSquareAttackedByColor(square, defenderColor))
+        attackers |= (board.pieceBoards[attackerColor][6] & KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i].mask_on);
+        if(!board.isSquareAttackedByColor(KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i], attackerColor ^ 1))
         {
           // undefended square in the pawn area
-          undefendedScore += scoreAttacksToSquare(board, attackers, attackerColor) >> (attackers & (attackers-1)) != 0 ? 0 : 1;
+          undefendedScore += scoreAttacksToSquare(board, attackers, attackerColor);
         }
         else
         {
@@ -1938,10 +1890,10 @@ public class SimpleEvaluator implements BoardEvaluator
         }
       }
       else {
-        Piece piece = board.boardSquares[square.index128].piece;
-        if(piece == null || piece.color != defenderColor)
+        if(board.boardSquares[KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i].index128].piece == null ||
+           board.boardSquares[KING_NEAR_AREA[attackerColor ^ 1][kingSquare.index64][i].index128].piece.color != (attackerColor ^ 1))
         {
-          safeSquareCount ++;
+          ++safeSquareCount;
         }
       }
     }
@@ -1951,23 +1903,21 @@ public class SimpleEvaluator implements BoardEvaluator
       return 10000;
     }
 
-    int totalScore = (stagingScore + undefendedScore + adjacentScore / Math.max(1, (defendedSquareCount)));
+    return undefendedScore + adjacentScore + (stagingScore / Math.max(1, defendedSquareCount + safeSquareCount));
+
 
 /*
     if(board.turn == defenderColor)
     {
       totalScore = totalScore >> 1;
     }
-*/
-
-/*
     if(totalScore > 100)
     {
       System.out.println("attackingPieces [" + kingSquare + "]: (* " + pawnShelter + " " + totalScore + ") " + board);
     }
-*/
 
     return totalScore;
+*/
   }
 
   public int scoreAttacksToSquare(Board board, long attackers, int attackerColor)
@@ -1978,45 +1928,55 @@ public class SimpleEvaluator implements BoardEvaluator
     int queens = 0;
     int king = 0;
 
-    while ((board.pieceBoards[attackerColor][Piece.PAWN] & attackers) != 0)
+
+    long[] attackerBoards = board.pieceBoards[attackerColor];
+    while (attackers != 0)
     {
-      pawns++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.PAWN] & attackers);
-    }
-    while ((board.pieceBoards[attackerColor][Piece.KNIGHT] & attackers) != 0)
-    {
-      minors++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.KNIGHT] & attackers);
-    }
-    while ((board.pieceBoards[attackerColor][Piece.BISHOP] & attackers) != 0)
-    {
-      minors++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.BISHOP] & attackers);
-    }
-    while ((board.pieceBoards[attackerColor][Piece.ROOK] & attackers) != 0)
-    {
-      rooks++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.ROOK] & attackers);
-    }
-    while ((board.pieceBoards[attackerColor][Piece.QUEEN] & attackers) != 0)
-    {
-      queens++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.QUEEN] & attackers);
-    }
-    if ((board.pieceBoards[attackerColor][Piece.KING] & attackers) != 0)
-    {
-      king++;
-      attackers ^= 1L << Board.getLeastSignificantBit(board.pieceBoards[attackerColor][Piece.KING] & attackers);
+
+      if ((attackerBoards[Piece.PAWN] & attackers) != 0)
+      {
+        ++pawns;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.PAWN] & attackers);
+      }
+      else if ((attackerBoards[Piece.KNIGHT] & attackers) != 0)
+      {
+        ++minors;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.KNIGHT] & attackers);
+      }
+      else if ((attackerBoards[Piece.BISHOP] & attackers) != 0)
+      {
+        ++minors;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.BISHOP] & attackers);
+      }
+      else if ((attackerBoards[Piece.ROOK] & attackers) != 0)
+      {
+        ++rooks;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.ROOK] & attackers);
+      }
+      else if ((attackerBoards[Piece.QUEEN] & attackers) != 0)
+      {
+        ++queens;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.QUEEN] & attackers);
+      }
+      else if ((attackerBoards[Piece.KING] & attackers) != 0)
+      {
+        ++king;
+        attackers ^= 1L << Board.getLeastSignificantBit(attackerBoards[Piece.KING] & attackers);
+      }
+      else
+      {
+        break;
+      }
     }
 
     int pieces = (pawns + minors + rooks + king);
     int piecesAndQueens = pieces + queens;
     int pawnValue = 10 * (pawns * piecesAndQueens);
-    int minorValue = 23 * (minors * piecesAndQueens);
+    int minorValue = 26 * (minors * piecesAndQueens);
     int rookValue = 60 * (rooks * piecesAndQueens);
     int queenValue = 94 * (queens * pieces);
 
-    return (pawns * pawnValue) + (minors * minorValue) + (rooks * rookValue) + (queens * queenValue) + king;
+    return pawnValue + minorValue + rookValue + queenValue + king;
   }
 
   public int scoreDefenseOfSquare(Board board, long bishopAttacks, long rookAttacks, Square square, int color, boolean rewardOccupancy)
@@ -2133,7 +2093,7 @@ public class SimpleEvaluator implements BoardEvaluator
              Board.SQUARES[square.index64 + 16].mask_on |
              (square.file < 7 ? Board.SQUARES[square.index64 + 17].mask_on : 0);
     }
-    return square.rank < 2 ? 0 : 
+    return square.rank < 2 ? 0 :
            (square.file > 0 ? Board.SQUARES[square.index64 - 17].mask_on : 0) |
            Board.SQUARES[square.index64 - 16].mask_on |
            (square.file < 7 ? Board.SQUARES[square.index64 - 15].mask_on : 0);
@@ -2171,7 +2131,7 @@ public class SimpleEvaluator implements BoardEvaluator
            (square.file < 7 ? Board.SQUARES[square.index64 + 1].mask_on : 0);
   }
 
-  
+
   private static long getKingAreaA1H8(Square square)
   {
     return MoveGeneration.attackVectors[0][7][square.index64]
@@ -2371,10 +2331,10 @@ public class SimpleEvaluator implements BoardEvaluator
   {
     int swapIndex = 1;
 
-    long attackers = moveGeneration.getAllAttackers(board,
+    long attackers = moveGeneration.getAttackersNoXRay(board,
                                                     toSquare,
                                                     board.turn ^ 1) |
-                     moveGeneration.getAllAttackers(board,
+                     moveGeneration.getAttackersNoXRay(board,
                                                     toSquare,
                                                     board.turn) |
                      moveGeneration.getNewAttackers(board, fromSquare, toSquare, board.turn) |
@@ -2390,7 +2350,7 @@ public class SimpleEvaluator implements BoardEvaluator
     while ((attackers & board.pieceBoards[color][Board.ALL_PIECES]) != 0)
     {
       swapScores[swapIndex] = -swapScores[swapIndex - 1] + attackedPiece;
-      swapIndex++;
+      ++swapIndex;
 
       if ((board.pieceBoards[color][Piece.PAWN] & attackers) != 0)
       {

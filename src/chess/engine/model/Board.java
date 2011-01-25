@@ -37,8 +37,8 @@ public class Board
 
   public MoveStack moveStack = new MoveStack();
 
-  public static Square[] SQUARES = Square.values();
-  public BoardSquare[] boardSquares = new BoardSquare[128];
+  public static final Square[] SQUARES = Square.values();
+  public final BoardSquare[] boardSquares = new BoardSquare[128];
   public Piece[] pieces = new Piece[32];
   public int[] attacks = new int[64];  
 
@@ -60,9 +60,6 @@ public class Board
 
   public int materialScore = 0;
   public int positionScore = 0;
-
-  // indexed as [fromSquare.index64][toSquare.index64]
-  public int[][] moveHistory = new int[64][64];
 
   // keeps board hashes for draw by rep
   public long[] repetitionTable = new long[500];
@@ -674,12 +671,6 @@ public class Board
     public static int O_O = 1;
     public static int O_O_O = 2;
 
-    public int whitePawnCount;
-    public int blackPawnCount;
-    public int whiteMaterial;
-    public int blackMaterial;
-    public int materialScore;
-
     public int whiteKingMoves = 0;
     public int blackKingMoves = 0;
 
@@ -690,9 +681,6 @@ public class Board
     public int whiteQueensideRookMoves = 0;
     public int blackKingsideRookMoves = 0;
     public int blackQueensideRookMoves = 0;
-
-    public int currentWhiteKingSafety;
-    public int currentBlackKingSafety;
 
     public boolean whiteAttacking = false;
     public boolean blackAttacking = false;
@@ -738,10 +726,6 @@ public class Board
     }
 
     return out.toString();
-  }
-
-  public void clearHistory() {
-    moveHistory = new int[64][64];
   }
 
   public long getHash()

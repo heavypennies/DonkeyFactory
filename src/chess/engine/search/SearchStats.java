@@ -29,6 +29,7 @@ public class SearchStats {
   public int doubleCheckExtensions;
   public int promotionExtensions;
   public int recaptureExtensions;
+  public int mcPrunes;
 
 
   public String toString() {
@@ -51,7 +52,8 @@ public class SearchStats {
             .append("   RX: ").append(pad(recaptureExtensions, 8))
             .append("\nReductions  |  LE: ").append(pad(lazyEvals, 8))
             .append("    R: ").append(pad(reductions, 8))
-            .append("    P: ").append(pad(prunes, 8)).toString();
+            .append("    P: ").append(pad(prunes, 8))
+            .append("    MCP: ").append(pad(mcPrunes, 8)).toString();
   }
 
   private String pad(Number value, int length) {

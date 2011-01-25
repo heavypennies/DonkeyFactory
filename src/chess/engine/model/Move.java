@@ -247,28 +247,6 @@ public class Move
          .append((promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : "")).toString();
   }
 
-  public static void nextMove(Move[] moves, int moveIndex)
-  {
-    int bestIndex = -1;
-    int best = -Searcher.INFINITY;
-
-    for(int index = moveIndex;moves[index].moved != null;index++)
-    {
-      if(moves[index].score > best)
-      {
-
-        bestIndex = index;
-        best = moves[index].score;
-      }
-    }
-    if(bestIndex > -1)
-    {
-      Move temp = moves[bestIndex];
-      moves[bestIndex] = moves[moveIndex];
-      moves[moveIndex] = temp;
-    }
-  }
-
   public static String toString(Move[] moves)
   {
     return Move.toString(moves, 0);
