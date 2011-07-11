@@ -1010,7 +1010,7 @@ public class SimpleEvaluator implements BoardEvaluator
     score += pawnFlags.endgameScore * (pawnFlags.endgameScore > 0 ?  blackMaterialRatio : whiteMaterialRatio);
 
 
-    if(undevelopedWhitePieces != 0 || undevelopedBlackPieces != 0)
+    if(undevelopedWhitePieces != 0 && undevelopedBlackPieces != 0)
     {
 /*
       // Attack the center
@@ -1018,7 +1018,7 @@ public class SimpleEvaluator implements BoardEvaluator
 */
 
       // Develop pieces
-      score += Math.min(36, (Board.countBits(undevelopedWhitePieces) - Board.countBits(undevelopedBlackPieces) * board.moveIndex));
+      score += Math.min(50, (Board.countBits(undevelopedWhitePieces) - Board.countBits(undevelopedBlackPieces) * board.moveIndex));
 
       // Dont move the queen too much too early
       if (undevelopedWhitePieces != 0 && board.pieceBoards[1][Piece.QUEEN] != 0 && board.stats.whitePieceMoves[Piece.QUEEN] > 1)
@@ -1259,12 +1259,12 @@ public class SimpleEvaluator implements BoardEvaluator
           (board.pieceBoards[1][Piece.PAWN] & WHITE_ISO_MASK[pawnSquare.index64]) == 0)
       {
         //if(DEBUG)System.err.println("    Double Backwards");
-        whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
-        //if(DEBUG)System.err.println("    Backwards");
+        whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
+        //if(DEBUG)System.err.println("  `  Backwards");
         if((board.pieceBoards[0][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
         {
           //if(DEBUG)System.err.println("    Double Backwards");
-          whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+          whitePawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
         }
       }
 
@@ -1363,11 +1363,11 @@ public class SimpleEvaluator implements BoardEvaluator
       if ((board.pieceBoards[0][Piece.PAWN] & BLACK_BACKWARDS_MASK[pawnSquare.index64]) == 0 ||
           (board.pieceBoards[0][Piece.PAWN] & BLACK_ISO_MASK[pawnSquare.index64]) == 0)
       {
-        blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+        blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
         //if(DEBUG)System.err.println("    Backwards");
         if((board.pieceBoards[1][Piece.PAWN] & FILES[pawnSquare.file]) == 0)
         {
-          blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file] >> 1;
+          blackPawnScore -= PAWN_BACKWARDS_VALUE[pawnSquare.file];
           //if(DEBUG)System.err.println("    Doubled Backwards");
         }
       }
@@ -1619,7 +1619,7 @@ public class SimpleEvaluator implements BoardEvaluator
       Square advancingSquare = Board.SQUARES[pawnSquareIndex - 8];
       if(board.boardSquares[advancingSquare.index128].piece == null && advancingSquare.rank < 2)
       {
-        blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 2;
+        blackScore += BLACK_PASSED_PAWN_VALUES[square.rank] >> 3;
         int swap = swapMove(board, square, advancingSquare, 1, 100, 0);
         if (swap >= 0)
         {
@@ -1656,7 +1656,7 @@ public class SimpleEvaluator implements BoardEvaluator
 
     if ((board.pieceBoards[0][Piece.QUEEN] == 0 && blackMaterial < 17))
     {
-      score += PIECE_VALUE_TABLES[1][Piece.KNIGHT][board.whiteKing.square.index64];
+      score += PIECE_VALUE_TABLES[1][Piece.KNIGHT][board.whiteKing.square.index64] << 1;
       int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[1][Piece.KING][board.whiteKing.square.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
       score += nearbyPassedPawns * board.whiteKing.square.rank * 3;
 
@@ -1710,7 +1710,7 @@ public class SimpleEvaluator implements BoardEvaluator
 
     if ((board.pieceBoards[1][Piece.QUEEN] == 0 && whiteMaterial < 17))
     {
-      score += PIECE_VALUE_TABLES[0][Piece.KNIGHT][board.blackKing.square.index64];
+      score += PIECE_VALUE_TABLES[0][Piece.KNIGHT][board.blackKing.square.index64] << 1;
       int nearbyPassedPawns = Board.countBits(MoveGeneration.attackVectors[0][Piece.KING][board.blackKing.square.index64] & (pawnFlags.whitePassedPawns | pawnFlags.blackPassedPawns));
       score += nearbyPassedPawns * (7-board.blackKing.square.rank) * 3;
       return score;
@@ -1820,7 +1820,7 @@ public class SimpleEvaluator implements BoardEvaluator
         }
       }
     }
-    return (((attackerMaterial / 5) * PIECE_VALUE_TABLES[0][Piece.KING][kingSquare.index64])) * pawnScore;
+    return ((((attackerMaterial / 4) * PIECE_VALUE_TABLES[0][Piece.KING][kingSquare.index64])) * pawnScore) + pawnScore;
   }
 
   /**
