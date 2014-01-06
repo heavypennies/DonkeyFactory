@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_twitter4j" default="compile.module.twitter4j">
+  <dirname property="module.twitter4j.basedir" file="${ant.file.module_twitter4j}"/>
+  
+  <property name="module.jdk.home.twitter4j" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.twitter4j" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.twitter4j" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.twitter4j" value="${compiler.args}"/>
+  
+  <property name="twitter4j.output.dir" value="${module.twitter4j.basedir}/../build/production/twitter4j"/>
+  <property name="twitter4j.testoutput.dir" value="${module.twitter4j.basedir}/../build/test/twitter4j"/>
+  
+  <path id="twitter4j.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="twitter4j.module.production.classpath">
+    <path refid="${module.jdk.classpath.twitter4j}"/>
+  </path>
+  
+  <path id="twitter4j.runtime.production.module.classpath">
+    <pathelement location="${twitter4j.output.dir}"/>
+  </path>
+  
+  <path id="twitter4j.module.classpath">
+    <path refid="${module.jdk.classpath.twitter4j}"/>
+    <pathelement location="${twitter4j.output.dir}"/>
+  </path>
+  
+  <path id="twitter4j.runtime.module.classpath">
+    <pathelement location="${twitter4j.testoutput.dir}"/>
+    <pathelement location="${twitter4j.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.twitter4j">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.twitter4j">
+    <patternset refid="excluded.from.module.twitter4j"/>
+  </patternset>
+  
+  
+  <target name="compile.module.twitter4j" depends="compile.module.twitter4j.production,compile.module.twitter4j.tests" description="Compile module twitter4j"/>
+  
+  <target name="compile.module.twitter4j.production" depends="register.custom.compilers" description="Compile module twitter4j; production classes"/>
+  
+  <target name="compile.module.twitter4j.tests" depends="register.custom.compilers,compile.module.twitter4j.production" description="compile module twitter4j; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.twitter4j" description="cleanup module">
+    <delete dir="${twitter4j.output.dir}"/>
+    <delete dir="${twitter4j.testoutput.dir}"/>
+  </target>
+</project>

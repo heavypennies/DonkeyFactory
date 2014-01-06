@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_donkeyfactory" default="compile.module.donkeyfactory">
+  <dirname property="module.donkeyfactory.basedir" file="${ant.file.module_donkeyfactory}"/>
+  
+  <property name="module.jdk.home.donkeyfactory" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.donkeyfactory" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.donkeyfactory" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.donkeyfactory" value="${compiler.args}"/>
+  
+  <property name="donkeyfactory.output.dir" value="${module.donkeyfactory.basedir}/build/production/DonkeyFactory"/>
+  <property name="donkeyfactory.testoutput.dir" value="${module.donkeyfactory.basedir}/build/test/DonkeyFactory"/>
+  
+  <path id="donkeyfactory.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="donkeyfactory.module.production.classpath">
+    <path refid="${module.jdk.classpath.donkeyfactory}"/>
+    <pathelement location="${twitter4j.output.dir}"/>
+    <path refid="library.libz.classpath"/>
+  </path>
+  
+  <path id="donkeyfactory.runtime.production.module.classpath">
+    <pathelement location="${donkeyfactory.output.dir}"/>
+    <path refid="twitter4j.runtime.production.module.classpath"/>
+    <path refid="library.libz.classpath"/>
+  </path>
+  
+  <path id="donkeyfactory.module.classpath">
+    <path refid="${module.jdk.classpath.donkeyfactory}"/>
+    <pathelement location="${donkeyfactory.output.dir}"/>
+    <pathelement location="${twitter4j.testoutput.dir}"/>
+    <pathelement location="${twitter4j.output.dir}"/>
+    <path refid="library.libz.classpath"/>
+  </path>
+  
+  <path id="donkeyfactory.runtime.module.classpath">
+    <pathelement location="${donkeyfactory.testoutput.dir}"/>
+    <pathelement location="${donkeyfactory.output.dir}"/>
+    <path refid="twitter4j.runtime.module.classpath"/>
+    <path refid="library.libz.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.donkeyfactory">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.donkeyfactory">
+    <patternset refid="excluded.from.module.donkeyfactory"/>
+  </patternset>
+  
+  <path id="donkeyfactory.module.sourcepath">
+    <dirset dir="${module.donkeyfactory.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.donkeyfactory" depends="compile.module.donkeyfactory.production,compile.module.donkeyfactory.tests" description="Compile module DonkeyFactory"/>
+  
+  <target name="compile.module.donkeyfactory.production" depends="register.custom.compilers,compile.module.twitter4j" description="Compile module DonkeyFactory; production classes">
+    <mkdir dir="${donkeyfactory.output.dir}"/>
+    <javac2 destdir="${donkeyfactory.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.donkeyfactory}/javac">
+      <compilerarg line="${compiler.args.donkeyfactory}"/>
+      <bootclasspath refid="donkeyfactory.module.bootclasspath"/>
+      <classpath refid="donkeyfactory.module.production.classpath"/>
+      <src refid="donkeyfactory.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.donkeyfactory"/>
+    </javac2>
+    
+    <copy todir="${donkeyfactory.output.dir}">
+      <fileset dir="${module.donkeyfactory.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.donkeyfactory.tests" depends="register.custom.compilers,compile.module.donkeyfactory.production" description="compile module DonkeyFactory; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.donkeyfactory" description="cleanup module">
+    <delete dir="${donkeyfactory.output.dir}"/>
+    <delete dir="${donkeyfactory.testoutput.dir}"/>
+  </target>
+</project>

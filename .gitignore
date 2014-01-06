@@ -4,3 +4,5 @@ guestDonkeyFactory.sh
 out/*
 *.iws
 .idea/*
+build/*
+testdonkeyfactory.sh
