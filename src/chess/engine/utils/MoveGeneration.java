@@ -4,10 +4,10 @@
 package chess.engine.utils;
 
 import chess.engine.model.*;
-import chess.engine.search.PositionHashtable;
+import chess.engine.search.ABSearch;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class MoveGeneration implements MoveGenerationConstants {
@@ -15,7 +15,6 @@ public class MoveGeneration implements MoveGenerationConstants {
   public static long[] zerosL = new long[64];
   public static int[] zeros = new int[64];
   public static int[][] checks = new int[2][64];
-  private PositionHashtable.HashEntry hashEntry;
 /*
   public static int[][] pawnChecks = new int[2][64];
   public static int[][] knightChecks = new int[2][64];
@@ -71,9 +70,11 @@ public class MoveGeneration implements MoveGenerationConstants {
       Piece target1;
       Piece target2;
       for (Square square : Board.SQUARES) {
+/*
         if (square.rank == Constants.RANK_1 || square.rank == Constants.RANK_8) {
           continue;
         }
+*/
         board.turn = color;
 
         piece = new Piece(0, board, color, Piece.PAWN, square);
@@ -224,13 +225,12 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare + 15 == toSquare && ((fromSquare + 15) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare + 15; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 15)
-            {
+            for (int squareIndex = fromSquare + 15; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 15) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
             }
-            for (int squareIndex = toSquare + 15; (squareIndex & 0x88) == 0; squareIndex+=15) {
+            for (int squareIndex = toSquare + 15; (squareIndex & 0x88) == 0; squareIndex += 15) {
               Square square = board.boardSquares[squareIndex].square;
               shadowVectors[fromSquare][toSquare] |= square.mask_on;
             }
@@ -240,13 +240,12 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare + 16 == toSquare && ((fromSquare + 16) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare + 16; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 16)
-            {
+            for (int squareIndex = fromSquare + 16; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 16) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
             }
-            for (int squareIndex = toSquare + 16; (squareIndex & 0x88) == 0; squareIndex+=16) {
+            for (int squareIndex = toSquare + 16; (squareIndex & 0x88) == 0; squareIndex += 16) {
               Square square = board.boardSquares[squareIndex].square;
               shadowVectors[fromSquare][toSquare] |= square.mask_on;
             }
@@ -256,13 +255,12 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare + 17 == toSquare && ((fromSquare + 17) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare + 17; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 17)
-            {
+            for (int squareIndex = fromSquare + 17; squareIndex < toSquare && (squareIndex & 0x88) == 0; squareIndex += 17) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
             }
-            for (int squareIndex = toSquare + 17; (squareIndex & 0x88) == 0; squareIndex+=17) {
+            for (int squareIndex = toSquare + 17; (squareIndex & 0x88) == 0; squareIndex += 17) {
               Square square = board.boardSquares[squareIndex].square;
               shadowVectors[fromSquare][toSquare] |= square.mask_on;
             }
@@ -288,8 +286,7 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare - 15 == toSquare && ((fromSquare - 15) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare - 15; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 15)
-            {
+            for (int squareIndex = fromSquare - 15; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 15) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
@@ -304,8 +301,7 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare - 16 == toSquare && ((fromSquare - 16) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare - 16; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 16)
-            {
+            for (int squareIndex = fromSquare - 16; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 16) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
@@ -320,8 +316,7 @@ public class MoveGeneration implements MoveGenerationConstants {
             if (fromSquare - 17 == toSquare && ((fromSquare - 17) & 0x88) == 0) {
               distanceSpans[fromSquare][toSquare] = 0;
             }
-            for (int squareIndex = fromSquare - 17; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 17)
-            {
+            for (int squareIndex = fromSquare - 17; squareIndex > toSquare && (squareIndex & 0x88) == 0; squareIndex -= 17) {
               Square square = board.boardSquares[squareIndex].square;
               distanceSpans[fromSquare][toSquare] |= square.mask_on;
               notDistanceSpans[fromSquare][toSquare] &= square.mask_off;
@@ -338,13 +333,17 @@ public class MoveGeneration implements MoveGenerationConstants {
   }
 
 
+  long pieces;
+  Piece piece;
+  Square pieceSquare;
+  int index;
   public int generateMoves(Move[] moves, Board board) {
-    int index = 0;
-    long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
+    index = 0;
+    pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
       pieces &= pieceSquare.mask_off;
-      Piece piece = board.boardSquares[pieceSquare.index128].piece;
+      piece = board.boardSquares[pieceSquare.index128].piece;
       switch (piece.type) {
         case Piece.PAWN: {
           if (piece.color == 1) {
@@ -354,19 +353,11 @@ public class MoveGeneration implements MoveGenerationConstants {
           }
           break;
         }
-        case Piece.KNIGHT: {
-          index += generateFullKnightMoves(index, moves, board, piece);
-          break;
-        }
+        case Piece.KNIGHT:
         case Piece.BISHOP:
-          index += generateBishopMoves(index, moves, board, piece);
-          break;
         case Piece.ROOK:
-          index += generateRookMoves(index, moves, board, piece);
-          break;
         case Piece.QUEEN: {
-          index += generateBishopMoves(index, moves, board, piece);
-          index += generateRookMoves(index, moves, board, piece);
+          index += generateMovesFromAttacks(index, moves, board, piece);
           break;
         }
         case Piece.KING: {
@@ -409,11 +400,10 @@ public class MoveGeneration implements MoveGenerationConstants {
   public int generateKnightMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
 
-    long knightMoves = attackVectors[piece.color][Piece.KNIGHT][piece.square.index64];
+    long knightMoves = piece.attacks;
 
     long capturesBoard = knightMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
@@ -422,8 +412,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     }
 
     capturesBoard = knightMoves & ~board.allPieces;
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
@@ -433,13 +422,102 @@ public class MoveGeneration implements MoveGenerationConstants {
     return index - originalIndex;
   }
 
+  public int generateMovesFromAttacks(int index, Move[] moves, Board board, Piece piece) {
+    int originalIndex = index;
+    Square square;
+    long toSquares = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
+    while (toSquares != 0) {
+      square = Board.SQUARES[Board.getLeastSignificantBit(toSquares)];
+      toSquares &= square.mask_off;
+      moves[index++].reset(piece.square, board.boardSquares[square.index128].square, board.boardSquares[square.index128].square, piece, board.boardSquares[square.index128].piece);
+    }
+
+    toSquares = piece.attacks & ~board.allPieces;
+    while (toSquares != 0) {
+      square = Board.SQUARES[Board.getLeastSignificantBit(toSquares)];
+      toSquares &= square.mask_off;
+      moves[index++].reset(piece.square, square, piece);
+    }
+    return index - originalIndex;
+  }
+
+  public int generateKnightChecksFromAttacks(int index, Move[] moves, Board board, Piece piece, Square kingSquare) {
+    int originalIndex = index;
+
+    long possibleKnightChecks = MoveGeneration.attackVectors[0][Piece.KNIGHT][kingSquare.index64];
+
+    long slidingMoves = piece.attacks;
+    long squares = possibleKnightChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
+    while (squares != 0) {
+      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      Square square = Board.SQUARES[toSquareIndex];
+      squares &= square.mask_off;
+      if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
+        moves[index++].reset(piece.square, square, square, piece, board.boardSquares[square.index128].piece);
+      }
+      else {
+        moves[index++].reset(piece.square, square, piece);
+        moves[index-1].score = Move.CAPTURE_SCORE - index;
+      }
+      moves[index-1].check = true;
+    }
+    return index - originalIndex;
+  }
+
+  public int generateBishopQueenChecksFromAttacks(int index, Move[] moves, Board board, Piece piece, Square kingSquare) {
+    int originalIndex = index;
+
+    long possibleBishopQueenChecks = board.bishopAttacks(kingSquare.index64);
+
+    long slidingMoves = piece.attacks;
+
+    long squares = possibleBishopQueenChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
+    while (squares != 0) {
+      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      Square square = Board.SQUARES[toSquareIndex];
+      squares &= square.mask_off;
+      if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
+        moves[index++].reset(piece.square, square, square, piece, board.boardSquares[square.index128].piece);
+      }
+      else {
+        moves[index++].reset(piece.square, square, piece);
+        moves[index-1].score = Move.CAPTURE_SCORE - index;
+      }
+      moves[index-1].check = true;
+    }
+    return index - originalIndex;
+  }
+
+  public int generateRookQueenChecksFromAttacks(int index, Move[] moves, Board board, Piece piece, Square kingSquare) {
+    int originalIndex = index;
+
+    long possibleRookQueenChecks = board.rookAttacks(kingSquare.index64);
+
+    long slidingMoves = piece.attacks;
+    long squares = possibleRookQueenChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
+    while (squares != 0) {
+      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      Square square = Board.SQUARES[toSquareIndex];
+      squares &= square.mask_off;
+      if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
+        moves[index++].reset(piece.square, square, square, piece, board.boardSquares[square.index128].piece);
+      }
+      else {
+        moves[index++].reset(piece.square, square, piece);
+        moves[index-1].score = Move.CAPTURE_SCORE - index;
+      }
+      moves[index-1].check = true;
+    }
+    return index - originalIndex;
+  }
+
+
   public int generateBishopMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
 
     long bishopMoves = (board.attacksDiaga1(piece.square.index64) | board.attacksDiagh1(piece.square.index64));
     long capturesBoard = bishopMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
@@ -448,8 +526,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     }
 
     capturesBoard = bishopMoves & ~board.allPieces;
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
@@ -458,14 +535,12 @@ public class MoveGeneration implements MoveGenerationConstants {
     return index - originalIndex;
   }
 
-  public int generateRookMoves(int index, Move[] moves, Board board, Piece piece)
-  {
+  public int generateRookMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
 
     long rookMoves = (board.attacksRank(piece.square.index64) | board.attacksFile(piece.square.index64));
     long capturesBoard = rookMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
@@ -474,44 +549,11 @@ public class MoveGeneration implements MoveGenerationConstants {
     }
 
     capturesBoard = rookMoves & ~board.allPieces;
-    while(capturesBoard != 0)
-    {
+    while (capturesBoard != 0) {
       int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       moves[index++].reset(piece.square, square, piece);
-    }
-    return index - originalIndex;
-  }
-
-  public int generateBBBishopCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-
-    long bishopMoves = (board.attacksDiaga1(piece.square.index64) | board.attacksDiagh1(piece.square.index64));
-    long capturesBoard = bishopMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-    while(capturesBoard != 0)
-    {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
-      Square square = Board.SQUARES[toSquareIndex];
-      capturesBoard &= square.mask_off;
-      Board.BoardSquare toSquare = board.boardSquares[square.index128];
-      moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-    }
-    return index - originalIndex;
-  }
-
-  public int generateBBRookCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-
-    long rookMoves = (board.attacksRank(piece.square.index64) | board.attacksFile(piece.square.index64));
-    long capturesBoard = rookMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-    while(capturesBoard != 0)
-    {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
-      Square square = Board.SQUARES[toSquareIndex];
-      capturesBoard &= square.mask_off;
-      Board.BoardSquare toSquare = board.boardSquares[square.index128];
-      moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
     }
     return index - originalIndex;
   }
@@ -644,16 +686,20 @@ public class MoveGeneration implements MoveGenerationConstants {
     int squareIndex = piece.square.index128 + 16;
     if ((squareIndex & 0x88) == 0) {
       Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-      long squareMask = toSquare.square.mask_on;
-
-      if ((board.allPieces & squareMask) == 0) {
+      if ((board.allPieces & toSquare.square.mask_on) == 0) {
         // Promote
-        if ((squareMask & Constants.RANK_8_MASK) != 0) {
+        if ((toSquare.square.mask_on & Constants.RANK_8_MASK) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
-        } 
+        }
+        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_7_MASK | Constants.RANK_6_MASK)) != 0) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, piece);
+          index += index1 - originalIndex1;
+        }
       }
     }
 
@@ -661,15 +707,20 @@ public class MoveGeneration implements MoveGenerationConstants {
     squareIndex = piece.square.index128 + 15;
     if ((squareIndex & 0x88) == 0) {
       Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-      long squareMask = toSquare.square.mask_on;
-
-      if ((board.pieceBoards[0][Board.ALL_PIECES] & squareMask) != 0) {
-        if ((squareMask & Constants.RANK_8_MASK) != 0) {
+      if ((board.pieceBoards[0][Board.ALL_PIECES] & toSquare.square.mask_on) != 0) {
+        if ((toSquare.square.mask_on & Constants.RANK_8_MASK) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
-        } else {
+        }
+        else if (board.isEndgame() && toSquare.square.rank == Constants.RANK_7) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
+          index += index1 - originalIndex1;
+        }
+        else {
           moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
         }
       }
@@ -679,15 +730,21 @@ public class MoveGeneration implements MoveGenerationConstants {
     squareIndex = piece.square.index128 + 17;
     if ((squareIndex & 0x88) == 0) {
       Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-      long squareMask = toSquare.square.mask_on;
 
-      if ((board.pieceBoards[0][Board.ALL_PIECES] & squareMask) != 0) {
-        if ((squareMask & Constants.RANK_8_MASK) != 0) {
+      if ((board.pieceBoards[0][Board.ALL_PIECES] & toSquare.square.mask_on) != 0) {
+        if ((toSquare.square.mask_on & Constants.RANK_8_MASK) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
-        } else {
+        }
+        else if (board.isEndgame() && toSquare.square.rank == Constants.RANK_7) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
+          index += index1 - originalIndex1;
+        }
+        else {
           moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
         }
       }
@@ -757,7 +814,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-   
+
 
     // capture right
     if (((piece.square.index128 - 15) & 0x88) == 0) {
@@ -792,6 +849,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     index += generateBlackEnPassentMoves(index, moves, board, piece);
     return index - originalIndex;
   }
+
   public int generateFullBlackPawnQMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
     // up by one
@@ -808,6 +866,12 @@ public class MoveGeneration implements MoveGenerationConstants {
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
         }
+        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_2_MASK | Constants.RANK_3_MASK)) != 0) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, piece);
+          index += index1 - originalIndex1;
+        }
       }
     }
 
@@ -820,7 +884,14 @@ public class MoveGeneration implements MoveGenerationConstants {
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
-        } else {
+        }
+        else if (board.isEndgame() && toSquare.square.rank == Constants.RANK_2) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
+          index += index1 - originalIndex1;
+        }
+        else {
           moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
         }
       }
@@ -835,7 +906,14 @@ public class MoveGeneration implements MoveGenerationConstants {
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
           index += index1 - originalIndex1;
-        } else {
+        }
+        else if (board.isEndgame() && toSquare.square.rank == Constants.RANK_2) {
+          int index1 = index;
+          int originalIndex1 = index1;
+          moves[index1++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
+          index += index1 - originalIndex1;
+        }
+        else {
           moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
         }
       }
@@ -844,7 +922,6 @@ public class MoveGeneration implements MoveGenerationConstants {
     index += generateBlackEnPassentMoves(index, moves, board, piece);
     return index - originalIndex;
   }
-
 
 
   public int generateBlackEnPassentMoves(int index, Move[] moves, Board board, Piece piece) {
@@ -874,7 +951,8 @@ public class MoveGeneration implements MoveGenerationConstants {
 
   public int generateFullKnightMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : knightMoves) {
+    for (int x = 0; x < knightMoves.length; x++) {
+      int i = knightMoves[x];
       if (((piece.square.index128 + i) & 0x88) != 0) {
         continue;
       }
@@ -891,11 +969,12 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     return index - originalIndex;
   }
-                                                              
+
 
   public int generateFullBishopMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : bishopMoves) {
+    for (int x = 0; x < bishopMoves.length; x++) {
+      int i = bishopMoves[x];
       int squareIndex = piece.square.index128 + i;
       while ((squareIndex & 0x88) == 0) {
         Board.BoardSquare toSquare = board.boardSquares[squareIndex];
@@ -919,7 +998,8 @@ public class MoveGeneration implements MoveGenerationConstants {
 
   public int generateFullRookMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : rookMoves) {
+    for (int x = 0; x < rookMoves.length; x++) {
+      int i = rookMoves[x];
       int squareIndex = piece.square.index128 + i;
       while ((squareIndex & 0x88) == 0) {
         Board.BoardSquare toSquare = board.boardSquares[squareIndex];
@@ -943,7 +1023,8 @@ public class MoveGeneration implements MoveGenerationConstants {
 
   public int generateFullQueenMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : queenMoves) {
+    for (int x = 0; x < queenMoves.length; x++) {
+      int i = queenMoves[x];
       int squareIndex = piece.square.index128 + i;
       while ((squareIndex & 0x88) == 0) {
         Board.BoardSquare toSquare = board.boardSquares[squareIndex];
@@ -978,25 +1059,25 @@ public class MoveGeneration implements MoveGenerationConstants {
     if (piece.square == Square.E1) {
       if (board.stats.whiteKingMoves == 0) {
         if (board.stats.whiteKingsideRookMoves == 0) {
-          Piece castledRook = board.getPieceOnSquare(Square.H1);
+          Piece castledRook = board.boardSquares[Square.H1.index128].piece;
           if (castledRook != null
-                  && board.getPieceOnSquare(Square.F1) == null
-                  && board.getPieceOnSquare(Square.G1) == null
-                  && !isSquareCheckedByColor(board, Square.E1, 0)
-                  && !isSquareCheckedByColor(board, Square.F1, 0)
-                  && !isSquareCheckedByColor(board, Square.G1, 0)) {
+                  && board.boardSquares[Square.F1.index128].piece == null
+                  && board.boardSquares[Square.G1.index128].piece == null
+                  && !board.isSquareCheckedByColor(Square.E1, 0)
+                  && !board.isSquareCheckedByColor(Square.F1, 0)
+                  && !board.isSquareCheckedByColor(Square.G1, 0)) {
             moves[index++].reset(piece.square, Square.G1, piece, castledRook, Square.H1, Square.F1);
           }
         }
         if (board.stats.whiteQueensideRookMoves == 0) {
-          Piece castledRook = board.getPieceOnSquare(Square.A1);
+          Piece castledRook = board.boardSquares[Square.A1.index128].piece;
           if (castledRook != null
-                  && board.getPieceOnSquare(Square.D1) == null
-                  && board.getPieceOnSquare(Square.C1) == null
-                  && board.getPieceOnSquare(Square.B1) == null
-                  && !isSquareCheckedByColor(board, Square.E1, 0)
-                  && !isSquareCheckedByColor(board, Square.D1, 0)
-                  && !isSquareCheckedByColor(board, Square.C1, 0)) {
+                  && board.boardSquares[Square.D1.index128].piece == null
+                  && board.boardSquares[Square.C1.index128].piece == null
+                  && board.boardSquares[Square.B1.index128].piece == null
+                  && !board.isSquareCheckedByColor(Square.E1, 0)
+                  && !board.isSquareCheckedByColor(Square.D1, 0)
+                  && !board.isSquareCheckedByColor(Square.C1, 0)) {
             moves[index++].reset(piece.square, Square.C1, piece, castledRook, Square.A1, Square.D1);
           }
         }
@@ -1020,25 +1101,25 @@ public class MoveGeneration implements MoveGenerationConstants {
     if (piece.square == Square.E8) {
       if (board.stats.blackKingMoves == 0) {
         if (board.stats.blackKingsideRookMoves == 0) {
-          Piece castledRook = board.getPieceOnSquare(Square.H8);
+          Piece castledRook = board.boardSquares[Square.H8.index128].piece;
           if (castledRook != null
-                  && board.getPieceOnSquare(Square.F8) == null
-                  && board.getPieceOnSquare(Square.G8) == null
-                  && !isSquareCheckedByColor(board, Square.E8, 1)
-                  && !isSquareCheckedByColor(board, Square.F8, 1)
-                  && !isSquareCheckedByColor(board, Square.G8, 1)) {
+                  && board.boardSquares[Square.F8.index128].piece == null
+                  && board.boardSquares[Square.G8.index128].piece == null
+                  && !board.isSquareCheckedByColor(Square.E8, 1)
+                  && !board.isSquareCheckedByColor(Square.F8, 1)
+                  && !board.isSquareCheckedByColor(Square.G8, 1)) {
             moves[index++].reset(piece.square, Square.G8, piece, castledRook, Square.H8, Square.F8);
           }
         }
         if (board.stats.blackQueensideRookMoves == 0) {
-          Piece castledRook = board.getPieceOnSquare(Square.A8);
+          Piece castledRook = board.boardSquares[Square.A8.index128].piece;
           if (castledRook != null
-                  && board.getPieceOnSquare(Square.D8) == null
-                  && board.getPieceOnSquare(Square.C8) == null
-                  && board.getPieceOnSquare(Square.B8) == null
-                  && !isSquareCheckedByColor(board, Square.E8, 1)
-                  && !isSquareCheckedByColor(board, Square.D8, 1)
-                  && !isSquareCheckedByColor(board, Square.C8, 1)) {
+                  && board.boardSquares[Square.D8.index128].piece == null
+                  && board.boardSquares[Square.C8.index128].piece == null
+                  && board.boardSquares[Square.B8.index128].piece == null
+                  && !board.isSquareCheckedByColor(Square.E8, 1)
+                  && !board.isSquareCheckedByColor(Square.D8, 1)
+                  && !board.isSquareCheckedByColor(Square.C8, 1)) {
             moves[index++].reset(piece.square, Square.C8, piece, castledRook, Square.A8, Square.D8);
           }
         }
@@ -1050,24 +1131,22 @@ public class MoveGeneration implements MoveGenerationConstants {
 
   private int generateNormalKingMoves(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : kingMoves) {
+    for (int x = 0; x < kingMoves.length; x++) {
+      int i = kingMoves[x];
       // Be sure the destination square is on the board
       if (((piece.square.index128 + i) & 0x88) == 0) {
-        Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 + i];
+        Board.BoardSquare toSquare = board.boardSquares[piece.square.index128 + i];
         // If we run into a piece
         if (toSquare.piece != null) {
           // If the piece is not our color
           if (toSquare.piece.color != piece.color) {
-            if(isSquareCheckedByColor(board, toSquare.square, piece.color ^ 1))
-            {
+            if (board.isSquareCheckedByColor(toSquare.square, piece.color ^ 1)) {
               continue;
             }
             moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
           }
-        }
-        else {
-          if(isSquareCheckedByColor(board, toSquare.square, piece.color ^ 1))
-          {
+        } else {
+          if (board.isSquareCheckedByColor(toSquare.square, piece.color ^ 1)) {
             continue;
           }
           moves[index++].reset(piece.square, toSquare.square, piece);
@@ -1077,176 +1156,147 @@ public class MoveGeneration implements MoveGenerationConstants {
     return index - originalIndex;
   }
 
-// Evasion generation
-
-  public int generateEvasions(Move[] moves, Board board)
-  {
-    int index = 0;
+  // Evasion generation
+  public int generateEvasions(int index, Move[] moves, Board board) {
+    long checkers;
+    Square kingSquare;
     // generate king moves
     if (board.turn == 1) {
       index += generateFullWhiteKingMoves(index, moves, board, board.whiteKing);
+      kingSquare = board.whiteKing.square;
+
     } else {
       index += generateFullBlackKingMoves(index, moves, board, board.blackKing);
+      kingSquare = board.blackKing.square;
     }
+    checkers = board.squareAttackers[kingSquare.index64] & board.pieceBoards[board.turn ^ 1][6];
 
-    // include king moves and moves where tosquare is in the checkvector, or takenSq == checkDquare
-    long checkVector = getAllAttackVectors(board, board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
-    // for each square in check vector
-    while(checkVector != 0)
-    {
-      int squareIndex = Board.getLeastSignificantBit(checkVector);
-      Square savingSquare = Board.SQUARES[squareIndex];
-      checkVector ^= savingSquare.mask_on;
+    while (checkers != 0) {
+      int attackerSquareIndex = Board.getLeastSignificantBit(checkers);
+      Square attackerSquare = Board.SQUARES[attackerSquareIndex];
+      checkers ^= attackerSquare.mask_on;
 
-      // find all attacking pieces
-      long attackers = getAttackersNoXRay(board, savingSquare, board.turn);
-      while(attackers != 0)
-      {
-        int attackerSquareIndex = Board.getLeastSignificantBit(attackers);
-        Square attackerSquare = Board.SQUARES[attackerSquareIndex];
-        attackers ^= attackerSquare.mask_on;
+      if (checkers != 0) {
+        break;
+      }
 
-        // generate their moves
-        Piece moved = board.boardSquares[attackerSquare.index128].piece;
-        // include pawn promotions
-        if(moved.type == Piece.PAWN)
-        {
-          Piece taken = board.boardSquares[savingSquare.index128].piece;
-          if(taken != null)
-          {
-            if(savingSquare.rank == 7 || savingSquare.rank == 0)
-            {
-              int index1 = index;
-              int originalIndex = index1;
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
-              index += index1 - originalIndex;
+      // include king moves and moves where tosquare is in the checkvector, or takenSq == checkDquare
+      long checkVector = distanceSpans[kingSquare.index128][attackerSquare.index128] | attackerSquare.mask_on;
+      // for each square in check vector
+      while (checkVector != 0) {
+        int squareIndex = Board.getLeastSignificantBit(checkVector);
+        Square savingSquare = Board.SQUARES[squareIndex];
+        checkVector ^= savingSquare.mask_on;
+        // find all attacking pieces
+        long defenders = board.squareAttackers[savingSquare.index64] & board.pieceBoards[board.turn][6];
+        while (defenders != 0) {
+          int defenderSquareIndex = Board.getLeastSignificantBit(defenders);
+          Square defenderSquare = Board.SQUARES[defenderSquareIndex];
+          defenders ^= defenderSquare.mask_on;
+
+          // generate their moves
+          Piece moved = board.boardSquares[defenderSquare.index128].piece;
+          // include pawn promotions
+          if (moved.type == Piece.PAWN) {
+            Piece taken = board.boardSquares[savingSquare.index128].piece;
+            if (taken != null) {
+              if (savingSquare.rank == 7 || savingSquare.rank == 0) {
+                int index1 = index;
+                int originalIndex = index1;
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
+                index += index1 - originalIndex;
+              } else {
+                moves[index++].reset(moved.square, savingSquare, savingSquare, moved, taken);
+              }
             }
-            else
-            {
+          } else if (moved.type == Piece.KING) {
+            continue;
+          } else {
+            Piece taken = board.boardSquares[savingSquare.index128].piece;
+            if (taken != null) {
               moves[index++].reset(moved.square, savingSquare, savingSquare, moved, taken);
-            }
-          }
-        }
-        else if(moved.type == Piece.KING)
-        {
-          continue;
-        }
-        else
-        {
-          Piece taken = board.boardSquares[savingSquare.index128].piece;
-          if(taken != null)
-          {
-            moves[index++].reset(moved.square, savingSquare, savingSquare, moved, taken);
-          }
-          else
-          {
-            moves[index++].reset(moved.square, savingSquare, moved);
-          }
-        }
-      }
-
-      // check normal pawn moves
-      if(board.turn == 1)
-      {
-        if(savingSquare.rank > 0 && board.boardSquares[savingSquare.index128].piece == null)
-        {
-          if((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[savingSquare.index64 - 8].mask_on) != 0)
-          {
-            Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 - 8].index128].piece;
-            if(savingSquare.rank == 7 || savingSquare.rank == 0)
-            {
-              int index1 = index;
-              int originalIndex = index1;
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
-              index += index1 - originalIndex;
-            }
-            else
-            {
+            } else {
               moves[index++].reset(moved.square, savingSquare, moved);
             }
           }
-          else if(savingSquare.rank == 3 &&
-                  (board.allPieces & Board.SQUARES[savingSquare.index64 - 8].mask_on) == 0 &&
-                  (board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[savingSquare.index64 - 16].mask_on) != 0)
-          {
-            Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 - 16].index128].piece;
-            moves[index++].reset(moved.square, savingSquare, moved, Board.SQUARES[savingSquare.index64 - 8]);
-          }
         }
-        else
-        {
+
+        // check normal pawn moves
+        if (board.turn == 1) {
+          if (savingSquare.rank > 0 && board.boardSquares[savingSquare.index128].piece == null) {
+            if ((board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[savingSquare.index64 - 8].mask_on) != 0) {
+              Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 - 8].index128].piece;
+              if (savingSquare.rank == 7 || savingSquare.rank == 0) {
+                int index1 = index;
+                int originalIndex = index1;
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
+                index += index1 - originalIndex;
+              } else {
+                moves[index++].reset(moved.square, savingSquare, moved);
+              }
+            } else if (savingSquare.rank == 3 &&
+                    (board.allPieces & Board.SQUARES[savingSquare.index64 - 8].mask_on) == 0 &&
+                    (board.pieceBoards[1][Piece.PAWN] & Board.SQUARES[savingSquare.index64 - 16].mask_on) != 0) {
+              Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 - 16].index128].piece;
+              moves[index++].reset(moved.square, savingSquare, moved, Board.SQUARES[savingSquare.index64 - 8]);
+            }
+          } else {
+            //  check for enpassent moves
+            if (savingSquare.file > 0) {
+              Piece piece = board.boardSquares[savingSquare.index128 - 1].piece;
+              if (piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 + 16].enPassentInfo[board.moveIndex]) {
+                moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 + 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
+              }
+            }
+
+            if (savingSquare.file < 7) {
+              Piece piece = board.boardSquares[savingSquare.index128 + 1].piece;
+              if (piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 + 16].enPassentInfo[board.moveIndex]) {
+                moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 + 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
+              }
+            }
+          }
+        } else {
+          if (savingSquare.rank < 7 && board.boardSquares[savingSquare.index128].piece == null) {
+            if ((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[savingSquare.index64 + 8].mask_on) != 0) {
+              Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 + 8].index128].piece;
+              if (savingSquare.rank == 7 || savingSquare.rank == 0) {
+                int index1 = index;
+                int originalIndex = index1;
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
+                moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
+                index += index1 - originalIndex;
+              } else {
+                moves[index++].reset(moved.square, savingSquare, moved);
+              }
+            } else if (savingSquare.rank == 4 &&
+                    (board.allPieces & Board.SQUARES[savingSquare.index64 + 8].mask_on) == 0 &&
+                    (board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[savingSquare.index64 + 16].mask_on) != 0) {
+              Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 + 16].index128].piece;
+              moves[index++].reset(moved.square, savingSquare, moved, Board.SQUARES[savingSquare.index64 + 8]);
+            }
+          }
           //  check for enpassent moves
-          if(savingSquare.file > 0)
-          {
+          if (savingSquare.file > 0) {
             Piece piece = board.boardSquares[savingSquare.index128 - 1].piece;
-            if(piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 + 16].enPassentInfo[board.moveIndex])
-            {
-              moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 + 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
+            if (piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 - 16].enPassentInfo[board.moveIndex]) {
+              moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 - 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
             }
           }
 
-          if(savingSquare.file < 7)
-          {
+          if (savingSquare.file < 7) {
             Piece piece = board.boardSquares[savingSquare.index128 + 1].piece;
-            if(piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 + 16].enPassentInfo[board.moveIndex])
-            {
-              moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 + 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
+            if (piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 - 16].enPassentInfo[board.moveIndex]) {
+              moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 - 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
             }
-          }
-        }
-      }
-      else
-      {
-        if(savingSquare.rank < 7 && board.boardSquares[savingSquare.index128].piece == null)
-        {
-          if((board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[savingSquare.index64 + 8].mask_on) != 0)
-          {
-            Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 + 8].index128].piece;
-            if(savingSquare.rank == 7 || savingSquare.rank == 0)
-            {
-              int index1 = index;
-              int originalIndex = index1;
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.QUEEN);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.ROOK);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.BISHOP);
-              moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, board.boardSquares[savingSquare.index128].square, board.boardSquares[savingSquare.index128].piece, Piece.KNIGHT);
-              index += index1 - originalIndex;
-            }
-            else
-            {
-              moves[index++].reset(moved.square, savingSquare, moved);
-            }
-          }
-          else if(savingSquare.rank == 4 &&
-                  (board.allPieces & Board.SQUARES[savingSquare.index64 + 8].mask_on) == 0 &&
-                  (board.pieceBoards[0][Piece.PAWN] & Board.SQUARES[savingSquare.index64 + 16].mask_on) != 0)
-          {
-            Piece moved = board.boardSquares[Board.SQUARES[savingSquare.index64 + 16].index128].piece;
-            moves[index++].reset(moved.square, savingSquare, moved, Board.SQUARES[savingSquare.index64 + 8]);
-          }
-        }
-        //  check for enpassent moves
-        if(savingSquare.file > 0)
-        {
-          Piece piece = board.boardSquares[savingSquare.index128 - 1].piece;
-          if(piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 - 16].enPassentInfo[board.moveIndex])
-          {
-            moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 - 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
-          }
-        }
-
-        if(savingSquare.file < 7)
-        {
-          Piece piece = board.boardSquares[savingSquare.index128 + 1].piece;
-          if(piece != null && piece.type == Piece.PAWN && piece.color == 1 && board.boardSquares[savingSquare.index128 - 16].enPassentInfo[board.moveIndex])
-          {
-            moves[index++].reset(piece.square, board.boardSquares[savingSquare.index128 - 16].square, savingSquare, piece, board.boardSquares[savingSquare.index128].piece);
           }
         }
       }
@@ -1258,123 +1308,56 @@ public class MoveGeneration implements MoveGenerationConstants {
     return index;
   }
 
-  public void generateWhitePawnChecks(Board board, Piece piece) {
-    // capture left
-    if (((piece.square.index128 + 15) & 0x88) == 0) {
-      Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 + 15];
-      checks[1][toSquare.square.index64]++;
-//      pawnChecks[1][toSquare.square.index64] ++;
+  public int generateChecks(int index, Move[] moves, Board board) {
+    Square kingSquare;
+    // generate king moves
+    if (board.turn == 1) {
+      kingSquare = board.blackKing.square;
+
+    } else {
+      kingSquare = board.whiteKing.square;
     }
 
-    // capture right
-    if (((piece.square.index128 + 17) & 0x88) == 0) {
-      Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 + 17];
-      checks[1][toSquare.square.index64]++;
-//      pawnChecks[1][toSquare.square.index64] ++;
-    }
-  }
+    long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
+    while (pieces != 0) {
+      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      pieces &= pieceSquare.mask_off;
+      Piece piece = board.boardSquares[pieceSquare.index128].piece;
 
+      switch (piece.type) {
+/*
+        case Piece.PAWN: {
+*/
+/*
+          if (piece.color == 1) {
+            index += generateWhitePawnChecks(index, moves, board, piece);
+          } else {
+            index += generateBlackPawnChecks(index, moves, board, piece);
+          }
+*//*
 
-  public void generateBlackPawnChecks(Board board, Piece piece) {
-    // capture right
-    if (((piece.square.index128 - 15) & 0x88) == 0) {
-      Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 - 15];
-      checks[0][toSquare.square.index64]++;
-//      pawnChecks[0][toSquare.square.index64] ++;
-    }
-
-    // capture left
-    if (((piece.square.index128 - 17) & 0x88) == 0) {
-      Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 - 17];
-      checks[0][toSquare.square.index64]++;
-//      pawnChecks[0][toSquare.square.index64] ++;
-    }
-  }
-
-
-  public void generateKnightChecks(Board board, Piece piece) {
-    for (int i : knightMoves) {
-      int squareIndex = piece.square.index128 + i;
-      if ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        squareIndex += i;
-        checks[piece.color][toSquare.square.index64]++;
-//        knightChecks[piece.color][toSquare.square.index64] ++;
-      }
-    }
-  }
-
-
-  public void generateBishopChecks(Board board, Piece piece) {
-    for (int i : bishopMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        squareIndex += i;
-        checks[piece.color][toSquare.square.index64]++;
-//        bishopChecks[piece.color][toSquare.square.index64] ++;
-        // If we run into a piece
-        if (toSquare.piece != null) {
+          break;
+        }
+*/
+        case Piece.KNIGHT:
+          index += generateKnightChecksFromAttacks(index, moves, board, piece, kingSquare);
+          break;
+        case Piece.BISHOP:
+          index += generateBishopQueenChecksFromAttacks(index, moves, board, piece, kingSquare);
+          break;
+        case Piece.ROOK:
+          index += generateRookQueenChecksFromAttacks(index, moves, board, piece, kingSquare);
+          break;
+        case Piece.QUEEN: {
+          index += generateBishopQueenChecksFromAttacks(index, moves, board, piece, kingSquare);
+          index += generateRookQueenChecksFromAttacks(index, moves, board, piece, kingSquare);
           break;
         }
       }
     }
-  }
+    moves[index].moved = null;
 
-
-  public void generateRookChecks(Board board, Piece piece) {
-    for (int i : rookMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        squareIndex += i;
-        checks[piece.color][toSquare.square.index64]++;
-//        rookChecks[piece.color][toSquare.square.index64] ++;
-        // If we run into a piece
-        if (toSquare.piece != null) {
-          break;
-        }
-      }
-    }
-  }
-
-
-  public void generateQueenChecks(Board board, Piece piece) {
-    for (int i : queenMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        squareIndex += i;
-        checks[piece.color][toSquare.square.index64]++;
-//        queenChecks[piece.color][toSquare.square.index64] ++;
-        // If we run into a piece
-        if (toSquare.piece != null) {
-          break;
-        }
-      }
-    }
-  }
-
-
-  private void generateKingChecks(Board board, Piece piece) {
-    for (int i : kingMoves) {
-      // Be sure the destination square is on the board
-      if (((piece.square.index128 + i) & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.getSquare(piece.square.index128 + i);
-        checks[piece.color][toSquare.square.index64]++;
-//        kingChecks[piece.color][toSquare.square.index64] ++;
-      }
-    }
-  }
-
-
-  public boolean isSquareCheckedByColor(Board board, Square square, int color) {
-    return  ((attackVectors[color][Piece.KNIGHT][square.index64] &  board.pieceBoards[color][Piece.KNIGHT]) |
-            (attackVectors[color][Piece.PAWN][square.index64] &  board.pieceBoards[color][Piece.PAWN]) |
-            (attackVectors[color][Piece.KING][square.index64] &  board.pieceBoards[color][Piece.KING])) != 0
-            || ((board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64)) & ( board.pieceBoards[color][Piece.QUEEN] |  board.pieceBoards[color][Piece.BISHOP])) != 0
-            || ((board.attacksRank(square.index64) | board.attacksFile(square.index64)) & ( board.pieceBoards[color][Piece.QUEEN] |  board.pieceBoards[color][Piece.ROOK])) != 0;
-//    return isInCheck(board, square, color);
+    return index;
   }
 
 
@@ -1382,55 +1365,63 @@ public class MoveGeneration implements MoveGenerationConstants {
   //***   GET ATTACKERS
   //*******************************************************
 
-/*
-  public long getAllAttackers(Board board, Square square, int color) {
-    long bishopAndQueenAttackers = getBishopAndQueenXRayAttackers(board, square, color);
-    long rookAndQueenAttackers = getRookAndQueenXRayAttackers(board, square, color);
+  /*
+    public long getAllAttackers(Board board, Square square, int color) {
+      long bishopAndQueenAttackers = getBishopAndQueenXRayAttackers(board, square, color);
+      long rookAndQueenAttackers = getRookAndQueenXRayAttackers(board, square, color);
 
-    return (attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) |
-           (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
-           bishopAndQueenAttackers |
-           rookAndQueenAttackers |
-           (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
-  }
-*/
-  public long getAllAttackers(Board board, Square square, int color) {
-    long attackers = 0;
+      return (attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) |
+             (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
+             bishopAndQueenAttackers |
+             rookAndQueenAttackers |
+             (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
+    }
+  */
+  public static final long getAllAttackers(Board board, Square square, int color) {
+    long attackers = (attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) |
+            (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
+            (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
     Square attackerSquare;
-    for (long candidateAttackers = attackVectors[color][Piece.BISHOP][square.index64] & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
+    long candidateAttackers;
+    long rooksAndQueens = board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK];
+    long bishopsAndQueens = board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.BISHOP];
+    long notRooksAndQueens = board.allPieces ^ rooksAndQueens;
+    long notBishopsAndQueens = board.allPieces ^ bishopsAndQueens;
+
+    for (candidateAttackers = attackVectors[color][Piece.BISHOP][square.index64] & bishopsAndQueens;
          candidateAttackers != 0;
          candidateAttackers ^= attackerSquare.mask_on) {
       attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
-      if (((board.allPieces ^ (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
+      if ((notBishopsAndQueens & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
     }
 
-    for (long candidateAttackers = attackVectors[color][Piece.ROOK][square.index64] & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
+/*
+    long attackers = (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]) & (board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64));
+    attackers |= (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]) & (board.attacksFile(square.index64) | board.attacksRank(square.index64));
+*/
+
+    for (candidateAttackers = attackVectors[color][Piece.ROOK][square.index64] & rooksAndQueens;
          candidateAttackers != 0;
          candidateAttackers ^= attackerSquare.mask_on) {
       attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
-      if (((board.allPieces ^ (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
+      if ((notRooksAndQueens & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
     }
 
-    return (attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) |
-           (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
-           attackers |
-           (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
+    return attackers;
   }
 
-  public long getBishopAndQueenXRayAttackers(Board board, Square square, int color)
-  {
+  public long getBishopAndQueenXRayAttackers(Board board, Square square, int color) {
     long attackers, eachAttacker;
 
     attackers = eachAttacker = (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]) &
-                               (board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64));
+            (board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64));
 
 
-    while(eachAttacker != 0)
-    {
+    while (eachAttacker != 0) {
       Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(eachAttacker)];
       eachAttacker &= pieceSquare.mask_off;
       long xrayAttackers = (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]) &
@@ -1443,16 +1434,14 @@ public class MoveGeneration implements MoveGenerationConstants {
     return attackers;
   }
 
-  public long getRookAndQueenXRayAttackers(Board board, Square square, int color)
-  {
+  public long getRookAndQueenXRayAttackers(Board board, Square square, int color) {
     long attackers, eachAttacker;
 
     attackers = eachAttacker = (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]) &
-                               (board.attacksRank(square.index64) | board.attacksFile(square.index64));
+            (board.attacksRank(square.index64) | board.attacksFile(square.index64));
 
 
-    while(eachAttacker != 0)
-    {
+    while (eachAttacker != 0) {
       Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(eachAttacker)];
       eachAttacker &= pieceSquare.mask_off;
       long xrayAttackers = (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]) &
@@ -1468,25 +1457,25 @@ public class MoveGeneration implements MoveGenerationConstants {
   public long getNewAttackers(Board board, Square emptySquare, Square square, int color) {
     long bishopAndQueenAttackers = 0;
     Square attackerSquare;
-    for (long bishopAttacker = attackVectors[color][Piece.BISHOP][emptySquare.index64] & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
+    for (long bishopAttacker = board.squareAttackers[emptySquare.index64] &
+            (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]) &
+            shadowVectors[square.index128][emptySquare.index128];
          bishopAttacker != 0;
          bishopAttacker ^= attackerSquare.mask_on) {
       int squareIndex = Board.getLeastSignificantBit(bishopAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
-      if (distanceSpans[square.index128][attackerSquare.index128] != 0 && ((board.allPieces ^ (emptySquare.mask_on | board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
-        bishopAndQueenAttackers |= attackerSquare.mask_on;
-      }
+      bishopAndQueenAttackers |= attackerSquare.mask_on;
     }
 
     long rookAndQueenAttackers = 0;
-    for (long rookAttacker = attackVectors[color][Piece.ROOK][square.index64] & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
+    for (long rookAttacker = board.squareAttackers[emptySquare.index64] &
+            (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]) &
+            shadowVectors[square.index128][emptySquare.index128];
          rookAttacker != 0;
          rookAttacker ^= attackerSquare.mask_on) {
       int squareIndex = Board.getLeastSignificantBit(rookAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
-      if (distanceSpans[square.index128][attackerSquare.index128] != 0 && ((board.allPieces ^ (emptySquare.mask_on | board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK])) & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
-        rookAndQueenAttackers |= attackerSquare.mask_on;
-      }
+      rookAndQueenAttackers |= attackerSquare.mask_on;
     }
 
     return bishopAndQueenAttackers | rookAndQueenAttackers;
@@ -1494,28 +1483,18 @@ public class MoveGeneration implements MoveGenerationConstants {
 
   public long getAttackersNoXRay(Board board, Square square, int color) {
     return (attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN]) |
-           (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
-           getBishopAndQueenAttackersWithoutXRay(board, square, color) |
-           getRookAndQueenAttackersWithoutXRay(board, square, color) |
-           (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
-  }
-
-  public long getBishopAndQueenAttackersWithoutXRay(Board board, Square square, int color) {
-    long attackVector = board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64);
-    return (attackVector & (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.BISHOP]));
-  }
-
-  public long getRookAndQueenAttackersWithoutXRay(Board board, Square square, int color) {
-    long attackVector = board.attacksRank(square.index64) | board.attacksFile(square.index64);
-    return (attackVector & (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK]));
+            (attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]) |
+            (((board.attacksDiaga1(square.index64) | board.attacksDiagh1(square.index64)) & (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.BISHOP]))) |
+            (((board.attacksRank(square.index64) | board.attacksFile(square.index64)) & (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK]))) |
+            (attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
   }
 
   public long getAllAttackVectors(Board board, Square square, int color) {
-    return getPawnAttackVectors(board, square, color) |
-            getKnightAttackVectors(board, square, color) |
+    return attackVectors[color][Piece.PAWN][square.index64] & board.pieceBoards[color][Piece.PAWN] |
+            attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT] |
             getBishopAndQueenAttackVectors(board, square, color) |
             getRookAndQueenAttackVectors(board, square, color) |
-            getKingAttackVectors(board, square, color);
+            attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING];
   }
 
   public long getPawnAttackVectors(Board board, Square square, int color) {
@@ -1609,121 +1588,11 @@ public class MoveGeneration implements MoveGenerationConstants {
   }
 
   //*******************************************************
-  //***   STUFF
-  //*******************************************************
-
-
-  /**
-   * @param board
-   * @param square
-   * @param color
-   * @return
-   * @deprecated
-   */
-  public boolean isInCheck(Board board, Square square, int color) {
-    // look for places knights could check from
-    if (board.pieceBoards[color][Piece.KNIGHT] != 0) {
-      for (int i : knightMoves) {
-        int squareIndex = square.index128 + i;
-        if ((squareIndex & 0x88) == 0) {
-          Board.BoardSquare toSquare = board.getSquare(squareIndex);
-          Piece piece = toSquare.piece;
-          if (piece != null && piece.color == color && piece.type == Piece.KNIGHT) {
-            return true;
-          }
-        }
-      }
-    }
-
-    // look for places bishops or queens could check from
-    if (board.pieceBoards[color][Piece.BISHOP] != 0 || board.pieceBoards[color][Piece.QUEEN] != 0) {
-      for (int i : bishopMoves) {
-        int squareIndex = square.index128 + i;
-        while ((squareIndex & 0x88) == 0) {
-          Board.BoardSquare toSquare = board.getSquare(squareIndex);
-          // If we run into a piece
-          Piece piece = toSquare.piece;
-          if (piece != null) {
-            if (piece.color == color && (piece.type == Piece.BISHOP || piece.type == Piece.QUEEN)) {
-              return true;
-            }
-            break;
-          }
-          squareIndex += i;
-        }
-        ;
-      }
-    }
-
-    // look for places rooks or queens could check from
-    if (board.pieceBoards[color][Piece.ROOK] != 0 || board.pieceBoards[color][Piece.QUEEN] != 0) {
-      for (int i : rookMoves) {
-        int squareIndex = square.index128 + i;
-        while ((squareIndex & 0x88) == 0) {
-          Board.BoardSquare toSquare = board.getSquare(squareIndex);
-          // If we run into a piece
-          Piece piece = toSquare.piece;
-          if (piece != null) {
-            if (piece.color == color && (piece.type == Piece.ROOK || piece.type == Piece.QUEEN)) {
-              return true;
-            }
-            break;
-          }
-          squareIndex += i;
-        }
-      }
-    }
-
-    // look for places kings could check from
-    for (int i : kingMoves) {
-      int squareIndex = square.index128 + i;
-      if ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.getSquare(squareIndex);
-        Piece piece = toSquare.piece;
-        if (piece != null && piece.color == color && piece.type == Piece.KING) {
-          return true;
-        }
-      }
-    }
-
-    // look for places pawns could check from
-    if (board.pieceBoards[color][Piece.PAWN] != 0) {
-      for (int i : bishopMoves) {
-        if (color == 1 && i < 0) {
-          int squareIndex = square.index128 + i;
-          if ((squareIndex & 0x88) == 0) {
-            Board.BoardSquare toSquare = board.getSquare(squareIndex);
-            Piece piece = toSquare.piece;
-            if (piece != null && piece.color == color && piece.type == Piece.PAWN) {
-              return true;
-            }
-          }
-        } else if (color == 0 && i > 0) {
-          int squareIndex = square.index128 + i;
-          if ((squareIndex & 0x88) == 0) {
-            Board.BoardSquare toSquare = board.getSquare(squareIndex);
-            Piece piece = toSquare.piece;
-            if (piece != null && piece.color == color && piece.type == Piece.PAWN) {
-              return true;
-            }
-          }
-        }
-      }
-    }
-
-    return false;
-
-  }
-
-  //*******************************************************
   //***   Captures
   //*******************************************************
 
 
-  public int generateCaptures(Move[] moves, Board board) {
-    int index = 0;
-
-
+  public int generateCaptures(int index, Move[] moves, Board board) {
     long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
 
@@ -1737,20 +1606,21 @@ public class MoveGeneration implements MoveGenerationConstants {
         } else {
           index += generateFullBlackPawnQMoves(index, moves, board, piece);
         }
-      } else {
-        long attacks = attackVectors[board.turn ^ 1][piece.type][pieceSquare.index64] & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
+      } else if(piece.type == Piece.KING) {
+        long attacks = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
         while (attacks != 0) {
           Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
           attacks ^= toSquare.mask_on;
-
-          if (piece.type == Piece.BISHOP || piece.type == Piece.ROOK || piece.type == Piece.QUEEN) {
-            long distanceSpan = distanceSpans[toSquare.index128][pieceSquare.index128];
-            if ((board.allPieces & distanceSpan) == 0) {
-              moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
-            }
-          } else {
+          if(!board.isSquareCheckedByColor(toSquare, board.turn ^ 1)) {
             moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
           }
+        }
+      } else {
+        long attacks = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
+        while (attacks != 0) {
+          Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
+          attacks ^= toSquare.mask_on;
+          moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
         }
       }
     }
@@ -1758,252 +1628,12 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     return index;
   }
-
-
-  public int generateQMoves(Move[] moves, Board board) {
-    int index = 0;
-    long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
-    while (pieces != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
-      pieces ^= pieceSquare.mask_on;
-      Piece piece = board.boardSquares[pieceSquare.index128].piece;
-
-      // White index128, moves
-      switch (piece.type) {
-        case Piece.PAWN: {
-          if (piece.color == 1) {
-            index += generateFullWhitePawnQMoves(index, moves, board, piece);
-          } else {
-            index += generateFullBlackPawnQMoves(index, moves, board, piece);
-          }
-          break;
-        }
-        case Piece.KNIGHT: {
-          long attacks = attackVectors[board.turn ^ 1][piece.type][pieceSquare.index64] & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-          while (attacks != 0) {
-            Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
-            attacks ^= toSquare.mask_on;
-            moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
-          }
-          break;
-        }
-        case Piece.BISHOP: {
-          index += generateBBBishopCaptures(index, moves, board, piece);
-          break;
-        }
-        case Piece.ROOK: {
-          index += generateBBRookCaptures(index, moves, board, piece);
-          break;
-        }
-        case Piece.QUEEN: {
-          index += generateBBBishopCaptures(index, moves, board, piece);
-          index += generateBBRookCaptures(index, moves, board, piece);
-          break;
-        }
-        case Piece.KING: {
-          long attacks = attackVectors[board.turn ^ 1][piece.type][pieceSquare.index64] & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
-          while (attacks != 0) {
-            Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
-            attacks ^= toSquare.mask_on;
-            moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
-          }
-          break;
-        }
-      }
-    }
-
-    moves[index].moved = null;
-
-    return index;
-  }
-
-
-  public int generateWhitePawnCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    // capture left
-    Board.BoardSquare toSquare = board.getSquare(piece.square.index128 + 15);
-    if (toSquare != null) {
-      if (toSquare.piece != null && toSquare.piece.color == 0) {
-        if (toSquare.square.rank == Constants.RANK_8) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
-        } else {
-          moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-        }
-      }
-      // en passent
-      if (toSquare.enPassentInfo[board.moveIndex]) {
-        Board.BoardSquare enPassentSquare = board.boardSquares[piece.square.index128 - 1];
-        moves[index++].reset(piece.square, toSquare.square, enPassentSquare.square, piece, enPassentSquare.piece);
-      }
-    }
-
-    // capture right
-    toSquare = board.getSquare(piece.square.index128 + 17);
-    if (toSquare != null) {
-      if (toSquare.piece != null && toSquare.piece.color == 0) {
-        if (toSquare.square.rank == Constants.RANK_8) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
-        } else {
-          moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-        }
-      }
-      // en passent
-      if (toSquare.enPassentInfo[board.moveIndex]) {
-        Board.BoardSquare enPassentSquare = board.boardSquares[piece.square.index128 + 1];
-        moves[index++].reset(piece.square, toSquare.square, enPassentSquare.square, piece, enPassentSquare.piece);
-      }
-    }
-    return index - originalIndex;
-  }
-
-
-  public int generateBlackPawnCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    // capture right
-    Board.BoardSquare toSquare = board.getSquare(piece.square.index128 - 15);
-    if (toSquare != null) {
-      if (toSquare.piece != null && toSquare.piece.color == 1) {
-        if (toSquare.square.rank == Constants.RANK_1) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
-        } else {
-          moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-        }
-      }
-      // en passent
-      if (toSquare.enPassentInfo[board.moveIndex]) {
-        Board.BoardSquare enPassentSquare = board. boardSquares[piece.square.index128 + 1];
-        moves[index++].reset(piece.square, toSquare.square, enPassentSquare.square, piece, enPassentSquare.piece);
-      }
-    }
-
-    // capture left
-    toSquare = board.getSquare(piece.square.index128 - 17);
-    if (toSquare != null) {
-      if (toSquare.piece != null && toSquare.piece.color == 1) {
-        if (toSquare.square.rank == Constants.RANK_1) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
-        } else {
-          moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-        }
-      }
-      // en passent
-      if (toSquare.enPassentInfo[board.moveIndex]) {
-        Board.BoardSquare enPassentSquare = board. boardSquares[piece.square.index128 - 1];
-        moves[index++].reset(piece.square, toSquare.square, enPassentSquare.square, piece, enPassentSquare.piece);
-      }
-    }
-    return index - originalIndex;
-  }
-
-
-  public int generateKnightCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    for (int i : knightMoves) {
-      int squareIndex = piece.square.index128 + i;
-      if ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board. boardSquares[squareIndex];
-
-        if ((toSquare.square.mask_on & board.pieceBoards[piece.color ^ 1][Board.ALL_PIECES]) != 0) {
-          moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-        }
-      }
-    }
-
-    return index - originalIndex;
-  }
-
-
-  public int generateBishopCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    for (int i : bishopMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        long squareMask = toSquare.square.mask_on;
-        // If we run into a piece
-        if ((board.allPieces & squareMask) != 0) {
-          // If the piece is not our color
-          if ((board.pieceBoards[piece.color ^ 1][Board.ALL_PIECES] & squareMask) != 0) {
-            moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-          }
-          break;
-        }
-        squareIndex += i;
-      }
-    }
-    return index - originalIndex;
-  }
-
-
-  public int generateRookCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    for (int i : rookMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        long squareMask = toSquare.square.mask_on;
-        // If we run into a piece
-        if ((board.allPieces & squareMask) != 0) {
-          // If the piece is not our color
-          if ((board.pieceBoards[piece.color ^ 1][Board.ALL_PIECES] & squareMask) != 0) {
-            moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-          }
-          break;
-        }
-        squareIndex += i;
-      }
-    }
-    return index - originalIndex;
-  }
-
-
-  public int generateQueenCaptures(int index, Move[] moves, Board board, Piece piece) {
-    int originalIndex = index;
-    for (int i : queenMoves) {
-      int squareIndex = piece.square.index128 + i;
-      while ((squareIndex & 0x88) == 0) {
-        Board.BoardSquare toSquare = board.boardSquares[squareIndex];
-        // If we run into a piece
-        if (toSquare.piece != null) {
-          // If the piece is not our color
-          if (toSquare.piece.color != piece.color) {
-            moves[index++].reset(piece.square, toSquare.square, toSquare.square, piece, toSquare.piece);
-          }
-          break;
-        }
-        squareIndex += i;
-      }
-    }
-    return index - originalIndex;
-  }
-
-
-  public int generateWhiteKingCaptures(int index, Move[] moves, Board board, Piece piece) {
-    return generateNormalKingCaptures(index, moves, board, piece);
-  }
-
-
-  public int generateBlackKingCaptures(int index, Move[] moves, Board board, Piece piece) {
-    return generateNormalKingCaptures(index, moves, board, piece);
-  }
-
 
   private int generateNormalKingCaptures(int index, Move[] moves, Board board, Piece piece) {
     int originalIndex = index;
-    for (int i : kingMoves) {
-      Board.BoardSquare toSquare = board. boardSquares[piece.square.index128 + i];
+    for (int x = 0; x < kingMoves.length; x++) {
+      int i = kingMoves[x];
+      Board.BoardSquare toSquare = board.boardSquares[piece.square.index128 + i];
       // Be sure the destination square is on the board
       if (toSquare != null) {
         // If we run into a piece
@@ -2020,124 +1650,124 @@ public class MoveGeneration implements MoveGenerationConstants {
 
 
   public static int init_r90[] = {
-    56, 48, 40, 32, 24, 16, 8, 0,
-    57, 49, 41, 33, 25, 17, 9, 1,
-    58, 50, 42, 34, 26, 18, 10, 2,
-    59, 51, 43, 35, 27, 19, 11, 3,
-    60, 52, 44, 36, 28, 20, 12, 4,
-    61, 53, 45, 37, 29, 21, 13, 5,
-    62, 54, 46, 38, 30, 22, 14, 6,
-    63, 55, 47, 39, 31, 23, 15, 7
+          56, 48, 40, 32, 24, 16, 8, 0,
+          57, 49, 41, 33, 25, 17, 9, 1,
+          58, 50, 42, 34, 26, 18, 10, 2,
+          59, 51, 43, 35, 27, 19, 11, 3,
+          60, 52, 44, 36, 28, 20, 12, 4,
+          61, 53, 45, 37, 29, 21, 13, 5,
+          62, 54, 46, 38, 30, 22, 14, 6,
+          63, 55, 47, 39, 31, 23, 15, 7
   };
 
   public static int init_l90[] = {
-    7, 15, 23, 31, 39, 47, 55, 63,
-    6, 14, 22, 30, 38, 46, 54, 62,
-    5, 13, 21, 29, 37, 45, 53, 61,
-    4, 12, 20, 28, 36, 44, 52, 60,
-    3, 11, 19, 27, 35, 43, 51, 59,
-    2, 10, 18, 26, 34, 42, 50, 58,
-    1, 9, 17, 25, 33, 41, 49, 57,
-    0, 8, 16, 24, 32, 40, 48, 56
+          7, 15, 23, 31, 39, 47, 55, 63,
+          6, 14, 22, 30, 38, 46, 54, 62,
+          5, 13, 21, 29, 37, 45, 53, 61,
+          4, 12, 20, 28, 36, 44, 52, 60,
+          3, 11, 19, 27, 35, 43, 51, 59,
+          2, 10, 18, 26, 34, 42, 50, 58,
+          1, 9, 17, 25, 33, 41, 49, 57,
+          0, 8, 16, 24, 32, 40, 48, 56
   };
 
   public static int init_l45[] = {
-    0, 2, 5, 9, 14, 20, 27, 35,
-    1, 4, 8, 13, 19, 26, 34, 42,
-    3, 7, 12, 18, 25, 33, 41, 48,
-    6, 11, 17, 24, 32, 40, 47, 53,
-    10, 16, 23, 31, 39, 46, 52, 57,
-    15, 22, 30, 38, 45, 51, 56, 60,
-    21, 29, 37, 44, 50, 55, 59, 62,
-    28, 36, 43, 49, 54, 58, 61, 63
+          0, 2, 5, 9, 14, 20, 27, 35,
+          1, 4, 8, 13, 19, 26, 34, 42,
+          3, 7, 12, 18, 25, 33, 41, 48,
+          6, 11, 17, 24, 32, 40, 47, 53,
+          10, 16, 23, 31, 39, 46, 52, 57,
+          15, 22, 30, 38, 45, 51, 56, 60,
+          21, 29, 37, 44, 50, 55, 59, 62,
+          28, 36, 43, 49, 54, 58, 61, 63
   };
 
   public static int init_ul45[] = {
-    0, 8, 1, 16, 9, 2, 24, 17,
-    10, 3, 32, 25, 18, 11, 4, 40,
-    33, 26, 19, 12, 5, 48, 41, 34,
-    27, 20, 13, 6, 56, 49, 42, 35,
-    28, 21, 14, 7, 57, 50, 43, 36,
-    29, 22, 15, 58, 51, 44, 37, 30,
-    23, 59, 52, 45, 38, 31, 60, 53,
-    46, 39, 61, 54, 47, 62, 55, 63
+          0, 8, 1, 16, 9, 2, 24, 17,
+          10, 3, 32, 25, 18, 11, 4, 40,
+          33, 26, 19, 12, 5, 48, 41, 34,
+          27, 20, 13, 6, 56, 49, 42, 35,
+          28, 21, 14, 7, 57, 50, 43, 36,
+          29, 22, 15, 58, 51, 44, 37, 30,
+          23, 59, 52, 45, 38, 31, 60, 53,
+          46, 39, 61, 54, 47, 62, 55, 63
   };
 
   public static int init_r45[] = {
-    28, 21, 15, 10, 6, 3, 1, 0,
-    36, 29, 22, 16, 11, 7, 4, 2,
-    43, 37, 30, 23, 17, 12, 8, 5,
-    49, 44, 38, 31, 24, 18, 13, 9,
-    54, 50, 45, 39, 32, 25, 19, 14,
-    58, 55, 51, 46, 40, 33, 26, 20,
-    61, 59, 56, 52, 47, 41, 34, 27,
-    63, 62, 60, 57, 53, 48, 42, 35
+          28, 21, 15, 10, 6, 3, 1, 0,
+          36, 29, 22, 16, 11, 7, 4, 2,
+          43, 37, 30, 23, 17, 12, 8, 5,
+          49, 44, 38, 31, 24, 18, 13, 9,
+          54, 50, 45, 39, 32, 25, 19, 14,
+          58, 55, 51, 46, 40, 33, 26, 20,
+          61, 59, 56, 52, 47, 41, 34, 27,
+          63, 62, 60, 57, 53, 48, 42, 35
   };
 
   public static int init_ur45[] = {
-    7, 6, 15, 5, 14, 23, 4, 13,
-    22, 31, 3, 12, 21, 30, 39, 2,
-    11, 20, 29, 38, 47, 1, 10, 19,
-    28, 37, 46, 55, 0, 9, 18, 27,
-    36, 45, 54, 63, 8, 17, 26, 35,
-    44, 53, 62, 16, 25, 34, 43, 52,
-    61, 24, 33, 42, 51, 60, 32, 41,
-    50, 59, 40, 49, 58, 48, 57, 56
+          7, 6, 15, 5, 14, 23, 4, 13,
+          22, 31, 3, 12, 21, 30, 39, 2,
+          11, 20, 29, 38, 47, 1, 10, 19,
+          28, 37, 46, 55, 0, 9, 18, 27,
+          36, 45, 54, 63, 8, 17, 26, 35,
+          44, 53, 62, 16, 25, 34, 43, 52,
+          61, 24, 33, 42, 51, 60, 32, 41,
+          50, 59, 40, 49, 58, 48, 57, 56
   };
 
   public static int diagonal_length[] = {
-    1, 2, 2, 3, 3, 3, 4, 4,
-    4, 4, 5, 5, 5, 5, 5, 6,
-    6, 6, 6, 6, 6, 7, 7, 7,
-    7, 7, 7, 7, 8, 8, 8, 8,
-    8, 8, 8, 8, 7, 7, 7, 7,
-    7, 7, 7, 6, 6, 6, 6, 6,
-    6, 5, 5, 5, 5, 5, 4, 4,
-    4, 4, 3, 3, 3, 2, 2, 1
+          1, 2, 2, 3, 3, 3, 4, 4,
+          4, 4, 5, 5, 5, 5, 5, 6,
+          6, 6, 6, 6, 6, 7, 7, 7,
+          7, 7, 7, 7, 8, 8, 8, 8,
+          8, 8, 8, 8, 7, 7, 7, 7,
+          7, 7, 7, 6, 6, 6, 6, 6,
+          6, 5, 5, 5, 5, 5, 4, 4,
+          4, 4, 3, 3, 3, 2, 2, 1
   };
 
   public static int bishop_shift_rl45[] = {
-    64, 62, 59, 55, 50, 44, 37, 29,
-    62, 59, 55, 50, 44, 37, 29, 22,
-    59, 55, 50, 44, 37, 29, 22, 16,
-    55, 50, 44, 37, 29, 22, 16, 11,
-    50, 44, 37, 29, 22, 16, 11,  7,
-    44, 37, 29, 22, 16, 11,  7,  4,
-    37, 29, 22, 16, 11,  7,  4,  2,
-    29, 22, 16, 11,  7,  4,  2,  1
+          64, 62, 59, 55, 50, 44, 37, 29,
+          62, 59, 55, 50, 44, 37, 29, 22,
+          59, 55, 50, 44, 37, 29, 22, 16,
+          55, 50, 44, 37, 29, 22, 16, 11,
+          50, 44, 37, 29, 22, 16, 11, 7,
+          44, 37, 29, 22, 16, 11, 7, 4,
+          37, 29, 22, 16, 11, 7, 4, 2,
+          29, 22, 16, 11, 7, 4, 2, 1
   };
   public static int bishop_shift_rr45[] = {
-    29, 37, 44, 50, 55, 59, 62, 64,
-    22, 29, 37, 44, 50, 55, 59, 62,
-    16, 22, 29, 37, 44, 50, 55, 59,
-    11, 16, 22, 29, 37, 44, 50, 55,
-     7, 11, 16, 22, 29, 37, 44, 50,
-     4,  7, 11, 16, 22, 29, 37, 44,
-     2,  4,  7, 11, 16, 22, 29, 37,
-     1,  2,  4,  7, 11, 16, 22, 29
+          29, 37, 44, 50, 55, 59, 62, 64,
+          22, 29, 37, 44, 50, 55, 59, 62,
+          16, 22, 29, 37, 44, 50, 55, 59,
+          11, 16, 22, 29, 37, 44, 50, 55,
+          7, 11, 16, 22, 29, 37, 44, 50,
+          4, 7, 11, 16, 22, 29, 37, 44,
+          2, 4, 7, 11, 16, 22, 29, 37,
+          1, 2, 4, 7, 11, 16, 22, 29
   };
 
   {
     int diag_sq[] = {
-      0, 1, 0, 2, 1, 0, 3, 2,
-      1, 0, 4, 3, 2, 1, 0, 5,
-      4, 3, 2, 1, 0, 6, 5, 4,
-      3, 2, 1, 0, 7, 6, 5, 4,
-      3, 2, 1, 0, 6, 5, 4, 3,
-      2, 1, 0, 5, 4, 3, 2, 1,
-      0, 4, 3, 2, 1, 0, 3, 2,
-      1, 0, 2, 1, 0, 1, 0, 0
+            0, 1, 0, 2, 1, 0, 3, 2,
+            1, 0, 4, 3, 2, 1, 0, 5,
+            4, 3, 2, 1, 0, 6, 5, 4,
+            3, 2, 1, 0, 7, 6, 5, 4,
+            3, 2, 1, 0, 6, 5, 4, 3,
+            2, 1, 0, 5, 4, 3, 2, 1,
+            0, 4, 3, 2, 1, 0, 3, 2,
+            1, 0, 2, 1, 0, 1, 0, 0
     };
 
     int bias_rl45[] = {
-      0, 1, 1, 3, 3, 3, 6, 6,
-      6, 6, 10, 10, 10, 10, 10, 15,
-      15, 15, 15, 15, 15, 21, 21, 21,
-      21, 21, 21, 21, 28, 28, 28, 28,
-      28, 28, 28, 28, 36, 36, 36, 36,
-      36, 36, 36, 43, 43, 43, 43, 43,
-      43, 49, 49, 49, 49, 49, 54, 54,
-      54, 54, 58, 58, 58, 61, 61, 63
+            0, 1, 1, 3, 3, 3, 6, 6,
+            6, 6, 10, 10, 10, 10, 10, 15,
+            15, 15, 15, 15, 15, 21, 21, 21,
+            21, 21, 21, 21, 28, 28, 28, 28,
+            28, 28, 28, 28, 36, 36, 36, 36,
+            36, 36, 36, 43, 43, 43, 43, 43,
+            43, 49, 49, 49, 49, 49, 54, 54,
+            54, 54, 58, 58, 58, 61, 61, 63
     };
 
     int square, pcs, attacks;
@@ -2156,7 +1786,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         rook_mobility_r0[square][i] = 0;
       }
       for (pcs = 0; pcs < 64; pcs++) {
-        attacks = initializeFindAttacks(Board.file(square), pcs << 1, 8);
+        attacks = initializeFindAttacks((square & 7), pcs << 1, 8);
         while (attacks != 0) {
           sq = 7 - first_one_8bit[attacks];
           rook_attacks_r0[square][pcs] |= Board.SQUARES[(square & 56) + (sq)].mask_on;
@@ -2179,11 +1809,11 @@ public class MoveGeneration implements MoveGenerationConstants {
         attacks = initializeFindAttacks(Board.rank(square), pcs << 1, 8);
         while (attacks != 0) {
           sq = first_one_8bit[attacks];
-          rook_attacks_rl90[square][pcs] |= Board.SQUARES[init_r90[(Board.file(square) << 3) + (sq)]].mask_on;
+          rook_attacks_rl90[square][pcs] |= Board.SQUARES[init_r90[((square & 7) << 3) + (sq)]].mask_on;
           attacks = attacks & (~(1 << (7 - sq)));
         }
         rook_mobility_rl90[square][pcs] =
-            Board.countBits(rook_attacks_rl90[square][pcs]);
+                Board.countBits(rook_attacks_rl90[square][pcs]);
       }
     }
 /*
@@ -2201,8 +1831,8 @@ public class MoveGeneration implements MoveGenerationConstants {
         rsq = init_l45[square];
         tsq = diag_sq[rsq];
         attacks =
-            initializeFindAttacks(tsq, (pcs << 1) & mask,
-            diagonal_length[rsq]) << (8 - diagonal_length[rsq]);
+                initializeFindAttacks(tsq, (pcs << 1) & mask,
+                        diagonal_length[rsq]) << (8 - diagonal_length[rsq]);
         while (attacks != 0) {
           sq = first_one_8bit[attacks];
           bishop_attacks_rl45[square][pcs] |= Board.SQUARES[init_ul45[sq + bias_rl45[rsq]]].mask_on;
@@ -2211,7 +1841,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       for (pcs = 0; pcs < 64; pcs++) {
         bishop_mobility_rl45[square][pcs] =
-            Board.countBits(bishop_attacks_rl45[square][pcs]);
+                Board.countBits(bishop_attacks_rl45[square][pcs]);
       }
     }
 /*
@@ -2229,8 +1859,8 @@ public class MoveGeneration implements MoveGenerationConstants {
         rsq = init_r45[square];
         tsq = diag_sq[rsq];
         attacks =
-            initializeFindAttacks(tsq, (pcs << 1) & mask,
-            diagonal_length[rsq]) << (8 - diagonal_length[rsq]);
+                initializeFindAttacks(tsq, (pcs << 1) & mask,
+                        diagonal_length[rsq]) << (8 - diagonal_length[rsq]);
         while (attacks != 0) {
           sq = first_one_8bit[attacks];
           bishop_attacks_rr45[square][pcs] |= Board.SQUARES[init_ur45[sq + bias_rl45[rsq]]].mask_on;
@@ -2239,34 +1869,32 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       for (pcs = 0; pcs < 64; pcs++) {
         bishop_mobility_rr45[square][pcs] =
-            Board.countBits(bishop_attacks_rr45[square][pcs]);
+                Board.countBits(bishop_attacks_rr45[square][pcs]);
       }
     }
   }
 
 
-
   /*
-   *******************************************************************************
-   *                                                                             *
-   *   InitlializeFindAttacks() is used to find the attacks from <square> that   *
-   *   exist on the 8-bit vector supplied as <pieces>.  <pieces> represents a    *
-   *   rank, file or diagonal, based on the rotated bit-boards.                  *
-   *                                                                             *
-   *******************************************************************************
-   */
-  public static int initializeFindAttacks(int square, int pieces, int length)
-  {
+  *******************************************************************************
+  *                                                                             *
+  *   InitlializeFindAttacks() is used to find the attacks from <square> that   *
+  *   exist on the 8-bit vector supplied as <pieces>.  <pieces> represents a    *
+  *   rank, file or diagonal, based on the rotated bit-boards.                  *
+  *                                                                             *
+  *******************************************************************************
+  */
+  public static int initializeFindAttacks(int square, int pieces, int length) {
     int result, start;
 
     result = 0;
-  /*
-   ************************************************************
-   *                                                          *
-   *   find attacks to left of <square>.                      *
-   *                                                          *
-   ************************************************************
-   */
+    /*
+    ************************************************************
+    *                                                          *
+    *   find attacks to left of <square>.                      *
+    *                                                          *
+    ************************************************************
+    */
     if (square < 7) {
       start = 1 << (square + 1);
       while (start < 256) {
@@ -2276,13 +1904,13 @@ public class MoveGeneration implements MoveGenerationConstants {
         start = start << 1;
       }
     }
-  /*
-   ************************************************************
-   *                                                          *
-   *   find attacks to right of <square>.                     *
-   *                                                          *
-   ************************************************************
-   */
+    /*
+    ************************************************************
+    *                                                          *
+    *   find attacks to right of <square>.                     *
+    *                                                          *
+    ************************************************************
+    */
     if (square > 0) {
       start = 1 << (square - 1);
       while (start > 0) {
@@ -2302,8 +1930,7 @@ public class MoveGeneration implements MoveGenerationConstants {
   public static int[] bit_cnt_8bit = new int[256];
   public static int[] connected_passed = new int[256];
 
-  static
-  {
+  static {
     int i;
     int j;
 
@@ -2342,19 +1969,19 @@ public class MoveGeneration implements MoveGenerationConstants {
           bit_cnt_8bit[i]++;
       for (j = 0; j < 8; j++) {
         if ((i & (1 << (7 - j))) != 0) {
-          first_one_8bit[i] = (char)j;
+          first_one_8bit[i] = (char) j;
           break;
         }
       }
       for (j = 7; j >= 0; j--) {
         if ((i & (1 << (7 - j))) != 0) {
-          last_one_8bit[i] = (char)j;
+          last_one_8bit[i] = (char) j;
           break;
         }
       }
       for (j = 7; j > 0; j--) {
         if ((i & (3 << (7 - j))) == (3 << (7 - j))) {
-          connected_passed[i] = (char)j;
+          connected_passed[i] = (char) j;
           break;
         }
       }
@@ -2362,3 +1989,4 @@ public class MoveGeneration implements MoveGenerationConstants {
   }
 
 }
+

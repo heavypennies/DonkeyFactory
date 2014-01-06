@@ -10,15 +10,9 @@
 		<pathelement path="timesealing.jar"/>
 		<pathelement path="jregex.jar"/>
 		<pathelement path="bsh-core-1.2b7.jar"/>
-    <pathelement path="twitter4j/lib/jdom.jar"/>
-    <pathelement path="twitter4j/lib/junit.jar"/>
-    <pathelement path="twitter4j/lib/logback-classic-0.9.6.jar"/>
-    <pathelement path="twitter4j/lib/logback-core-0.9.6.jar"/>
-    <pathelement path="twitter4j/lib/rome-0.9.jar"/>
-    <pathelement path="twitter4j/lib/slf4j-api-1.5.0.jar"/>
-    <pathelement path="twitter4j/twitter4j-2.0.8.jar"/>
-    <pathelement path="signpost/signpost-core-1.2.1.1.jar"/>
-    <pathelement path="signpost/signpost-commonshttp4-1.2.1.1.jar"/>
+    <pathelement path="src/lib/twitter4j-core-3.0.3.jar"/>
+    <pathelement path="src/lib/httpcore-4.2.2.jar"/>
+    <pathelement path="src/lib/httpclient-4.2.3.jar"/>
   </path>
 	
 	<target name="init">

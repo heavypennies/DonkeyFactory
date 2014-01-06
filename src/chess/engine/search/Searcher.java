@@ -6,13 +6,13 @@ import chess.engine.model.Board;
 import chess.engine.model.Move;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public interface Searcher
 {
-  public static int INFINITY = 70000;
-  public static int MATE = 60000;
+  public static int INFINITY = 10010000;
+  public static int MATE = INFINITY - 10000;
 
   SearchStats getStats();
   void setStats(SearchStats stats);
@@ -21,4 +21,7 @@ public interface Searcher
   boolean isDone();
   void stop();
   void reset();
+
+  boolean isResearchAtRoot();
+
 }

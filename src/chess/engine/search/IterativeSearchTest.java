@@ -9,7 +9,7 @@ import chess.engine.utils.MoveGeneration;
 import java.util.Date;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class IterativeSearchTest //extends TestCase
@@ -17,7 +17,8 @@ public class IterativeSearchTest //extends TestCase
   public void testSimpleABSearch()
   {
 
-// MATS
+    MoveGeneration moveGen = new MoveGeneration();
+ // MATS
 
 /*
     Board searchBoard = new Board("2r1k2r/pp2bp1p/1q3pp1/3P1b2/4N3/2Qp1N2/PP3PPP/R3R1K1"); // w k - bm d6; id MATS001;
@@ -36,17 +37,30 @@ public class IterativeSearchTest //extends TestCase
 
 
 /*
-
     Board searchBoard = new Board("2r1r1k1/1p1q1ppp/3p1b2/p2P4/3Q4/5N2/PP2RPPP/4R1K1"); // w - - bm Qg4; MATS003;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
 */
 
-/*
     Board searchBoard = new Board("2rr2k1/1b3ppp/pb2p3/1p2P3/1P2BPnq/P1N3P1/1B2Q2P/R4R1K"); // b	- - bm Rxc3; id MATS004;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 0;
+
+    // Hash table tests
+/*
+    Board searchBoard = new Board("8/k7/3p4/p2P1p2/P2P1P2/8/8/K7"); // w - - Kb1
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
+*/
+
+    // PASSED PAWN TESTS
+/*
+    Board searchBoard = new Board("8/6k1/4K2R/6PP/8/8/8/7r"); // b
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
 */
 
 /*
@@ -55,6 +69,127 @@ public class IterativeSearchTest //extends TestCase
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 0;
 */
+
+/*
+    Board searchBoard = new Board("8/pR4pk/1b1r4/2p5/N1p5/6PP/PP6/5K2"); // b - - bm Rxb2; id MATS005;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 0;
+*/
+
+/*
+    Board searchBoard = new Board("8/p6k/1p3bpp/3qp3/2p5/P1P2P1P/1P2QBP1/6K1"); // b
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 0;
+*/
+
+/*
+    Board searchBoard = new Board("8/p6k/1p3bpp/4p3/2p5/P1Pq1P1P/1P2QBP1/6K1"); // b
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
+*/
+
+/*
+    Board searchBoard = new Board("8/p6k/1p3bpp/4p3/8/P1Pp1P1P/1P3BP1/6K1"); // b
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
+*/
+
+
+/*
+   Board searchBoard = new Board("8/6p1/1p6/p7/2P1K2N/1Pk5/8/8");
+   searchBoard.stats.whiteCastleFlag = 1;
+   searchBoard.stats.blackCastleFlag = 1;
+   searchBoard.turn = 0;
+*/
+/*
+   Board searchBoard = new Board("4Q3/6pk/2pq4/3p4/1p1P3p/1P1K1P2/1PP3P1/8"); // Qg6;
+   searchBoard.stats.whiteCastleFlag = 1;
+   searchBoard.stats.blackCastleFlag = 1;
+   searchBoard.turn = 0;
+*/
+/*
+  Board searchBoard = new Board("8/6p1/2p5/3p1k2/1p1P3p/1P2KP2/1PP3P1/8");;
+  searchBoard.stats.whiteCastleFlag = 1;
+  searchBoard.stats.blackCastleFlag = 1;
+  searchBoard.turn = 1;
+*/
+/*
+Board searchBoard = new Board("8/5pk1/4p3/7Q/8/3q4/KP6/8 b - - bm Qd5;
+*/
+/*
+Board searchBoard = new Board("r3bb2/P1q3k1/Q2p3p/2pPp1pP/2B1P3/2B5/6P1/R5K1 w - - bm Bxe5;
+*/
+/*
+Board searchBoard = new Board("r1b5/p2k1r1p/3P2pP/1ppR4/2P2p2/2P5/P1B4P/4R1K1 w - - bm Bxg6;
+*/
+/*
+Board searchBoard = new Board("6r1/1p3k2/pPp4R/K1P1p1p1/1P2Pp1p/5P1P/6P1/8 w - - bm Rxc6;
+*/
+/*
+Board searchBoard = new Board("1k2b3/4bpp1/p2pp1P1/1p3P2/2q1P3/4B3/PPPQN2r/1K1R4 w - - bm f6;
+*/
+/*
+Board searchBoard = new Board("2kr3r/ppp1qpp1/2p5/2b2b2/2P1pPP1/1P2P1p1/PBQPB3/RN2K1R1 b Q - bm Rh1;
+*/
+/*
+   Board searchBoard = new Board("6k1/2q3p1/1n2Pp1p/pBp2P2/Pp2P3/1P1Q1KP1/8/8");// w - - bm e5;
+  searchBoard.stats.whiteCastleFlag = 1;
+  searchBoard.stats.blackCastleFlag = 1;
+  searchBoard.turn = 1;
+*/
+/*
+Board searchBoard = new Board("5r2/pp1RRrk1/4Qq1p/1PP3p1/8/4B3/1b3P1P/6K1 w - - bm Rxf7 Qxf7;
+*/
+/*
+Board searchBoard = new Board("6k1/1q2rpp1/p6p/P7/1PB1n3/5Q2/6PP/5R1K w - - bm b5;
+*/
+/*
+Board searchBoard = new Board("3r2k1/p6p/b2r2p1/2qPQp2/2P2P2/8/6BP/R4R1K w - - bm Rxa6;
+*/
+/*
+Board searchBoard = new Board("8/6Bp/6p1/2k1p3/4PPP1/1pb4P/8/2K5 b - - bm b2;
+*/
+/*
+Board searchBoard = new Board("2r1rbk1/p1Bq1ppp/Ppn1b3/1Npp4/B7/3P2Q1/1PP2PPP/R4RK1 w - - bm Nxa7;
+*/
+/*
+Board searchBoard = new Board("r4rk1/ppq3pp/2p1Pn2/4p1Q1/8/2N5/PP4PP/2KR1R2 w - - bm Rxf6;
+*/
+/*
+Board searchBoard = new Board("6k1/p4pp1/Pp2r3/1QPq3p/8/6P1/2P2P1P/1R4K1 w - - bm cxb6;
+*/
+/*
+Board searchBoard = new Board("8/2k5/2p5/2pb2K1/pp4P1/1P1R4/P7/8 b - - bm Bxb3;
+*/
+/*
+Board searchBoard = new Board("2r5/1r5k/1P3p2/PR2pP1p/4P2p/2p1BP2/1p2n3/4R2K b - - bm Nd4;
+*/
+/*
+Board searchBoard = new Board("8/1R2P3/6k1/3B4/2P2P2/1p2r3/1Kb4p/8 w - - bm Be6;
+*/
+/*
+Board searchBoard = new Board("1q1r3k/3P1pp1/ppBR1n1p/4Q2P/P4P2/8/5PK1/8 w - - bm Rxf6;
+*/
+/*
+Board searchBoard = new Board("6k1/5pp1/pb1r3p/8/2q1P3/1p3N1P/1P3PP1/2R1Q1K1 b - - bm Qc2;
+*/
+/*
+Board searchBoard = new Board("8/Bpk5/8/P2K4/8/8/8/8 w - - bm Kd4;
+*/
+/*
+Board searchBoard = new Board("1r6/5k2/p4p1K/5R2/7P/8/6P1/8 w - - bm Kh7;
+*/
+/*
+Board searchBoard = new Board("8/6k1/p4p2/P3q2p/7P/5Q2/5PK1/8 w - - bm Qg3;
+*/
+/*
+Board searchBoard = new Board("8/8/6p1/3Pkp2/4P3/2K5/6P1/n7 w - - bm d6;
+*/
+
 
 /*
 Board searchBoard = new Board("2r3k1/p2q1rpp/1p3pn1/3P4/4P2P/PQ4B1/6P1/2R2RK1"); // w - - bm d6; id MATS006;
@@ -106,9 +241,17 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 
 //    Board searchBoard = new Board();
 
-/*
-   Board searchBoard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+
+   /*Board searchBoard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
    searchBoard.turn = 1;
+*/
+/* D4 D5
+    Board searchBoard = new Board("rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR");
+    searchBoard.turn = 1;
+*/
+/*
+    Board searchBoard = new Board("rnbqkb1r/ppp2ppp/4pn2/3p4/3P4/2N1PN2/PPP2PPP/R1BQKB1R");
+    searchBoard.turn = 0;
 */
 
 /*
@@ -191,6 +334,13 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 0;
 */
+    // Castle queenside?
+/*
+    Board searchBoard = new Board("r3kbnr/pp1b1ppp/8/2p1q3/8/N1P1B3/PP3PPP/R2QKB1R");
+    searchBoard.stats.whiteCastleFlag = 0;
+    searchBoard.stats.blackCastleFlag = 0;
+    searchBoard.turn = 0;
+*/
 /*
     Board searchBoard = new Board("8/6k1/6p1/7p/3P1P2/3RK1P1/8/3r4");
     searchBoard.turn = 0;
@@ -209,6 +359,7 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 //    Board searchBoard = new Board("r1bqkb1r/p4pp1/2p2n1p/n7/4p3/5N2/PPPPBPPP/RNBQK2R");
 //    Board searchBoard = new Board("2k4r/ppp3pp/4pn2/3r3b/1B6/2PN1P2/P1P3PP/2R1R1K1");
 //    Board searchBoard = new Board("rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR");
+    //Board searchBoard = new Board("2rr4/pp2k1pp/4n3/4N3/1b6/8/PP3PPP/2R3KR");
 /*
     Board searchBoard = new Board("r2q2k1/pppnb1p1/3pb2p/8/3QP3/2N5/PPP2PPP/3R1RK1");
     searchBoard.turn = 1;
@@ -239,11 +390,75 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
 */
+    // Throw away rook ?
+/*
+    Board searchBoard = new Board("1r4k1/2R2p1p/5K2/5P2/1ppP3P/P7/2P5/8");
+    searchBoard.turn = 1;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+*/
+
     // can't see mate?
+/*
     Board searchBoard = new Board("4rrk1/3b1p1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R");
     searchBoard.turn = 0;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 2;
+*/
+
+    // can't see mate 3
+/*
+    Board searchBoard = new Board("r4r1k/pppb1p1p/1bq1pP1Q/4P3/3p1n2/P2P3P/1PP4N/R3KBR1");
+    searchBoard.turn = 0;
+    searchBoard.stats.whiteCastleFlag = 0;
+    searchBoard.stats.blackCastleFlag = 1;
+*/
+
+    // up a pawn, no breakthru
+/*
+    Board searchBoard = new Board("1r6/3b2k1/pp1r1ppp/2pBp3/2P1P1P1/P6P/1R2K1P1/1R6");
+    searchBoard.turn = 0;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+*/
+
+/*
+    Board searchBoard = new Board("r1b1k2r/p1pp1ppp/2p5/4q3/8/b1P2Q2/P1PB1PPP/R3KB1R");
+*/
+/*
+    Board searchBoard = new Board("r1bqrnk1/pp2bppp/2p5/3p2B1/3Pn3/2NBPN2/PPQ2PPP/4RRK1");
+    searchBoard.turn = 1;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 2;
+*/
+    // can't see mate? 2
+/*
+    Board searchBoard = new Board("2b2b2/1p2qnk1/7r/Q3p3/2P1Ppp1/1N1B4/PP3PP1/3R1RK1");
+    searchBoard.turn = 1;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+*/
+
+   // Nxg2 ?
+/*
+    Board searchBoard = new Board("1r3r1k/q6p/7Q/2p4B/2Pp1n2/Pn1P4/5PPP/3R1RK1"); // b
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 0;
+*/
+/*
+    Board searchBoard = new Board("5rk1/3q3p/p3b1p1/1ppNR3/1b5R/3Q1P2/PPP4P/1K6");
+    searchBoard.turn = 0;
+    searchBoard.stats.whiteCastleFlag = 2;
+    searchBoard.stats.blackCastleFlag = 1;
+*/
+
+/*
+Board searchBoard = new Board("8/1p3R1p/6pk/3B1b2/8/8/2r2PPP/R1n3K1");
+searchBoard.turn = 1;
+searchBoard.stats.whiteCastleFlag = 1;
+searchBoard.stats.blackCastleFlag = 1;
+*/
 /*
     Board searchBoard = new Board("8/p5kp/8/2p2K2/P7/8/1P3P2/8");
     searchBoard.turn = 0;
@@ -631,7 +846,11 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.turn = 0;
 */
 //    Board searchBoard = new Board("r1bqkb1r/pp1n1ppp/2n1p3/1BppP3/3P4/2N2N2/PPP2PPP/R1BQK2R");
+ /*   Board searchBoard = new Board("rn1qk2r/pppb1ppp/4p3/3p4/1b1P4/2N2N2/PPPQBPPP/R3K2R");
+    searchBoard.turn = 0;
+/*
 //    Board searchBoard = new Board("8/8/8/8/8/7K/5Q2/7k");
+ */
 /*
     new Piece(0,searchBoard, 1, Piece.PAWN, Square.A3);
     new Piece(1,searchBoard, 1, Piece.PAWN, Square.B4);
@@ -654,7 +873,6 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 
     System.out.println(new Date());
 
-    MoveGeneration moveGen = new MoveGeneration();
     BoardEvaluator eval = new SimpleEvaluator(moveGen);
 
     Move[] moves = Move.createMoves(100);
@@ -666,7 +884,7 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     ABSearch search = new ABSearch(moveGen, eval);
     IterativeSearch iterativeSearch = new IterativeSearch(search, moveGen, eval);
 
-    int score = iterativeSearch.search(searchBoard,50);
+    int score = iterativeSearch.search(searchBoard,100);
 
     System.err.println(searchBoard);
     System.err.println("Score: " + score);

@@ -7,7 +7,7 @@ import chess.engine.model.Move;
 import chess.engine.utils.MoveGeneration;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class IterativeSearch implements Searcher
@@ -70,8 +70,6 @@ public class IterativeSearch implements Searcher
 
     board.stats.originalMaterial = eval.getMaterial(board);
     board.stats.originalMaterialDifference = eval.getMaterialDifference(board);
-    board.stats.whiteAttacking = eval.getBlackKingSafety(board) < -100;
-    board.stats.blackAttacking = eval.getWhiteKingSafety(board) < -100;
 
     long start = System.currentTimeMillis();
 
@@ -86,7 +84,7 @@ public class IterativeSearch implements Searcher
 
       stats.time = (double) time / 1000;
 
-      if(currentDepth > 3)
+      if(currentDepth > 0 && time > 10)
       {
         System.err.println(new StringBuilder("d[").append(currentDepth).append("] Stats: ").append(search.getStats()));
         System.err.println(new StringBuilder("Best: ").append(Move.toString(search.getPV())).toString());
@@ -123,5 +121,10 @@ public class IterativeSearch implements Searcher
   public void reset() {
     done = true;
     search.reset();
+  }
+
+  @Override
+  public boolean isResearchAtRoot() {
+    return search.isResearchAtRoot();
   }
 }

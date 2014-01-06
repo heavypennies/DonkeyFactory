@@ -3,7 +3,7 @@
 package chess.engine.model;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class ShortAnalysis

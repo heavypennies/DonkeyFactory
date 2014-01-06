@@ -5,7 +5,7 @@ package chess.engine.search;
 import chess.engine.model.Move;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class PositionHashtable
@@ -14,7 +14,7 @@ public class PositionHashtable
   public static final byte LOWER_BOUND = 1;
   public static final byte EXACT_VALUE = 2;
 
-  public static int HASH_SIZE = (int)1L<<18;
+  public static int HASH_SIZE = (int)1L << 20;
   public static int HASH_MASK = HASH_SIZE - 1;
 
   public static class HashEntry
@@ -29,7 +29,7 @@ public class PositionHashtable
 
     public void reset()
     {
-      depth = 0;
+      depth = -101;
       hash = 0;
       type = -1;
       score = 0;
@@ -39,8 +39,8 @@ public class PositionHashtable
   }
 
   // index128 as [hash_index][fallback]
-  private HashEntry[] DEPTH_FIRST_HASH = new HashEntry[HASH_SIZE];
-  private HashEntry[] ALWAYS_STORE_HASH = new HashEntry[HASH_SIZE];
+  private final HashEntry[] DEPTH_FIRST_HASH = new HashEntry[HASH_SIZE];
+  private final HashEntry[] ALWAYS_STORE_HASH = new HashEntry[HASH_SIZE];
 
   public PositionHashtable()
   {
@@ -53,7 +53,7 @@ public class PositionHashtable
     clear();
   }
 
-  public HashEntry getEntry(long boardHash)
+  public final HashEntry getEntry(long boardHash)
   {
     int index = (int)(boardHash & HASH_MASK);
 
@@ -79,46 +79,34 @@ public class PositionHashtable
 
     HashEntry depthFirstEntry = DEPTH_FIRST_HASH[index];
 
-    if(depth > depthFirstEntry.depth || depthFirstEntry.hash == 0 || (depth == depthFirstEntry.depth && type > depthFirstEntry.type && depthFirstEntry.hash == boardHash))
+    if(depth > depthFirstEntry.depth)
     {
       depthFirstEntry.hash = boardHash;
       depthFirstEntry.depth = depth;
       depthFirstEntry.score = score;
       depthFirstEntry.type = type;
       depthFirstEntry.mateThreat = mateThreat;
+      depthFirstEntry.move.moved = move.moved;
       depthFirstEntry.move.fromSquare = move.fromSquare;
       depthFirstEntry.move.toSquare = move.toSquare;
-      depthFirstEntry.move.takenSquare = move.takenSquare;
-      depthFirstEntry.move.moved = move.moved;
       depthFirstEntry.move.taken = move.taken;
       depthFirstEntry.move.promoteTo = move.promoteTo;
-      depthFirstEntry.move.castledRook = move.castledRook;
-      depthFirstEntry.move.castleFromSquare = move.castleFromSquare;
-      depthFirstEntry.move.castleToSquare = move.castleToSquare;
-      depthFirstEntry.move.enPassentSquare = move.enPassentSquare;
-      depthFirstEntry.move.score = move.score;
-      depthFirstEntry.move.check = move.check;
       return;
     }
 
     HashEntry alwaysStoreEntry = ALWAYS_STORE_HASH[index];
-    alwaysStoreEntry.hash = boardHash;
-    alwaysStoreEntry.depth = depth;
-    alwaysStoreEntry.score = score;
-    alwaysStoreEntry.type = type;
-    alwaysStoreEntry.mateThreat = mateThreat;
-    alwaysStoreEntry.move.fromSquare = move.fromSquare;
-    alwaysStoreEntry.move.toSquare = move.toSquare;
-    alwaysStoreEntry.move.takenSquare = move.takenSquare;
-    alwaysStoreEntry.move.moved = move.moved;
-    alwaysStoreEntry.move.taken = move.taken;
-    alwaysStoreEntry.move.promoteTo = move.promoteTo;
-    alwaysStoreEntry.move.castledRook = move.castledRook;
-    alwaysStoreEntry.move.castleFromSquare = move.castleFromSquare;
-    alwaysStoreEntry.move.castleToSquare = move.castleToSquare;
-    alwaysStoreEntry.move.enPassentSquare = move.enPassentSquare;
-    alwaysStoreEntry.move.score = move.score;
-    alwaysStoreEntry.move.check = move.check;
+    if(depth >= alwaysStoreEntry.depth) {
+      alwaysStoreEntry.hash = boardHash;
+      alwaysStoreEntry.depth = depth;
+      alwaysStoreEntry.score = score;
+      alwaysStoreEntry.type = type;
+      alwaysStoreEntry.mateThreat = mateThreat;
+      alwaysStoreEntry.move.moved = move.moved;
+      alwaysStoreEntry.move.fromSquare = move.fromSquare;
+      alwaysStoreEntry.move.toSquare = move.toSquare;
+      alwaysStoreEntry.move.taken = move.taken;
+      alwaysStoreEntry.move.promoteTo = move.promoteTo;
+    }
   }
 
   public void clear()
@@ -134,13 +122,13 @@ public class PositionHashtable
   {
     for(int t = 0;t < HASH_SIZE;t++)
     {
-      DEPTH_FIRST_HASH[t].depth = 0;
-      ALWAYS_STORE_HASH[t].depth = 0;
-      if(Math.abs(DEPTH_FIRST_HASH[t].score) > Searcher.MATE - 300)
+      DEPTH_FIRST_HASH[t].depth = -101;
+      ALWAYS_STORE_HASH[t].depth = -101;
+      if(Math.abs(DEPTH_FIRST_HASH[t].score) < Searcher.MATE - 300)
       {
         DEPTH_FIRST_HASH[t].hash = 0;
       }
-      if(Math.abs(ALWAYS_STORE_HASH[t].score) > Searcher.MATE - 300)
+      if(Math.abs(ALWAYS_STORE_HASH[t].score) < Searcher.MATE - 300)
       {
         ALWAYS_STORE_HASH[t].hash = 0;
       }

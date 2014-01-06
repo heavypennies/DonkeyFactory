@@ -10,7 +10,7 @@ import chess.engine.utils.MoveGeneration;
 import java.util.Arrays;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class SimpleABSearch implements Searcher
@@ -110,7 +110,7 @@ public class SimpleABSearch implements Searcher
       // make the move
       board.make(move);
       // unmake if we are in check
-      if(moveGeneration.isSquareCheckedByColor(board, board.turn == 1 ? board.blackKing.square : board.whiteKing.square, board.turn ^ 1))
+      if(board.isSquareCheckedByColor(board.turn == 1 ? board.blackKing.square : board.whiteKing.square, board.turn ^ 1))
       {
         board.unmake(move);
         continue;
@@ -159,7 +159,7 @@ public class SimpleABSearch implements Searcher
 
     if(moveCount == 0)
     {
-      if(moveGeneration.isSquareCheckedByColor(board, board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1))
+      if(board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1))
       {
         pv[index][index].moved = null;
         return -(MATE - index);
@@ -185,6 +185,10 @@ public class SimpleABSearch implements Searcher
     return done;
   }
 
+  @Override
+  public boolean isResearchAtRoot() {
+    return false;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   public void reset() {
     

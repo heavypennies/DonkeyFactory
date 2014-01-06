@@ -8,12 +8,11 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/docs" />
       <excludeFolder url="file://$MODULE_DIR$/sounds" />
+      <excludeFolder url="file://$MODULE_DIR$/twitter4j" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="twitter4j" level="project" />
-    <orderEntry type="library" name="DonkeyFactory" level="project" />
-    <orderEntry type="library" name="signpost" level="project" />
+    <orderEntry type="library" name="libz" level="project" />
   </component>
 </module>
 

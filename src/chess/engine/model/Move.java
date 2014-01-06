@@ -2,6 +2,7 @@
 
 package chess.engine.model;
 
+import chess.engine.search.ABSearch;
 import chess.engine.search.Searcher;
 import chess.engine.search.SimpleEvaluator;
 
@@ -9,8 +10,10 @@ import chess.engine.search.SimpleEvaluator;
  * @author Joshua Levine <jlevine@theladders.com>
  * @version $Revision$ $Name$ $Date$
  */
-public class Move
+public final class Move
 {
+  public static final int CAPTURE_SCORE = (ABSearch.INFINITY - 40000);
+  public static final int PROMOTE_SCORE = (ABSearch.INFINITY - 55000);
   public boolean check;
 
   public Square fromSquare;
@@ -111,13 +114,6 @@ public class Move
 
   public void reset(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken)
   {
-/*
-    if(fromSquare == null || toSquare == null)
-    {
-      int x = 1;
-    }
-*/
-
     this.fromSquare = fromSquare;
     this.toSquare = toSquare;
     this.takenSquare = takenSquare;
@@ -128,7 +124,7 @@ public class Move
     this.castleFromSquare = null;
     this.castleToSquare = null;
     this.enPassentSquare = null;
-    this.score = 40000 + (Piece.TYPE_VALUES[taken.type] - Piece.TYPE_VALUES[moved.type]);
+    this.score = CAPTURE_SCORE + (Piece.TYPE_VALUES[taken.type] - Piece.TYPE_VALUES[moved.type]);
     this.check = false;
   }
 
@@ -148,22 +144,6 @@ public class Move
     this.check = false;
   }
 
-  public void reset(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken, Piece castledRook, Square castleFromSquare, Square castleToSquare, Square enPassentSquare)
-  {
-    this.fromSquare = fromSquare;
-    this.toSquare = toSquare;
-    this.takenSquare = takenSquare;
-    this.moved = moved;
-    this.taken = taken;
-    this.promoteTo = -1;
-    this.castledRook = castledRook;
-    this.castleFromSquare = castleFromSquare;
-    this.castleToSquare = castleToSquare;
-    this.enPassentSquare = enPassentSquare;
-    this.score = 500;
-    this.check = false;
-  }
-
   public void reset(Square fromSquare, Square toSquare, Piece moved, int promoteTo)
   {
     this.fromSquare = fromSquare;
@@ -176,7 +156,7 @@ public class Move
     this.castleFromSquare = null;
     this.castleToSquare = null;
     this.enPassentSquare = null;
-    this.score = 50000 + Piece.TYPE_VALUES[promoteTo];
+    this.score = PROMOTE_SCORE + Piece.TYPE_VALUES[promoteTo];
     this.check = false;
   }
 
@@ -192,7 +172,7 @@ public class Move
     this.castleFromSquare = null;
     this.castleToSquare = null;
     this.enPassentSquare = null;
-    this.score = 55000 + Piece.TYPE_VALUES[promoteTo];
+    this.score = PROMOTE_SCORE + Piece.TYPE_VALUES[promoteTo];
     this.check = false;
   }
 
@@ -299,18 +279,12 @@ public class Move
 
   public boolean matches(Move move)
   {
-    return move != null &&
-           moved == move.moved &&
+    return moved == move.moved &&
            fromSquare == move.fromSquare &&
            toSquare == move.toSquare &&
            taken == move.taken &&
            promoteTo == move.promoteTo;
   }
-
-  // castling squares are weeeaaak...
-  // 1 + 6 + 6 + 7 + 7 + 7 + + 7 + 7 + 7 + 6 + 4 + 6(score) 
-  // capture, movedIndex, takenIndex, from, to, takenSquare, enPassentSquare, castleFromSqaure, castleToSquare, castledRook, promoteTo
-
 
 /*
   public static int SHIFT_1024 = 11;
@@ -324,88 +298,57 @@ public class Move
   public static int SHIFT_1 = 1;
 
   public static int TO_SHIFT = SHIFT_128;
-  public static int SQUARE_SHIFT = SHIFT_128 + TO_SHIFT;
-  public static int MOVED_SHIFT = SHIFT_128 + SQUARE_SHIFT;
-  public static int EP_SQUARE_SHIFT = SHIFT_32 + MOVED_SHIFT;
-  public static int PROMOTE_TYPE_SHIFT = SHIFT_128 + EP_SQUARE_SHIFT;
-  public static int CASTLED_ROOK_SHIFT = SHIFT_8 + PROMOTE_TYPE_SHIFT;
-  public static int SCORE_SHIFT = SHIFT_1024 + PROMOTE_TYPE_SHIFT;
+  public static int TAKEN_SQUARE_SHIFT = SHIFT_32 + TO_SHIFT;
+  public static int MOVED_SHIFT = SHIFT_32 + TAKEN_SQUARE_SHIFT;
+  public static int TAKEN_SHIFT = SHIFT_32 + MOVED_SHIFT;
+  public static int PROMOTE_TO_SHIFT = SHIFT_128 + TAKEN_SQUARE_SHIFT;
+  public static int SCORE_SHIFT = SHIFT_1024 + PROMOTE_TO_SHIFT;
 
-  public static long FROM_MASK = 128 - 1;
-  public static long TO_MASK = (128 - 1) << TO_SHIFT;
-  public static long SQUARE_MASK = (64 - 1) << SQUARE_SHIFT;
-  public static long MOVED_MASK = (32 - 1) << MOVED_SHIFT;
-  public static long EP_SQUARE_MASK = (64 - 1) << EP_SQUARE_SHIFT;
-  public static long PROMOTE_TYPE_MASK = (8 - 1) << PROMOTE_TYPE_SHIFT;
-  public static long CASTLED_ROOK_MASK = (32 - 1) << CASTLED_ROOK_SHIFT;
-  public static long SCORE_MASK = (1024 - 1) << SCORE_SHIFT;
+  public static int FROM_MASK = TO_SHIFT - 1;
+  public static int TO_MASK = TO_SHIFT - 1;
+  public static int TAKEN_SQUARE_MASK = TAKEN_SQUARE_SHIFT - 1;
+  public static int MOVED_MASK = MOVED_SHIFT - 1;
+  public static int TAKEN_MASK = TAKEN_SHIFT - 1;
+  public static int PROMOTE_TO_MASK = PROMOTE_TO_SHIFT - 1;
+  public static int SCORE_MASK = SCORE_SHIFT - 1;
 
-
-  public long create(Square fromSquare, Square toSquare, Piece moved)
+  public static long create(Square fromSquare, Square toSquare, Piece moved)
   {
     return fromSquare.index128 |
            (toSquare.index128 << TO_SHIFT) |
-           (moved.index128 << MOVED_SHIFT);
+           (moved.index << MOVED_SHIFT) |
+           (SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][toSquare.index64] - SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][fromSquare.index64]) << SCORE_SHIFT;
   }
 
-  public long create(Square fromSquare, Square toSquare, Piece moved, Square enPassentSquare)
+  public static long create(Square fromSquare, Square toSquare, Piece moved, int promoteTo)
   {
     return fromSquare.index128 |
            (toSquare.index128 << TO_SHIFT) |
-           (moved.index128 << MOVED_SHIFT) |
-           (enPassentSquare.index128 << EP_SQUARE_SHIFT);
+           (moved.index << MOVED_SHIFT) |
+           (promoteTo << PROMOTE_TO_SHIFT) |
+           (PROMOTE_SCORE + (Piece.TYPE_VALUES[promoteTo])) << SCORE_SHIFT;
   }
 
-  public long create(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken)
+  public static long create(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken)
   {
     return fromSquare.index128 |
            (toSquare.index128 << TO_SHIFT) |
-           (moved.index128 << MOVED_SHIFT) |
-           (takenSquare.index128 << ) |
-
-    return create(fromSquare, toSquare,  takenSquare, moved, taken, null, null, null, null);
+           (takenSquare.index128 << TAKEN_SQUARE_SHIFT) |
+           (moved.index << MOVED_SHIFT) |
+           (taken.index << TAKEN_SHIFT) |
+           (CAPTURE_SCORE + (Piece.TYPE_VALUES[taken.type] - Piece.TYPE_VALUES[moved.type])) << SCORE_SHIFT;
   }
 
-  public long create(Square fromSquare, Square toSquare, Piece moved, Piece castledRook, Square castleFromSquare, Square castleToSquare)
+  public static long create(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken, int promoteTo)
   {
-    return create(fromSquare, toSquare, null, moved, null, castledRook, castleFromSquare, castleToSquare, null);
-  }
-
-  public long create(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken, Piece castledRook, Square castleFromSquare, Square castleToSquare, Square enPassentSquare)
-  {
-    this.fromSquare = fromSquare;
-    this.toSquare = toSquare;
-    this.takenSquare = takenSquare;
-    this.moved = moved;
-    this.taken = taken;
-    this.castledRook = castledRook;
-    this.castleFromSquare = castleFromSquare;
-    this.castleToSquare = castleToSquare;
-    this.enPassentSquare = enPassentSquare;
-
-    if(taken != null) score += taken.color == 1 ? taken.value : -taken.value;
-    if(promoteTo != -1) score += moved.color == 1 ? promoteTo * 100 : promoteTo * -100;
-    if(castledRook != null) score += 200;
-  }
-
-  public long create(Square fromSquare, Square toSquare, Piece moved, int promoteTo)
-  {
-    this.fromSquare = fromSquare;
-    this.toSquare = toSquare;
-    this.moved = moved;
-    this.promoteTo = promoteTo;
-  }
-
-  public long create(Square fromSquare, Square toSquare, Piece moved, Piece taken, int promoteTo)
-  {
-    this.fromSquare = fromSquare;
-    this.toSquare = toSquare;
-    this.takenSquare = toSquare;
-    this.moved = moved;
-    this.taken = taken;
-    this.promoteTo = promoteTo;
+    return fromSquare.index128 |
+           (toSquare.index128 << TO_SHIFT) |
+           (takenSquare.index128 << TAKEN_SQUARE_SHIFT) |
+           (moved.index << MOVED_SHIFT) |
+           (taken.index << TAKEN_SHIFT) |
+           (promoteTo << PROMOTE_TO_SHIFT) |
+           (PROMOTE_SCORE + (Piece.TYPE_VALUES[promoteTo])) << SCORE_SHIFT;
   }
 
 */
-
 }

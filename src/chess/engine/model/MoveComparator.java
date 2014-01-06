@@ -5,7 +5,7 @@ package chess.engine.model;
 import java.util.Comparator;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class MoveComparator implements Comparator<Move>

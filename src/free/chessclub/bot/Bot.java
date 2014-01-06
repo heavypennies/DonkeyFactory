@@ -33,20 +33,24 @@ import free.jin.JinFrame;
 import free.jin.event.*;
 import free.jin.freechess.FreechessJinListenerManager;
 import free.jin.freechess.JinFreechessConnection;
-import twitter4j.Twitter;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import twitter4j.TwitterException;
-import twitter4j.http.AccessToken;
-import twitter4j.http.HttpClient;
-import twitter4j.http.Response;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Bot extends JinFreechessConnection implements GameListener {
 
+  public static int TWEET_MAX = 1;
+  public static int TWEET_SOFT = 3;
+  public static final String SET_TWEET_MAX = "tweetMax";
+  public static final String SET_TWEET_SOFT = "tweetSoft";
   public boolean autoseek = false;
   public boolean tellOwner = true;
   public String owner = "tarabas";
@@ -120,7 +124,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
    */
 
   private static Properties userProps = new Properties();
-  private Twitter twitter;
+  private TwitterManager twitter;
 
   /**
    * The main method, duh :-). Creates a new Bot and makes it connect to
@@ -171,22 +175,10 @@ public class Bot extends JinFreechessConnection implements GameListener {
       seek();
     }
 
-    twitter = twitterUser != null && twitterUser.length() > 0 ? new Twitter() : null;
-    try {
-      File configInfo = new File("twitter_Auth.cfg");
-      Scanner fileReader = new Scanner(configInfo);
-      String consumerKey = fileReader.nextLine().trim();
-      String consumerSecret = fileReader.nextLine().trim();
-      String accessToken = fileReader.nextLine().trim();
-      String tokenSecret = fileReader.nextLine().trim();
-      String pin = fileReader.nextLine().trim();
-
-      twitter.setOAuthConsumer(consumerKey, consumerSecret);
-      twitter.setOAuthAccessToken(new AccessToken(accessToken, tokenSecret));
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
+    twitter = twitterUser != null && twitterUser.length() > 0 ? new TwitterManager() : null;
+    if(twitter != null) {
+      twitter.connect();
     }
-
   }
 
   /**
@@ -214,7 +206,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
     }
 
     public void run() {
-      int score = searcher.search(searchBoard, 50);
+      int score = searcher.search(searchBoard, 100);
 
       SearchStats stats = search.getStats();
       if (stats.nodes < 100 && score == 0) {
@@ -258,15 +250,13 @@ public class Bot extends JinFreechessConnection implements GameListener {
         if (maxTime > 2000) {
           try {
             Thread.sleep(maxTime / 4);
-          }
-          catch (InterruptedException e) {
+          } catch (InterruptedException e) {
 
           }
         } else {
           try {
             Thread.sleep(maxTime + 1);
-          }
-          catch (InterruptedException e) {
+          } catch (InterruptedException e) {
 
           }
         }
@@ -275,7 +265,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
         int score = pvMove.score;
 
         if (maxTime > 700) {
-          if (maxTime > 10 && score < lastScore - 45 && score > -Searcher.MATE + 100) {
+          if (score < lastScore - 45 && score > -Searcher.MATE + 100) {
             lastScore = searcher.getPV()[0].score;
             maxTime += maxTime / 2;
             String thinkComment = getThinkComment();
@@ -326,58 +316,87 @@ public class Bot extends JinFreechessConnection implements GameListener {
     private void maybeTweetMatePuzzle() {
       if (!talkedMate) {
         talkedMate = true;
-        Move[] pv = searcher.getPV();
-        int movesToMate = 1;
-        int color = pv[0].moved.color;
-        int movedType = pv[0].moved.type;
-        int movedType2 = pv[1].moved.type;
-        int complexity = -Math.abs(eval.scorePosition(gameBoard, 0, 0)) / 900;
-        System.err.println("MatePV: " + Move.toString(pv));
+        new Thread(new Runnable() {
+          @Override
+          public void run() {
+            Move[] pv = searcher.getPV();
+            int movesToMate = 1;
+            int color = pv[0].moved.color;
+            int movedType = pv[0].moved.type;
+            int movedType2 = pv[1].moved.type;
+            int complexity = -Math.abs(eval.scorePosition(gameBoard, 0, 0)) / 600;
+            System.err.println("MatePV: " + Move.toString(pv));
 
-        for (int i = 0; i < 100 && pv[i].moved != null; i++) {
-          if (pv[i].moved.color == color) {
-            if (pv[i].promoteTo == -1) {
-              if (pv[i].moved.type != Piece.QUEEN && pv[i].moved.type != Piece.ROOK) {
-                if (movedType != pv[i].moved.type) {
-                  complexity += 1;
-                  movedType = pv[i].moved.type;
-                }
-              } else if (pv[i].taken == null) {
-                complexity += 1;
-              } else if (!pv[i].check) {
-                complexity += 1;
+            int material = 0;
+            for (int i = 0; i < 100 && pv[i].moved != null; i++) {
+              if(pv[i].taken != null) {
+                material += pv[i].taken.getMaterialValue();
               }
+              if (pv[i].moved.color == color) {
+                if (pv[i].promoteTo == -1) {
+                  if (pv[i].moved.type != Piece.QUEEN && pv[i].moved.type != Piece.ROOK) {
+                    if (movedType != pv[i].moved.type) {
+                      complexity += 1;
+                      movedType = pv[i].moved.type;
+                    }
+                  } else if (pv[i].taken == null) {
+                    complexity += 1;
+                  } else if (!pv[i].check) {
+                    complexity += 1;
+                  }
+                } else if (pv[i].promoteTo == Piece.QUEEN) {
+                  complexity -= 1;
+                }
+              } else {
+                if (pv[i].taken != null) {
+                  complexity += 1;
+                } else if (movedType2 != pv[i].moved.type) {
+                  complexity += 1;
+                  movedType2 = pv[i].moved.type;
+                }
+              }
+              movesToMate++;
             }
-          } else {
-            if (pv[i].taken != null) {
-              complexity += 1;
-            } else if (movedType2 != pv[i].moved.type) {
-              complexity += 1;
-              movedType2 = pv[i].moved.type;
+            complexity -= Math.abs(material / 3);
+            movesToMate /= 2;
+            complexity += (movesToMate / 2) - 1;
+
+            String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0, fen.indexOf(" "));
+            String tinyUrl = getTinyUrl(boardURL);
+
+            if (tinyUrl != null && !tinyUrl.equals("Error") && complexity + TWEET_SOFT > TWEET_MAX && movesToMate > 1) {
+              // New DonkeyFactory Chess position
+              // Tweet
+              final String tweet = (complexity < TWEET_MAX ? "@heavypennies " : "" ) + (color == 1 ? "White" : "Black") + " mates in " + movesToMate + " (DF-" + complexity + ") -> " + tinyUrl + " - solution in next tweet!  #donkeyfactory #chess";
+              System.err.println("Tiny URL: " + tinyUrl);
+              System.err.println("Full URL: " + boardURL);
+              System.err.println(tweet);
+              tweet(tweet);
+
+
+              final int colorX = color;
+              final int movesToMateX = movesToMate;
+              final int complexityX = complexity;
+              final String tinyUrlX = tinyUrl;
+              final String mateLine = Move.toString(pv);
+
+              try {
+                Thread.sleep(1000 * 60 * 5);
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+              final String solutionTweet = (complexityX < TWEET_MAX ? "@heavypennies " : "" ) + "M" + movesToMateX + ": " + tinyUrlX + "\n Solution:" + mateLine;
+              tweet(solutionTweet);
+              sendTell(owner, "Tweeted solution: " + solutionTweet);
+              System.err.println("Tweeted Solution: " + solutionTweet);
+              connection.sendCommand("say Thank You! We created a new DonkeyFactory chess puzzle for this Mate in " + movesToMate + ", Estimated Complexity (DonkeyScale): " + complexity + "");
+              connection.sendCommand("say http://twitter.com/donkeyfactory");
+            }
+            else {
+              System.err.println("(Difficulty " + complexity + ")-[" + dateFormat.format(new Date()) + "] I found Mate in " + movesToMate + " -> " + boardURL + " #donkeyfactory #chess");
             }
           }
-          movesToMate++;
-        }
-        movesToMate /= 2;
-
-        String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0, fen.indexOf(" "));
-        String tinyUrl = getTinyUrl(boardURL);
-
-
-        if (tinyUrl != null && complexity > 0 && movesToMate > 2) {
-          // New DonkeyFactory Chess position
-          // Tweet
-          System.err.println("Tiny URL: " + tinyUrl);
-          System.err.println("Full URL: " + boardURL);
-          System.err.println((color == 1 ? "White" : "Black") + " mates in " + movesToMate + " (DF-" + complexity + ") -> " + tinyUrl + " @ me the solution!  #new #DonkeyFactory #chess #puzzle");
-          tweet((color == 1 ? "White" : "Black") + " mates in " + movesToMate + " (DF-" + complexity + ") -> " + tinyUrl + " @ me the solution!  #donkeyfactory #chess");
-
-          // tweet
-          connection.sendCommand("say Thank You! You helped me create a new DonkeyFactory chess puzzle (Mate in " + movesToMate + ", Complexity: " + complexity + ")");
-          connection.sendCommand("say http://twitter.com/donkeyfactory");
-        } else {
-          System.err.println/*tweet*/("(DF-" + complexity + ")-[" + dateFormat.format(new Date()) + "] I found Mate in " + movesToMate + " -> " + boardURL + " #donkeyfactory #chess @ me the solution!");
-        }
+        }).start();
       }
     }
 
@@ -500,8 +519,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
     if (searchThread != null) {
       try {
         searchThread.join();
-      }
-      catch (InterruptedException e) {
+      } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
@@ -535,8 +553,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
         System.err.println("Waiting for search...");
         try {
           searchThread.join();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           e.printStackTrace();
         }
         System.err.println("Search complete.");
@@ -612,8 +629,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
     try {
       moveGeneration.generateFullMoves(availableMoves, board);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       return null;
     }
 
@@ -715,7 +731,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
   public void tweet(String tweet) {
     if (twitter == null) return;
     try {
-      twitter.updateStatus(tweet);
+      twitter.tweet(tweet);
       sendCommand("tell " + owner + " tweet complete.");
     } catch (TwitterException e) {
       sendCommand("tell " + owner + " tweet failed.");
@@ -732,15 +748,31 @@ public class Bot extends JinFreechessConnection implements GameListener {
   }
 
   public void tweetCurrentStatus() {
+    String status = getCurrentStatus();
+    if (status != null) {
+      tweet(status);
+    }
+  }
+
+  public String getCurrentStatus() {
     Game game = twitterStatus.getGame();
     if (game != null) {
       boolean playingWhite = game.getWhiteName().equals(getUsername());
       int myRating = playingWhite ? game.getWhiteRating() : game.getBlackRating();
-      tweet(myRating + " - My W/D/L is " + twitterStatus.wins + "-" + twitterStatus.draws + "-" + twitterStatus.losses + " for the past " + twitterStatus.gameCount + " games (" + twitterStatus.incomplete + " games were incomplete).");
+      return myRating + " - My W/D/L is " + twitterStatus.wins + "-" + twitterStatus.draws + "-" + twitterStatus.losses + " for the past " + twitterStatus.gameCount + " games (" + twitterStatus.incomplete + " games were incomplete).";
     }
+    return null;
   }
 
   public void tweetCurrentGameStatus() {
+    String currentGameStatus = getCurrentGameStatus();
+    if (currentGameStatus != null) {
+      tweet(currentGameStatus);
+    }
+
+  }
+
+  public String getCurrentGameStatus() {
     Game game = twitterStatus.getGame();
     if (game != null) {
       boolean playingWhite = game.getWhiteName().equals(getUsername());
@@ -762,9 +794,13 @@ public class Bot extends JinFreechessConnection implements GameListener {
         } else {
           scoreStatement = " and I think I am " + (lastScore > 0 ? "ahead" : "behind") + " by " + score + " pawns ";
         }
-        tweet("DonkeyFactory: (" + myRating + ") I " + play + " " + oppName + " (" + oppRating + ") " + scoreStatement);
+        String fen = game.getInitialPosition().getFEN();
+        String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0, fen.indexOf(" "));
+        String tinyUrl = getTinyUrl(boardURL);
+        return "DonkeyFactory: (" + myRating + ") I " + play + " " + oppName + " (" + oppRating + ") " + scoreStatement + " " + tinyUrl;
       }
     }
+    return null;
   }
 
   private String formatScore(int score) {
@@ -880,17 +916,49 @@ public class Bot extends JinFreechessConnection implements GameListener {
   protected boolean processPersonalTell(String username, String titles, String message) {
     super.processPersonalTell(username, titles, message);
 
-    if (username.equals(owner)) {
+    if (message.indexOf("status") > -1) {
+      String currentStatus = getCurrentStatus();
+      if (currentStatus != null) {
+        sendCommand("tell " + username + " " + currentStatus);
+      }
+      String currentGameStatus = getCurrentGameStatus();
+      if (currentGameStatus != null) {
+        sendCommand("tell " + username + " " + currentGameStatus);
+      }
+    }
+    else if (username.equals(owner)) {
       if (message.indexOf("tellme") > -1) {
         tellOwner = !tellOwner;
         sendCommand("tell " + owner + " tellme: " + tellOwner);
-      } else if (message.indexOf("test") > -1) {
-        sendCommand("tell " + owner + " challenging testdonkeyfactory");
-        sendCommand("ma testdonkeyfactory 3 0 u");
-      } else if (message.indexOf("tweet") > -1) {
+      } else if (message.indexOf("tdf") == 0) {
+        sendCommand("tell " + owner + " challenging testdonkeyfactor");
+        sendCommand("ma testdonkeyfactor 1 0 u");
+      } else if (message.indexOf("tweetGame") > -1) {
+        tweetCurrentGameStatus();
+      } else if (message.indexOf("dset ")  == 0) {
+        if (message.indexOf(" tweetMax ") > -1) {
+          try {
+            TWEET_MAX = Integer.parseInt(message.substring(message.indexOf(SET_TWEET_MAX) + SET_TWEET_MAX.length() + 1));
+          }
+          catch (NumberFormatException e) {
+            sendCommand("tell " + owner + " no... e.g. set " + SET_TWEET_MAX + " 8");
+          }
+        }
+        if (message.indexOf(" " + SET_TWEET_SOFT + " ") > -1) {
+          try {
+            TWEET_SOFT = Integer.parseInt(message.substring(message.indexOf(SET_TWEET_SOFT) + SET_TWEET_SOFT.length() + 1));
+          }
+          catch (NumberFormatException e) {
+            sendCommand("tell " + owner + " no... e.g. set " + SET_TWEET_SOFT + " 8");
+          }
+        }
+      } else if (message.startsWith("dset")) {
+        sendCommand("tell " + owner + " " + SET_TWEET_MAX + ": " + TWEET_MAX);
+        sendCommand("tell " + owner + " " + SET_TWEET_SOFT + ": " + TWEET_SOFT);
+      } else if (message.indexOf("tweet ") == 0) {
         sendCommand("tell " + owner + " tweeting '" + message.substring(6) + "'");
         try {
-          twitter.updateStatus(message.substring(6));
+          twitter.tweet(message.substring(6));
         } catch (TwitterException e) {
           e.printStackTrace();
         }
@@ -900,23 +968,24 @@ public class Bot extends JinFreechessConnection implements GameListener {
         if (autoseek) {
           seek();
         }
-      } else if (message.indexOf("tweet") > -1) {
-        tweetCurrentGameStatus();
       } else {
         sendCommand(message);
       }
     }
+
     return true;
   }
 
   public static String getTinyUrl(String fullUrl) {
-    HttpClient httpclient = new HttpClient();
+    HttpClient httpclient = new DefaultHttpClient();
+    HttpGet get = new HttpGet("http://tinyurl.com/api-create.php?url=" + fullUrl);
 
     try {
-      Response response = httpclient.get("http://tinyurl.com/api-create.php?url=" + fullUrl);
-      return response.asString();
-    }
-    catch (TwitterException e) {
+      HttpResponse response = httpclient.execute(get);
+      return EntityUtils.toString(response.getEntity());
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
       e.printStackTrace();
     }
     return null;

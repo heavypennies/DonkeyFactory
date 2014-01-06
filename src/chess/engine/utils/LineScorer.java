@@ -8,7 +8,7 @@ import chess.engine.search.BoardEvaluator;
 import chess.engine.search.Searcher;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public class LineScorer

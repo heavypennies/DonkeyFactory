@@ -5,7 +5,7 @@ package chess.engine.model;
 import chess.engine.utils.MoveGeneration;
 
 /**
- * @author Joshua Levine <jlevine@theladders.com>
+ * @author Joshua Levine <levinester@gmail.com>
  * @version $Revision$ $Name$ $Date$
  */
 public enum Square
@@ -33,6 +33,8 @@ public enum Square
   public long mask_off_rl45;
   public long mask_off_rr45;
 
+  public long[] kingArea = new long[2];
+
   Square(int index)
   {
     this.index128 = index;
@@ -58,7 +60,7 @@ public enum Square
     mask_off_rl90 = ~mask_on_rl90;
     mask_off_rl45 = ~mask_on_rl45;
     mask_off_rr45 = ~mask_on_rr45;
-
+    
     assert Board.getLeastSignificantBit(mask_on) == index64;
     assert 64 - Board.getLeastSignificantBit(mask_on) == index64;
 

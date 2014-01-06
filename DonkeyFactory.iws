@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" line="176" mnemonic="1" />
+  </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
     <option name="markExternalChangeAsUpToDate" value="true" />
     <option name="checkInUseHijack" value="true" />
     <option name="useUcmModel" value="true" />
-    <option name="isOffline" value="false" />
     <option name="synchOutside" value="false" />
     <option name="isHistoryResticted" value="true" />
     <option name="useIdenticalSwitch" value="true" />
@@ -29,7 +31,41 @@
     <option name="USER" value="" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="Updates - who knows if it works better or worse." />
+    <list default="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="Updates - who knows if it works better or worse.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DonkeyFactory.jar" afterPath="$PROJECT_DIR$/DonkeyFactory.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/commons-codec/commons-codec-1.4.jar" afterPath="$PROJECT_DIR$/commons-codec/commons-codec-1.4.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/resources/servers/fics.server" afterPath="$PROJECT_DIR$/src/free/jin/resources/servers/fics.server" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/resources/servers/icc.server" afterPath="$PROJECT_DIR$/src/free/jin/resources/servers/icc.server" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/hashKeys.dat" afterPath="$PROJECT_DIR$/src/hashKeys.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DonkeyFactory.iml" afterPath="$PROJECT_DIR$/DonkeyFactory.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DonkeyFactory.ipr" afterPath="$PROJECT_DIR$/DonkeyFactory.ipr" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DonkeyFactory.iws" afterPath="$PROJECT_DIR$/DonkeyFactory.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Jin.iml" afterPath="$PROJECT_DIR$/src/Jin.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Board.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Board.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Constants.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Constants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Game.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Game.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Move.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Move.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/MoveComparator.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/MoveComparator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/ShortAnalysis.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/ShortAnalysis.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/model/Square.java" afterPath="$PROJECT_DIR$/src/chess/engine/model/Square.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/BoardEvaluator.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/BoardEvaluator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/Searcher.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/Searcher.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGenerationConstants.java" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGenerationConstants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/free/jin/jin.iml" afterPath="$PROJECT_DIR$/src/free/jin/jin.iml" />
+    </list>
     <list id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
     <list id="3b10a3ad-2cd0-4b08-b5df-deb7fcf90fe8" name="ignore" comment="" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -51,59 +87,12 @@
     <option name="PATCH_PATH" value="" />
     <option name="REVERSE_PATCH" value="false" />
   </component>
-  <component name="Cvs2Configuration">
-    <option name="PRUNE_EMPTY_DIRECTORIES" value="true" />
-    <option name="MERGING_MODE" value="0" />
-    <option name="MERGE_WITH_BRANCH1_NAME" value="HEAD" />
-    <option name="MERGE_WITH_BRANCH2_NAME" value="HEAD" />
-    <option name="RESET_STICKY" value="false" />
-    <option name="CREATE_NEW_DIRECTORIES" value="true" />
-    <option name="DEFAULT_TEXT_FILE_SUBSTITUTION" value="kv" />
-    <option name="PROCESS_UNKNOWN_FILES" value="false" />
-    <option name="PROCESS_DELETED_FILES" value="false" />
-    <option name="PROCESS_IGNORED_FILES" value="false" />
-    <option name="RESERVED_EDIT" value="false" />
-    <option name="CHECKOUT_DATE_OR_REVISION_SETTINGS">
-      <value>
-        <option name="BRANCH" value="" />
-        <option name="DATE" value="" />
-        <option name="USE_BRANCH" value="false" />
-        <option name="USE_DATE" value="false" />
-      </value>
-    </option>
-    <option name="UPDATE_DATE_OR_REVISION_SETTINGS">
-      <value>
-        <option name="BRANCH" value="" />
-        <option name="DATE" value="" />
-        <option name="USE_BRANCH" value="false" />
-        <option name="USE_DATE" value="false" />
-      </value>
-    </option>
-    <option name="SHOW_CHANGES_REVISION_SETTINGS">
-      <value>
-        <option name="BRANCH" value="" />
-        <option name="DATE" value="" />
-        <option name="USE_BRANCH" value="false" />
-        <option name="USE_DATE" value="false" />
-      </value>
-    </option>
-    <option name="SHOW_OUTPUT" value="false" />
-    <option name="ADD_WATCH_INDEX" value="0" />
-    <option name="REMOVE_WATCH_INDEX" value="0" />
-    <option name="UPDATE_KEYWORD_SUBSTITUTION" />
-    <option name="MAKE_NEW_FILES_READONLY" value="false" />
-    <option name="SHOW_CORRUPTED_PROJECT_FILES" value="0" />
-    <option name="TAG_AFTER_PROJECT_COMMIT" value="false" />
-    <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="true" />
-    <option name="TAG_AFTER_PROJECT_COMMIT_NAME" value="" />
-    <option name="CLEAN_COPY" value="false" />
-  </component>
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" line="1286" class="chess.engine.utils.MoveGeneration" package="chess.engine.utils">
+      <breakpoint url="file://$PROJECT_DIR$/src/free/freechess/Style12Struct.java" line="209" class="free.freechess.Style12Struct" package="free.freechess">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -116,7 +105,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" line="1093" class="chess.engine.search.SimpleEvaluator" package="chess.engine.search">
+      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" line="114" class="chess.engine.search.SimpleABSearch" package="chess.engine.search">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -129,7 +118,59 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" line="1587" class="chess.engine.search.SimpleEvaluator" package="chess.engine.search">
+      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java" line="54" class="chess.engine.search.ProgressiveMoveGenTest" package="chess.engine.search">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/model/Board.java" line="1106" class="chess.engine.model.Board" package="chess.engine.model">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" line="940" class="free.chessclub.bot.Bot" package="free.chessclub.bot">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" line="386" class="chess.engine.search.ABSearch" package="chess.engine.search">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" line="1017" class="chess.engine.search.ABSearch" package="chess.engine.search">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -213,88 +254,61 @@
       <file leaf-file-name="SimpleEvaluator.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="64" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.0">
+            <state line="504" column="52" selection-start="19886" selection-end="19886" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.properties" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter4j/build.properties">
+      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="29" column="4" selection-start="958" selection-end="958" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="guestDonkeyFactory.sh" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/guestDonkeyFactory.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="iterativeSearchTest.sh" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/iterativeSearchTest.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="donkeyfactory.sh" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/donkeyfactory.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="42" selection-start="187" selection-end="187" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Bot.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Bot.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/free/chessclub/bot/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="19" selection-start="1420" selection-end="1420" vertical-scroll-proportion="0.14409222">
+            <state line="297" column="57" selection-start="9443" selection-end="9443" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="twitter_Auth.cfg" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter_Auth.cfg">
+      <file leaf-file-name="ABSearch.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="188" column="55" selection-start="6166" selection-end="6166" vertical-scroll-proportion="0.38663486">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Object.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.6.0_07/src.zip!/java/lang/Object.java">
+      <file leaf-file-name="SearchStats.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/SearchStats.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="364" column="29" selection-start="17907" selection-end="17907" vertical-scroll-proportion="0.0">
+            <state line="59" column="26" selection-start="2213" selection-end="2213" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Piece.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Piece.java">
+      <file leaf-file-name="BoardEvaluator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/BoardEvaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
+            <state line="15" column="24" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MoveComparator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/MoveComparator.java">
+      <file leaf-file-name="MoveGeneration.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="13" selection-start="179" selection-end="179" vertical-scroll-proportion="0.0">
+            <state line="300" column="13" selection-start="12497" selection-end="12497" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -303,7 +317,16 @@
       <file leaf-file-name="Board.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0">
+            <state line="489" column="17" selection-start="19580" selection-end="19580" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MoveComparator.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/MoveComparator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="13" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -312,106 +335,7 @@
       <file leaf-file-name="LineScorer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="39" selection-start="979" selection-end="979" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hashKeys.dat" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/hashKeys.dat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MateEvaluator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/MateEvaluator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="128" column="36" selection-start="3659" selection-end="3659" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IterativeSearchTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="24" selection-start="4449" selection-end="4449" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NumberFormatException.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.6.0_07/src.zip!/java/lang/NumberFormatException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="6" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Move.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Move.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="13" selection-start="231" selection-end="231" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Game.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Game.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Constants.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Constants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShortAnalysis.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/ShortAnalysis.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Square.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Square.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="12" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Enum.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.6.0_07/src.zip!/java/lang/Enum.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="18" selection-start="3350" selection-end="3350" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IterativeSearch.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="62" selection-start="1340" selection-end="1340" vertical-scroll-proportion="0.0">
+            <state line="13" column="13" selection-start="293" selection-end="293" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -420,16 +344,115 @@
       <file leaf-file-name="Searcher.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chess/engine/search/Searcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="457" selection-end="457" vertical-scroll-proportion="0.0">
+            <state line="21" column="58" selection-start="468" selection-end="468" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SoundManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/free/jin/sound/SoundManager.java">
+      <file leaf-file-name="ProgressiveMoveGenTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="251" column="0" selection-start="5953" selection-end="5953" vertical-scroll-proportion="0.0">
+            <state line="15" column="13" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Piece.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Piece.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="326" column="14" selection-start="11240" selection-end="11240" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IterativeSearch.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="127" column="37" selection-start="2607" selection-end="2607" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IterativeSearchTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="48" column="0" selection-start="1430" selection-end="1430" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Move.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Move.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="114" column="14" selection-start="3020" selection-end="3020" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Square.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Square.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="43" column="23" selection-start="1268" selection-end="1268" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PositionHashtable.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="16" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="donkeyfactory.sh" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/donkeyfactory.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="195" selection-start="194" selection-end="195" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PawnWingScorer.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PawnWingScorer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="13" selection-start="290" selection-end="290" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PawnHashtable.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="44" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OpeningBook.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/OpeningBook.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="13" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProgressiveMoveGenTest2.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="13" selection-start="347" selection-end="347" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -450,6 +473,34 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="SORT_ALPHABETICALLY" value="false" />
     <option name="HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED" value="false" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/chess/engine/search/Searcher.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" />
+        <option value="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/model/Piece.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/model/Move.java" />
+        <option value="$USER_HOME$/AppData/Local/Temp/matchFinder.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" />
+        <option value="$PROJECT_DIR$/donkeyfactory.sh" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/model/Board.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" />
+        <option value="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState />
+  </component>
+  <component name="MavenRunner">
+    <option name="jreName" value="1.6 (1)" />
   </component>
   <component name="ModuleEditorState">
     <option name="LAST_EDITED_MODULE_NAME" />
@@ -473,15 +524,23 @@
     <option name="USE_CLIENT_FILTER" value="true" />
     <option name="CLIENT" value="" />
   </component>
-  <component name="PerforceDirect.Settings">
-    <option name="useNativeApi" value="true" />
-  </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
-      <profile-state />
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Abstraction issues</id>
+          </State>
+        </selected-state>
+      </profile-state>
     </entry>
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkin" />
@@ -809,7 +868,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Favorites" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -828,14 +888,184 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="search" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Favorites" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DonkeyFactory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chess" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="cvs_file_history_treeOrder2" value="2" />
@@ -845,6 +1075,8 @@
     <property name="recentsLimit" value="5" />
     <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="donkeyfactory" />
     <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
@@ -858,8 +1090,8 @@
     <property name="cvs_file_history_flatWidth3" value="375" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="cvs_file_history_flatWidth0" value="375" />
-    <property name="GoToClass.includeLibraries" value="false" />
     <property name="cvs_file_history_flatWidth1" value="375" />
+    <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="RunManagerConfig.compileBeforeRunning" value="true" />
@@ -876,15 +1108,104 @@
     <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="chess.engine.search" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\WORK\DonkeyFactory\src\lib" />
+      <recent name="C:\WORK\DonkeyFactory\src" />
+      <recent name="C:\WORK\DonkeyFactory" />
+    </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="chess.engine.model.Board" />
       <recent name="Board" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="chess.engine.search" />
-    </key>
   </component>
   <component name="RunManager" selected="Application.IterativeSearchTest">
+    <configuration default="false" name="ProgressiveMoveGenTest" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" runner="emma">
+        <pattern>
+          <option name="PATTERN" value="chess.engine.search.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="chess.engine.search.ProgressiveMoveGenTest" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="DonkeyFactory" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="57224" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ProgressiveMoveGenTest2" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" runner="emma">
+        <pattern>
+          <option name="PATTERN" value="chess.engine.search.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="chess.engine.search.ProgressiveMoveGenTest2" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="DonkeyFactory" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="57462" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="TwitterManager" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" runner="emma">
+        <pattern>
+          <option name="PATTERN" value="free.chessclub.bot.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="free.chessclub.bot.TwitterManager" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="DonkeyFactory" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="57603" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1003,7 +1324,7 @@
     <configuration default="false" name="IterativeSearchTest" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
       <option name="MAIN_CLASS_NAME" value="chess.engine.search.IterativeSearchTest" />
-      <option name="VM_PARAMETERS" value="-Xms256m -Xmx512m" />
+      <option name="VM_PARAMETERS" value="-Xms256m -Xmx4096m" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -1027,9 +1348,12 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Application.Live DonkeyFactory" />
-      <item index="1" class="java.lang.String" itemvalue="Application.IterativeSearchTest" />
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Application.ProgressiveMoveGenTest" />
+      <item index="1" class="java.lang.String" itemvalue="Application.ProgressiveMoveGenTest2" />
+      <item index="2" class="java.lang.String" itemvalue="Application.TwitterManager" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Live DonkeyFactory" />
+      <item index="4" class="java.lang.String" itemvalue="Application.IterativeSearchTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1098,28 +1422,10 @@
     <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <option name="FORCE_UPDATE" value="false" />
-    <configuration useDefault="true">C:\Documents and Settings\jlevine\Application Data\Subversion</configuration>
+    <configuration useDefault="true">C:\Users\jlevine\AppData\Roaming\Subversion</configuration>
     <upgradeMode>auto</upgradeMode>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
     <supportedVersion>125</supportedVersion>
-  </component>
-  <component name="SvnFileUrlMappingImpl">
-    <option name="myMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
-          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\src" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
-    <option name="myMoreRealMappingRoots">
-      <list>
-        <SvnCopyRootSimple>
-          <option name="myVcsRoot" value="C:\WORK\DonkeyFactory" />
-          <option name="myCopyRoot" value="C:\WORK\DonkeyFactory\src" />
-        </SvnCopyRootSimple>
-      </list>
-    </option>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -1161,42 +1467,43 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1602" height="1174" extended-state="0" />
+    <frame x="100" y="21" width="1606" height="1006" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32923368" sideWeight="0.0" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.6666667" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4154863" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21370499" sideWeight="0.0" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.073627844" sideWeight="0.68112546" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30128956" sideWeight="0.99887955" order="6" side_tool="false" content_ui="tabs" x="33" y="380" width="1506" height="305" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288719" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.665392" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32921275" sideWeight="0.58072007" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32988358" sideWeight="0.6707663" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18988982" sideWeight="0.68112546" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31418523" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="127" y="123" width="1308" height="939" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298279" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851636" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.665392" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947975" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31779256" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30715123" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Profile" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32402235" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31887457" sideWeight="0.99934256" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295562" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VCS.FileViewConfiguration">
@@ -1312,114 +1619,114 @@
     <option name="myLastEditedConfigurable" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Board.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/chess/engine/utils/LineScorer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="39" selection-start="979" selection-end="979" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/hashKeys.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/MateEvaluator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="36" selection-start="3659" selection-end="3659" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="24" selection-start="4449" selection-end="4449" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_07/src.zip!/java/lang/NumberFormatException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="6" selection-start="514" selection-end="514" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Move.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="231" selection-end="231" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/ShortAnalysis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Square.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="12" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_07/src.zip!/java/lang/Enum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="18" selection-start="3350" selection-end="3350" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="62" selection-start="1340" selection-end="1340" vertical-scroll-proportion="0.0">
+        <state line="13" column="13" selection-start="293" selection-end="293" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chess/engine/search/Searcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="457" selection-end="457" vertical-scroll-proportion="0.0">
+        <state line="21" column="58" selection-start="468" selection-end="468" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/free/jin/sound/SoundManager.java">
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="251" column="0" selection-start="5953" selection-end="5953" vertical-scroll-proportion="0.0">
+        <state line="15" column="13" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/free/chessclub/bot/Bot.java">
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Piece.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="19" selection-start="1420" selection-end="1420" vertical-scroll-proportion="0.14409222">
+        <state line="326" column="14" selection-start="11240" selection-end="11240" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="127" column="37" selection-start="2607" selection-end="2607" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="0" selection-start="1430" selection-end="1430" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Move.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="14" selection-start="3020" selection-end="3020" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/model/Square.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="23" selection-start="1268" selection-end="1268" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="16" selection-start="650" selection-end="650" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/donkeyfactory.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="195" selection-start="194" selection-end="195" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PawnWingScorer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="13" selection-start="290" selection-end="290" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="44" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/OpeningBook.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="13" selection-start="347" selection-end="347" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="300" column="13" selection-start="12497" selection-end="12497" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="188" column="55" selection-start="6166" selection-end="6166" vertical-scroll-proportion="0.38663486">
           <folding />
         </state>
       </provider>
@@ -1466,7 +1773,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.6</last-edited>
+          <last-edited>1.7</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1489,7 +1796,31 @@
           </splitter-proportions>
         </settings>
       </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>libz</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
         <settings>
           <splitter-proportions>
             <option name="proportions">
@@ -1500,7 +1831,6 @@
           </splitter-proportions>
         </settings>
       </state>
-      <state key="ScopeChooserConfigurable.UI" />
     </states>
   </component>
 </project>
