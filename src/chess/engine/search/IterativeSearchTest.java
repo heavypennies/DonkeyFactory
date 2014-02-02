@@ -42,10 +42,12 @@ public class IterativeSearchTest //extends TestCase
     searchBoard.stats.blackCastleFlag = 1;
 */
 
+/*
     Board searchBoard = new Board("2rr2k1/1b3ppp/pb2p3/1p2P3/1P2BPnq/P1N3P1/1B2Q2P/R4R1K"); // b	- - bm Rxc3; id MATS004;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 0;
+*/
 
     // Hash table tests
 /*
@@ -335,6 +337,19 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.turn = 0;
 */
     // Castle queenside?
+
+    // Nxe6?
+/*
+    Board searchBoard = new Board("2r3k1/5ppp/r2np3/p2p4/3N1P2/P7/1PP3PP/2KRR3");
+    searchBoard.stats.whiteCastleFlag = 2;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
+*/
+
+    Board searchBoard = new Board("8/5pk1/8/1P5p/2P3p1/p1K5/P4R1P/1r6");
+    searchBoard.stats.whiteCastleFlag = 2;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.turn = 1;
 /*
     Board searchBoard = new Board("r3kbnr/pp1b1ppp/8/2p1q3/8/N1P1B3/PP3PPP/R2QKB1R");
     searchBoard.stats.whiteCastleFlag = 0;
@@ -437,6 +452,15 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.turn = 1;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
+*/
+
+    // Fifty move draw
+/*
+    Board searchBoard = new Board("2k1r2r/7q/1p1n1pb1/p1p1p1p1/Pn1pP1P1/1P1P1PNp/2PQB2P/R1R2NK1"); // ;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 1;
+    searchBoard.fiftyMoveTable[0] = 0;
+    searchBoard.turn = 0;
 */
 
    // Nxg2 ?

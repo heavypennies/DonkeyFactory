@@ -16,6 +16,7 @@ import java.io.*;
  * @version $Revision$ $Name$ $Date$
  */
 public class Board {
+  public static final int APPROACHING_FIFTY_MOVE_THRESHOLD = 40;
   public Piece whiteKing;
   public Piece blackKing;
 
@@ -75,6 +76,7 @@ public class Board {
 
   // keeps board hashes for draw by rep
   public long[] repetitionTable = new long[500];
+  public int[] fiftyMoveTable = new int[500];
 
 
   private static Random random = new Random();
@@ -543,6 +545,7 @@ public class Board {
       // remove taken piece
       removePieceFromSquare(move.taken, move.takenSquare);
 
+/*
       if (move.taken.type == Piece.ROOK) {
         if (move.taken.color == 1) {
           if (move.taken.kingsideRook) {
@@ -558,6 +561,7 @@ public class Board {
           }
         }
       }
+*/
     }
 
     // make promote
@@ -625,8 +629,14 @@ public class Board {
     if (move.enPassentSquare != null) {
       boardSquares[move.enPassentSquare.index128].enPassentInfo[moveIndex] = true;
     }
-    repetitionTable[moveIndex] = move.moved.type == Piece.PAWN || move.taken != null ? 0 : (turn == 1 ? hash1 : ~hash1);
+    repetitionTable[moveIndex] = turn == 1 ? hash1 : ~hash1;
 
+    if(move.moved.type == Piece.PAWN || move.taken != null || move.promoteTo != -1 || move.castleFromSquare != null) {
+      fiftyMoveTable[moveIndex] = 0;
+    }
+    else {
+      fiftyMoveTable[moveIndex] = fiftyMoveTable[moveIndex - 1] + 1;
+    }
   }
 
   public final void unmake(Move move) {
@@ -690,6 +700,7 @@ public class Board {
     // unmake capture
     if (move.taken != null) {
       setPieceOnSquare(move.taken, move.takenSquare);
+/*
       if (move.taken.type == Piece.ROOK) {
         if (move.taken.color == 1) {
           if (move.taken.kingsideRook) {
@@ -705,6 +716,7 @@ public class Board {
           }
         }
       }
+*/
     }
 
     setPieceOnSquare(move.moved, move.fromSquare);
@@ -780,6 +792,10 @@ public class Board {
 
   public final boolean isApproachingDraw() {
     long hash = turn == 1 ? hash1 : ~hash1;
+
+    if(fiftyMoveTable[moveIndex] > APPROACHING_FIFTY_MOVE_THRESHOLD) {
+      return true;
+    }
     for (int t = moveIndex - 2; t > moveIndex - 32 && t > -1; t -= 2) {
       if (repetitionTable[t] == 0) {
         return false;
@@ -793,6 +809,9 @@ public class Board {
 
   public boolean isDraw() {
     int hits = 0;
+    if(fiftyMoveTable[moveIndex] >= 50) {
+      return true;
+    }
     long hash = getHash();
     for (int t = moveIndex - 2; t > moveIndex - 64 && t > -1; t -= 2) {
       if (repetitionTable[t] == hash) {

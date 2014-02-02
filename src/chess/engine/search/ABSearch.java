@@ -83,10 +83,10 @@ public class ABSearch implements Searcher
     kingSafety = new int[2][128];
     moveHistory = new int[64][64];
     eval.reset();
-    for(int i = 0;i < killer1.length;i++) {
-      killer1[i].reset();
-      killer2[i].reset();
-      killer3[i].reset();
+    for(int i = 2;i < killer1.length;i++) {
+      killer1[i].reset(killer1[i-2]);
+      killer2[i].reset(killer2[i-2]);
+      killer3[i].reset(killer3[i-2]);
     }
     done = false;
   }

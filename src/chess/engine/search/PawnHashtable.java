@@ -9,7 +9,7 @@ import chess.engine.model.Board;
  * Time: 9:38:11 PM
  */
 public class PawnHashtable {
-  private static int HASH_SIZE = PositionHashtable.HASH_SIZE >> 10;
+  private static int HASH_SIZE =  (int)1L << 16;
   private static int HASH_MASK = HASH_SIZE - 1;
 
   class HashEntry

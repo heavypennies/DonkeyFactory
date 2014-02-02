@@ -323,6 +323,9 @@ public class Bot extends JinFreechessConnection implements GameListener {
             int movesToMate = 1;
             int color = pv[0].moved.color;
             int movedType = pv[0].moved.type;
+            if(pv[1].moved == null) {
+              return;
+            }
             int movedType2 = pv[1].moved.type;
             int complexity = -Math.abs(eval.scorePosition(gameBoard, 0, 0)) / 600;
             System.err.println("MatePV: " + Move.toString(pv));
@@ -330,7 +333,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
             int material = 0;
             for (int i = 0; i < 100 && pv[i].moved != null; i++) {
               if(pv[i].taken != null) {
-                material += pv[i].taken.getMaterialValue();
+                material += (pv[i].taken.color == color ? -1 : 1) * Math.abs(pv[i].taken.getMaterialValue());
               }
               if (pv[i].moved.color == color) {
                 if (pv[i].promoteTo == -1) {
@@ -357,7 +360,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
               }
               movesToMate++;
             }
-            complexity -= Math.abs(material / 3);
+            complexity -= material / 3;
             movesToMate /= 2;
             complexity += (movesToMate / 2) - 1;
 
@@ -571,6 +574,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
       searchBoard.stats.blackKingsideRookMoves = gameData.boardData.canBlackCastleKingside() ? 0 : 1;
       searchBoard.stats.blackQueensideRookMoves = gameData.boardData.canBlackCastleQueenside() ? 0 : 1;
       searchBoard.repetitionTable = gameBoard.repetitionTable;
+      searchBoard.fiftyMoveTable = gameBoard.fiftyMoveTable;
       searchBoard.moveIndex = gameBoard.moveIndex;
 
       for (int t = 0; t < 128; t++) {
@@ -593,6 +597,9 @@ public class Bot extends JinFreechessConnection implements GameListener {
 */
 
       iterativeSearch.reset();
+      searchThread = new Thread(new SearchThread(evt.getConnection(), iterativeSearch, searchBoard));
+      searchThread.setPriority(6);
+      searchThread.start();
 
       String fen = gameData.boardData.getBoardFEN();
 
@@ -606,9 +613,6 @@ public class Bot extends JinFreechessConnection implements GameListener {
 
       System.err.println("Searching (" + formatScore(score) + ") ...");
       System.err.println(searchBoard.toString());
-      searchThread = new Thread(new SearchThread(evt.getConnection(), iterativeSearch, searchBoard));
-      searchThread.setPriority(6);
-      searchThread.start();
       long maxTime = getTimeForMove(evt, gameData);
       Thread searchTimerThread = new Thread(new SearchTimerThread(evt.getConnection(), iterativeSearch, maxTime, fen));
       searchTimerThread.setPriority(7);
