@@ -61,8 +61,8 @@ public enum Square
     mask_off_rl45 = ~mask_on_rl45;
     mask_off_rr45 = ~mask_on_rr45;
     
-    assert Board.getLeastSignificantBit(mask_on) == index64;
-    assert 64 - Board.getLeastSignificantBit(mask_on) == index64;
+    assert Long.numberOfTrailingZeros(mask_on) == index64;
+    assert 64 - Long.numberOfTrailingZeros(mask_on) == index64;
 
     assert (~mask_off) == mask_on;
   }

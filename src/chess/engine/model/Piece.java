@@ -158,7 +158,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     attackerShift = ATTACKER_SHIFT[type];
     attackerUmask = ATTACKER_UMASK[type];
     while (attacks != 0) {
-      int squareIndex = Board.getLeastSignificantBit(attacks);
+      int squareIndex = Long.numberOfTrailingZeros(attacks);
       Square attackSquare = Board.SQUARES[squareIndex];
       attacks &= attackSquare.mask_off;
       board.squareAttackers[squareIndex] &= square.mask_off;
@@ -174,7 +174,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     this.attacks = 0;
     long rams = this.rams;
     while (rams != 0) {
-      int squareIndex = Board.getLeastSignificantBit(rams);
+      int squareIndex = Long.numberOfTrailingZeros(rams);
       Square attackSquare = Board.SQUARES[squareIndex];
       rams &= attackSquare.mask_off;
       board.squareRammers[squareIndex] &= square.mask_off;
@@ -233,7 +233,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     attackerShift = ATTACKER_SHIFT[type];
     attackerUmask = ATTACKER_UMASK[type];
     while (attacks != 0) {
-      squareIndex = Board.getLeastSignificantBit(attacks);
+      squareIndex = Long.numberOfTrailingZeros(attacks);
       mask = 1L << squareIndex;
       attacks ^= mask;
       this.attacks |= mask;
@@ -246,7 +246,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
                     ((attackerCount == 2 ? 3 : attackerCount + 1) << attackerShift);
     }
     while (rams != 0) {
-      squareIndex = Board.getLeastSignificantBit(rams);
+      squareIndex = Long.numberOfTrailingZeros(rams);
       mask = 1L << squareIndex;
       rams ^= mask;
       this.rams |= mask;
@@ -319,7 +319,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     attackerShift = ATTACKER_SHIFT[type];
     attackerUmask = ATTACKER_UMASK[type];
     while (removeAttacks != 0) {
-      int squareIndex = Board.getLeastSignificantBit(removeAttacks);
+      int squareIndex = Long.numberOfTrailingZeros(removeAttacks);
       Square attackSquare = Board.SQUARES[squareIndex];
       removeAttacks &= attackSquare.mask_off;
       board.squareAttackers[squareIndex] &= attackerSquare.mask_off;
@@ -333,7 +333,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     }
 
     while (addRams != 0) {
-      squareIndex = Board.getLeastSignificantBit(addRams);
+      squareIndex = Long.numberOfTrailingZeros(addRams);
       mask = 1L << squareIndex;
       addRams &= ~mask;
       board.squareRammers[squareIndex] |= attackerSquare.mask_on;
@@ -344,7 +344,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     }
 
     while (removeRams != 0) {
-      squareIndex = Board.getLeastSignificantBit(removeRams);
+      squareIndex = Long.numberOfTrailingZeros(removeRams);
       mask = 1L << squareIndex;
       removeRams &= ~mask;
       board.squareRammers[squareIndex] &= attackerSquare.mask_off;
@@ -397,7 +397,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     attackerShift = ATTACKER_SHIFT[type];
     attackerUmask = ATTACKER_UMASK[type];
     while (addAttacks != 0) {
-      squareIndex = Board.getLeastSignificantBit(addAttacks);
+      squareIndex = Long.numberOfTrailingZeros(addAttacks);
       mask = 1L << squareIndex;
       addAttacks &= ~mask;
       board.squareAttackers[squareIndex] |= attackerSquare.mask_on;
@@ -409,7 +409,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     }
 
     while (addRams != 0) {
-      squareIndex = Board.getLeastSignificantBit(addRams);
+      squareIndex = Long.numberOfTrailingZeros(addRams);
       Square attackSquare = Board.SQUARES[squareIndex];
       addRams &= attackSquare.mask_off;
       board.squareRammers[squareIndex] |= attackerSquare.mask_on;
@@ -420,7 +420,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     }
 
     while (removeRams != 0) {
-      squareIndex = Board.getLeastSignificantBit(removeRams);
+      squareIndex = Long.numberOfTrailingZeros(removeRams);
       mask = 1L << squareIndex;
       removeRams &= ~mask;
       board.squareRammers[squareIndex] &= attackerSquare.mask_off;

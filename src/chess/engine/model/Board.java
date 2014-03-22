@@ -406,7 +406,7 @@ public class Board {
     attackers = (squareAttackers[square.index64] | squareRammers[square.index64]) &
             (pieceBoards[0][QUEENS_ROOKS] | pieceBoards[0][QUEENS_BISHOPS] | pieceBoards[1][QUEENS_ROOKS] | pieceBoards[1][QUEENS_BISHOPS]);
     while (attackers != 0) {
-      pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(attackers)];
+      pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(attackers)];
       attackers &= pieceSquare.mask_off;
       boardSquares[pieceSquare.index128].piece.blockAttacks(this, square, pieceSquare);
     }
@@ -482,7 +482,7 @@ public class Board {
     attackers = (squareAttackers[square.index64] | squareRammers[square.index64]) &
             (pieceBoards[0][QUEENS_ROOKS] | pieceBoards[0][QUEENS_BISHOPS] | pieceBoards[1][QUEENS_ROOKS] | pieceBoards[1][QUEENS_BISHOPS]);
     while (attackers != 0) {
-      pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(attackers)];
+      pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(attackers)];
       attackers &= pieceSquare.mask_off;
       boardSquares[pieceSquare.index128].piece.unblockAttacks(this, square, pieceSquare);
     }
@@ -833,7 +833,7 @@ public class Board {
   public List<Square> getAllSquaresInBitboard(long bitboard) {
     List<Square> index = new ArrayList<Square>();
     while (bitboard != 0) {
-      int squareIndex = Board.getLeastSignificantBit(bitboard);
+      int squareIndex = Long.numberOfTrailingZeros(bitboard);
 
       Square fromSquare = SQUARES[squareIndex];
       index.add(fromSquare);
@@ -849,7 +849,7 @@ public class Board {
   public int getAllSquaresInBitboard(long bitboard, int[] squares) {
     int index = 0;
     while (bitboard != 0) {
-      int squareIndex = Board.getLeastSignificantBit(bitboard);
+      int squareIndex = Long.numberOfTrailingZeros(bitboard);
       squares[index++] = squareIndex;
       bitboard &= Board.SQUARES[squareIndex].mask_off;
     }
@@ -885,6 +885,10 @@ public class Board {
   }
 
   static final public int getLeastSignificantBit (long b) {
+    return Long.numberOfTrailingZeros(b);
+  }
+
+  static final public int getLeastSignificantBit5 (long b) {
     return magicTable[(int)(((b & -b) * deBruijn) >>> 58)];
   }
 
@@ -956,6 +960,9 @@ public class Board {
   static int FOURS = 0x0f0f0f0f;
 
   public static final int countBits(long set) {
+    return Long.bitCount(set);
+  }
+  public static final int countBits2(long set) {
     set -= (set >>> 1) & ONES;
     set = (set & TWOS) + ((set >>> 2) & TWOS);
     int result = (int) set + (int) (set >>> 32);

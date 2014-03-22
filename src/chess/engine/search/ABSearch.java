@@ -855,7 +855,7 @@ public class ABSearch implements Searcher
       long threats = board.attacks[board.turn ^ 1] & ~idleThreats & ~board.attacks[board.turn] & board.pieceBoards[board.turn][Board.ALL_PIECES];
 
       while(threats != 0) {
-        int threatSquareIndex = Board.getLeastSignificantBit(threats);
+        int threatSquareIndex = Long.numberOfTrailingZeros(threats);
         Square threatSquare = Board.SQUARES[threatSquareIndex];
         threats ^= 1L << threatSquareIndex;
         threat = Math.max(threat, Piece.TYPE_VALUES[board.boardSquares[threatSquare.index128].piece.type]);
@@ -1157,7 +1157,7 @@ public class ABSearch implements Searcher
       if ((board.pieceBoards[color][Piece.PAWN] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.PAWN];
-        attackerSquare = Board.getLeastSignificantBit(board.pieceBoards[color][Piece.PAWN] & attackers);
+        attackerSquare = Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.PAWN] & attackers);
         attackers &= Board.SQUARES[attackerSquare].mask_off;
         attackers |= (board.squareAttackers[attackerSquare] & rammers);
         rammers &= ~(board.squareAttackers[attackerSquare] & rammers);
@@ -1165,12 +1165,12 @@ public class ABSearch implements Searcher
       else if ((board.pieceBoards[color][Piece.KNIGHT] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.KNIGHT];
-        attackers &= Board.SQUARES[Board.getLeastSignificantBit(board.pieceBoards[color][Piece.KNIGHT] & attackers)].mask_off;
+        attackers &= Board.SQUARES[Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.KNIGHT] & attackers)].mask_off;
       }
       else if ((board.pieceBoards[color][Piece.BISHOP] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.BISHOP];
-        attackerSquare = Board.getLeastSignificantBit(board.pieceBoards[color][Piece.BISHOP] & attackers);
+        attackerSquare = Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.BISHOP] & attackers);
         attackers &= Board.SQUARES[attackerSquare].mask_off;
         attackers |= (board.squareAttackers[attackerSquare] & rammers);
         rammers &= ~(board.squareAttackers[attackerSquare] & rammers);
@@ -1178,7 +1178,7 @@ public class ABSearch implements Searcher
       else if ((board.pieceBoards[color][Piece.ROOK] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.ROOK];
-        attackerSquare = Board.getLeastSignificantBit(board.pieceBoards[color][Piece.ROOK] & attackers);
+        attackerSquare = Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.ROOK] & attackers);
         attackers &= Board.SQUARES[attackerSquare].mask_off;
         attackers |= (board.squareAttackers[attackerSquare] & rammers);
         rammers &= ~(board.squareAttackers[attackerSquare] & rammers);
@@ -1186,7 +1186,7 @@ public class ABSearch implements Searcher
       else if ((board.pieceBoards[color][Piece.QUEEN] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.QUEEN];
-        attackerSquare = Board.getLeastSignificantBit(board.pieceBoards[color][Piece.QUEEN] & attackers);
+        attackerSquare = Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.QUEEN] & attackers);
         attackers &= Board.SQUARES[attackerSquare].mask_off;
         attackers |= (board.squareAttackers[attackerSquare] & rammers);
         rammers &= ~(board.squareAttackers[attackerSquare] & rammers);
@@ -1194,7 +1194,7 @@ public class ABSearch implements Searcher
       else if ((board.pieceBoards[color][Piece.KING] & attackers) != 0)
       {
         attackedPiece = Piece.TYPE_VALUES[Piece.KING];
-        attackers &= Board.SQUARES[Board.getLeastSignificantBit(board.pieceBoards[color][Piece.KING] & attackers)].mask_off;
+        attackers &= Board.SQUARES[Long.numberOfTrailingZeros(board.pieceBoards[color][Piece.KING] & attackers)].mask_off;
       }
       else
       {

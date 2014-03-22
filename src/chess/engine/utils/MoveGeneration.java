@@ -178,7 +178,7 @@ public class MoveGeneration implements MoveGenerationConstants {
           long attacks = attackVectors[color][pieceType][square];
           while (attacks != 0) {
 
-            attackSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
+            attackSquare = Board.SQUARES[Long.numberOfTrailingZeros(attacks)];
             attacks &= attackSquare.mask_off;
 
             squares[index++] = attackSquare.index128;
@@ -341,7 +341,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     index = 0;
     pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
-      pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(pieces)];
       pieces &= pieceSquare.mask_off;
       piece = board.boardSquares[pieceSquare.index128].piece;
       switch (piece.type) {
@@ -378,7 +378,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     int index = 0;
     long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(pieces)];
       pieces &= pieceSquare.mask_off;
       Piece piece = board.boardSquares[pieceSquare.index128].piece;
       switch (piece.type) {
@@ -404,7 +404,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     long capturesBoard = knightMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       Board.BoardSquare toSquare = board.boardSquares[square.index128];
@@ -413,7 +413,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     capturesBoard = knightMoves & ~board.allPieces;
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       moves[index++].reset(piece.square, square, piece);
@@ -427,14 +427,14 @@ public class MoveGeneration implements MoveGenerationConstants {
     Square square;
     long toSquares = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
     while (toSquares != 0) {
-      square = Board.SQUARES[Board.getLeastSignificantBit(toSquares)];
+      square = Board.SQUARES[Long.numberOfTrailingZeros(toSquares)];
       toSquares &= square.mask_off;
       moves[index++].reset(piece.square, board.boardSquares[square.index128].square, board.boardSquares[square.index128].square, piece, board.boardSquares[square.index128].piece);
     }
 
     toSquares = piece.attacks & ~board.allPieces;
     while (toSquares != 0) {
-      square = Board.SQUARES[Board.getLeastSignificantBit(toSquares)];
+      square = Board.SQUARES[Long.numberOfTrailingZeros(toSquares)];
       toSquares &= square.mask_off;
       moves[index++].reset(piece.square, square, piece);
     }
@@ -449,7 +449,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     long slidingMoves = piece.attacks;
     long squares = possibleKnightChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (squares != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      int toSquareIndex = Long.numberOfTrailingZeros(squares);
       Square square = Board.SQUARES[toSquareIndex];
       squares &= square.mask_off;
       if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
@@ -473,7 +473,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     long squares = possibleBishopQueenChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (squares != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      int toSquareIndex = Long.numberOfTrailingZeros(squares);
       Square square = Board.SQUARES[toSquareIndex];
       squares &= square.mask_off;
       if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
@@ -496,7 +496,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     long slidingMoves = piece.attacks;
     long squares = possibleRookQueenChecks & slidingMoves & ~board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (squares != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(squares);
+      int toSquareIndex = Long.numberOfTrailingZeros(squares);
       Square square = Board.SQUARES[toSquareIndex];
       squares &= square.mask_off;
       if((board.pieceBoards[board.turn^1][Board.ALL_PIECES] & square.mask_on) != 0) {
@@ -518,7 +518,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     long bishopMoves = (board.attacksDiaga1(piece.square.index64) | board.attacksDiagh1(piece.square.index64));
     long capturesBoard = bishopMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       Board.BoardSquare toSquare = board.boardSquares[square.index128];
@@ -527,7 +527,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     capturesBoard = bishopMoves & ~board.allPieces;
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       moves[index++].reset(piece.square, square, piece);
@@ -541,7 +541,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     long rookMoves = (board.attacksRank(piece.square.index64) | board.attacksFile(piece.square.index64));
     long capturesBoard = rookMoves & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       Board.BoardSquare toSquare = board.boardSquares[square.index128];
@@ -550,7 +550,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     capturesBoard = rookMoves & ~board.allPieces;
     while (capturesBoard != 0) {
-      int toSquareIndex = Board.getLeastSignificantBit(capturesBoard);
+      int toSquareIndex = Long.numberOfTrailingZeros(capturesBoard);
       Square square = Board.SQUARES[toSquareIndex];
       capturesBoard &= square.mask_off;
       moves[index++].reset(piece.square, square, piece);
@@ -562,7 +562,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     int index = 0;
     long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(pieces)];
       Piece piece = board.boardSquares[pieceSquare.index128].piece;
       pieces &= pieceSquare.mask_off;
       switch (piece.type) {
@@ -1172,7 +1172,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     checkers = board.squareAttackers[kingSquare.index64] & board.pieceBoards[board.turn ^ 1][6];
 
     while (checkers != 0) {
-      int attackerSquareIndex = Board.getLeastSignificantBit(checkers);
+      int attackerSquareIndex = Long.numberOfTrailingZeros(checkers);
       Square attackerSquare = Board.SQUARES[attackerSquareIndex];
       checkers ^= attackerSquare.mask_on;
 
@@ -1184,13 +1184,13 @@ public class MoveGeneration implements MoveGenerationConstants {
       long checkVector = distanceSpans[kingSquare.index128][attackerSquare.index128] | attackerSquare.mask_on;
       // for each square in check vector
       while (checkVector != 0) {
-        int squareIndex = Board.getLeastSignificantBit(checkVector);
+        int squareIndex = Long.numberOfTrailingZeros(checkVector);
         Square savingSquare = Board.SQUARES[squareIndex];
         checkVector ^= savingSquare.mask_on;
         // find all attacking pieces
         long defenders = board.squareAttackers[savingSquare.index64] & board.pieceBoards[board.turn][6];
         while (defenders != 0) {
-          int defenderSquareIndex = Board.getLeastSignificantBit(defenders);
+          int defenderSquareIndex = Long.numberOfTrailingZeros(defenders);
           Square defenderSquare = Board.SQUARES[defenderSquareIndex];
           defenders ^= defenderSquare.mask_on;
 
@@ -1320,7 +1320,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
     long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(pieces)];
       pieces &= pieceSquare.mask_off;
       Piece piece = board.boardSquares[pieceSquare.index128].piece;
 
@@ -1391,7 +1391,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (candidateAttackers = attackVectors[color][Piece.BISHOP][square.index64] & bishopsAndQueens;
          candidateAttackers != 0;
          candidateAttackers ^= attackerSquare.mask_on) {
-      attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
+      attackerSquare = Board.SQUARES[Long.numberOfTrailingZeros(candidateAttackers)];
       if ((notBishopsAndQueens & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
@@ -1405,7 +1405,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (candidateAttackers = attackVectors[color][Piece.ROOK][square.index64] & rooksAndQueens;
          candidateAttackers != 0;
          candidateAttackers ^= attackerSquare.mask_on) {
-      attackerSquare = Board.SQUARES[Board.getLeastSignificantBit(candidateAttackers)];
+      attackerSquare = Board.SQUARES[Long.numberOfTrailingZeros(candidateAttackers)];
       if ((notRooksAndQueens & distanceSpans[square.index128][attackerSquare.index128]) == 0) {
         attackers |= attackerSquare.mask_on;
       }
@@ -1422,7 +1422,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
 
     while (eachAttacker != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(eachAttacker)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(eachAttacker)];
       eachAttacker &= pieceSquare.mask_off;
       long xrayAttackers = (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]) &
               (board.attacksDiaga1(pieceSquare.index64) | board.attacksDiagh1(pieceSquare.index64)) &
@@ -1442,7 +1442,7 @@ public class MoveGeneration implements MoveGenerationConstants {
 
 
     while (eachAttacker != 0) {
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(eachAttacker)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(eachAttacker)];
       eachAttacker &= pieceSquare.mask_off;
       long xrayAttackers = (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]) &
               (board.attacksRank(pieceSquare.index64) | board.attacksFile(pieceSquare.index64)) &
@@ -1462,7 +1462,7 @@ public class MoveGeneration implements MoveGenerationConstants {
             shadowVectors[square.index128][emptySquare.index128];
          bishopAttacker != 0;
          bishopAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(bishopAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(bishopAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       bishopAndQueenAttackers |= attackerSquare.mask_on;
     }
@@ -1473,7 +1473,7 @@ public class MoveGeneration implements MoveGenerationConstants {
             shadowVectors[square.index128][emptySquare.index128];
          rookAttacker != 0;
          rookAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(rookAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(rookAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       rookAndQueenAttackers |= attackerSquare.mask_on;
     }
@@ -1516,7 +1516,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (long bishopAttacker = attackVector & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
          bishopAttacker != 0;
          bishopAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(bishopAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(bishopAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       long distanceSpan = distanceSpans[square.index128][attackerSquare.index128];
       if ((board.allPieces & distanceSpan) == 0) {
@@ -1533,7 +1533,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (long rookAttacker = attackVector & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
          rookAttacker != 0;
          rookAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(rookAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(rookAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       long distanceSpan = distanceSpans[square.index128][attackerSquare.index128];
       if ((board.allPieces & distanceSpan) == 0) {
@@ -1544,15 +1544,15 @@ public class MoveGeneration implements MoveGenerationConstants {
   }
 
   public int countPawnAttackers(Board board, Square square, int color) {
-    return Board.countBits(attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.PAWN]);
+    return Long.bitCount(attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.PAWN]);
   }
 
   public int countKingAttackers(Board board, Square square, int color) {
-    return Board.countBits(attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
+    return Long.bitCount(attackVectors[color][Piece.KING][square.index64] & board.pieceBoards[color][Piece.KING]);
   }
 
   public int countKnightAttackers(Board board, Square square, int color) {
-    return Board.countBits(attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]);
+    return Long.bitCount(attackVectors[color][Piece.KNIGHT][square.index64] & board.pieceBoards[color][Piece.KNIGHT]);
   }
 
   public int countBishopAndQueenAttackers(Board board, Square square, int color) {
@@ -1561,7 +1561,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (long bishopAttacker = attackVectors[color][Piece.BISHOP][square.index64] & (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN]);
          bishopAttacker != 0;
          bishopAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(bishopAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(bishopAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       long distanceSpan = distanceSpans[square.index128][attackerSquare.index128];
       if (distanceSpan != -1 && ((board.allPieces ^ (board.pieceBoards[color][Piece.BISHOP] | board.pieceBoards[color][Piece.QUEEN])) & distanceSpan) == 0) {
@@ -1577,7 +1577,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     for (long rookAttacker = attackVectors[color][Piece.ROOK][square.index64] & (board.pieceBoards[color][Piece.ROOK] | board.pieceBoards[color][Piece.QUEEN]);
          rookAttacker != 0;
          rookAttacker ^= attackerSquare.mask_on) {
-      int squareIndex = Board.getLeastSignificantBit(rookAttacker);
+      int squareIndex = Long.numberOfTrailingZeros(rookAttacker);
       attackerSquare = Board.SQUARES[squareIndex];
       long distanceSpan = distanceSpans[square.index128][attackerSquare.index128];
       if (distanceSpan != -1 && ((board.allPieces ^ (board.pieceBoards[color][Piece.QUEEN] | board.pieceBoards[color][Piece.ROOK])) & distanceSpan) == 0) {
@@ -1596,7 +1596,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     long pieces = board.pieceBoards[board.turn][Board.ALL_PIECES];
     while (pieces != 0) {
 
-      Square pieceSquare = Board.SQUARES[Board.getLeastSignificantBit(pieces)];
+      Square pieceSquare = Board.SQUARES[Long.numberOfTrailingZeros(pieces)];
       pieces ^= pieceSquare.mask_on;
       Piece piece = board.boardSquares[pieceSquare.index128].piece;
 
@@ -1609,7 +1609,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       } else if(piece.type == Piece.KING) {
         long attacks = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
         while (attacks != 0) {
-          Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
+          Square toSquare = Board.SQUARES[Long.numberOfTrailingZeros(attacks)];
           attacks ^= toSquare.mask_on;
           if(!board.isSquareCheckedByColor(toSquare, board.turn ^ 1)) {
             moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
@@ -1618,7 +1618,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       } else {
         long attacks = piece.attacks & board.pieceBoards[board.turn ^ 1][Board.ALL_PIECES];
         while (attacks != 0) {
-          Square toSquare = Board.SQUARES[Board.getLeastSignificantBit(attacks)];
+          Square toSquare = Board.SQUARES[Long.numberOfTrailingZeros(attacks)];
           attacks ^= toSquare.mask_on;
           moves[index++].reset(pieceSquare, toSquare, toSquare, piece, board.boardSquares[toSquare.index128].piece);
         }
@@ -1792,7 +1792,7 @@ public class MoveGeneration implements MoveGenerationConstants {
           rook_attacks_r0[square][pcs] |= Board.SQUARES[(square & 56) + (sq)].mask_on;
           attacks = attacks & (~(1 << (sq)));
         }
-        rook_mobility_r0[square][pcs] = Board.countBits(rook_attacks_r0[square][pcs]);
+        rook_mobility_r0[square][pcs] = Long.bitCount(rook_attacks_r0[square][pcs]);
       }
     }
 /*
@@ -1813,7 +1813,7 @@ public class MoveGeneration implements MoveGenerationConstants {
           attacks = attacks & (~(1 << (7 - sq)));
         }
         rook_mobility_rl90[square][pcs] =
-                Board.countBits(rook_attacks_rl90[square][pcs]);
+                Long.bitCount(rook_attacks_rl90[square][pcs]);
       }
     }
 /*
@@ -1841,7 +1841,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       for (pcs = 0; pcs < 64; pcs++) {
         bishop_mobility_rl45[square][pcs] =
-                Board.countBits(bishop_attacks_rl45[square][pcs]);
+                Long.bitCount(bishop_attacks_rl45[square][pcs]);
       }
     }
 /*
@@ -1869,7 +1869,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       for (pcs = 0; pcs < 64; pcs++) {
         bishop_mobility_rr45[square][pcs] =
-                Board.countBits(bishop_attacks_rr45[square][pcs]);
+                Long.bitCount(bishop_attacks_rr45[square][pcs]);
       }
     }
   }
