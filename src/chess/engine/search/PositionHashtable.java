@@ -14,7 +14,7 @@ public class PositionHashtable
   public static final byte LOWER_BOUND = 1;
   public static final byte EXACT_VALUE = 2;
 
-  public static int HASH_SIZE = (int)1L << 20;
+  public static int HASH_SIZE = (int)1L << 22;
   public static int HASH_MASK = HASH_SIZE - 1;
 
   public static class HashEntry
@@ -95,18 +95,16 @@ public class PositionHashtable
     }
 
     HashEntry alwaysStoreEntry = ALWAYS_STORE_HASH[index];
-    if(depth >= alwaysStoreEntry.depth) {
-      alwaysStoreEntry.hash = boardHash;
-      alwaysStoreEntry.depth = depth;
-      alwaysStoreEntry.score = score;
-      alwaysStoreEntry.type = type;
-      alwaysStoreEntry.mateThreat = mateThreat;
-      alwaysStoreEntry.move.moved = move.moved;
-      alwaysStoreEntry.move.fromSquare = move.fromSquare;
-      alwaysStoreEntry.move.toSquare = move.toSquare;
-      alwaysStoreEntry.move.taken = move.taken;
-      alwaysStoreEntry.move.promoteTo = move.promoteTo;
-    }
+    alwaysStoreEntry.hash = boardHash;
+    alwaysStoreEntry.depth = depth;
+    alwaysStoreEntry.score = score;
+    alwaysStoreEntry.type = type;
+    alwaysStoreEntry.mateThreat = mateThreat;
+    alwaysStoreEntry.move.moved = move.moved;
+    alwaysStoreEntry.move.fromSquare = move.fromSquare;
+    alwaysStoreEntry.move.toSquare = move.toSquare;
+    alwaysStoreEntry.move.taken = move.taken;
+    alwaysStoreEntry.move.promoteTo = move.promoteTo;
   }
 
   public void clear()

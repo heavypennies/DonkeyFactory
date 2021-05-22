@@ -775,18 +775,7 @@ public class SimpleEvaluator implements BoardEvaluator {
 
     int score = 0;
 
-    pawnHashEntry.pawnFlags.whitePawnCount = 0;
-    pawnHashEntry.pawnFlags.blackPawnCount = 0;
-
-    pawnHashEntry.pawnFlags.whitePassedPawns = 0;
-    pawnHashEntry.pawnFlags.blackPassedPawns = 0;
-    pawnHashEntry.pawnFlags.whiteWeakPawns = 0;
-    pawnHashEntry.pawnFlags.blackWeakPawns = 0;
-    pawnHashEntry.pawnFlags.openFiles = ~0;
-    pawnHashEntry.pawnFlags.openRanks = ~0;
-    pawnHashEntry.pawnFlags.lockedFiles = 0;
-    pawnHashEntry.pawnFlags.closedFiles[0] = pawnHashEntry.pawnFlags.closedFiles[1] = pawnHashEntry.pawnFlags.pawnAttacks[0] = pawnHashEntry.pawnFlags.pawnAttacks[1] = 0;
-    pawnHashEntry.pawnFlags.endgameScore = 0;
+    pawnHashEntry.pawnFlags.reset();
 
     long whitePawns = board.pieceBoards[1][Piece.PAWN];
     long blackPawns = board.pieceBoards[0][Piece.PAWN];
@@ -803,7 +792,7 @@ public class SimpleEvaluator implements BoardEvaluator {
 
       //if(DEBUG)System.err.println("  P@" + pawnSquare.toString());
 //      whitePawnScore += Piece.TYPE_VALUES[Piece.PAWN];
-      ++pawnHashEntry.pawnFlags.whitePawnCount;
+      pawnHashEntry.pawnFlags.whitePawnCount++;
       pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
       pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
       //whitePawnScore += whitePawnValueTable[pawnSquareIndex];
@@ -919,7 +908,7 @@ public class SimpleEvaluator implements BoardEvaluator {
       //if(DEBUG)System.err.println("  p@" + pawnSquare.toString());
 
 //      blackPawnScore += Piece.TYPE_VALUES[Piece.PAWN];
-      ++pawnHashEntry.pawnFlags.blackPawnCount;
+      pawnHashEntry.pawnFlags.blackPawnCount++;
       pawnHashEntry.pawnFlags.openFiles &= ~FILES[pawnSquare.file];
       pawnHashEntry.pawnFlags.openRanks &= ~RANKS[pawnSquare.rank];
       //blackPawnScore += blackPawnValueTable[pawnSquareIndex];
@@ -1036,7 +1025,7 @@ public class SimpleEvaluator implements BoardEvaluator {
     pawnHashEntry.pawnFlags.endgameScore = (queensideScore + kingsideScore);
 */
 
-    pawnHashEntry.pawnFlags.score = (int)(score * ((8 - Long.bitCount(pawnHashEntry.pawnFlags.lockedFiles & RANKS[0])) / 8D));
+    pawnHashEntry.pawnFlags.score = (int)(score);
 
     // Store pawn hash
     pawnHashEntry.hash = board.pawnHash;
@@ -1093,7 +1082,7 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
 
       if (board.isEndgame() && runawayPawn) {
-        whiteScore += white_passed_pawn_value / (board.pieceValues + 1);
+        whiteScore += white_passed_pawn_value;
       }
       Square advancingSquare = Board.SQUARES[startingIndex + 8];
       if (board.boardSquares[advancingSquare.index128].piece == null) {
@@ -1165,7 +1154,7 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
 
       if (board.isEndgame() && runawayPawn) {
-        blackScore += black_passed_pawn_value / (board.pieceValues + 1);
+        blackScore += black_passed_pawn_value;
       }
       Square advancingSquare = Board.SQUARES[startingIndex - 8];
       if (board.boardSquares[advancingSquare.index128].piece == null) {
@@ -1224,7 +1213,7 @@ public class SimpleEvaluator implements BoardEvaluator {
       score += nearbyPassedPawns * board.whiteKing.square.rank * 3;
 */
 
-      if (board.pieceValues  == 0) {
+      if (board.pieceValues < 9) {
         Square square;
         long targetPawns = pawnFlags.blackWeakPawns & ~board.attacks[0];
 
@@ -1299,7 +1288,7 @@ public class SimpleEvaluator implements BoardEvaluator {
 */
 
 
-      if (board.pieceValues == 0) {
+      if (board.pieceValues < 9) {
         Square square;
         long targetPawns = pawnFlags.whiteWeakPawns & ~board.attacks[1];
 
@@ -1441,16 +1430,16 @@ public class SimpleEvaluator implements BoardEvaluator {
                                         int attackerColor) {
     adjacentScore = 0;
     stagingScore = 0;
+    defenderColor = attackerColor ^ 1;
     defendedAdjacentCount = KING_NEAR_AREA[defenderColor][kingSquare.index64].length + KING_PAWN_AREA[defenderColor][kingSquare.index64].length;
     safeSquareCount = 0;
     defendedStagingCount =  KING_STAGING_AREA[defenderColor][kingSquare.index64].length;
-    defenderColor = attackerColor ^ 1;
 
     for (i = 0; i < KING_NEAR_AREA[defenderColor][kingSquare.index64].length; i++) {
 
       kingAreaSquare = KING_NEAR_AREA[defenderColor][kingSquare.index64][i];
       if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
+        attackerState = board.attackState[attackerColor][kingAreaSquare.index64] & (~board.attackState[defenderColor][kingAreaSquare.index64]);
         adjacentScore += attackScores[attackerState];
         if (((board.pieceBoards[attackerColor][Piece.PAWN]) &
                 FILES[kingAreaSquare.file] &
@@ -1477,7 +1466,7 @@ public class SimpleEvaluator implements BoardEvaluator {
 
       kingAreaSquare = KING_PAWN_AREA[defenderColor][kingSquare.index64][i];
       if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
+        attackerState = board.attackState[attackerColor][kingAreaSquare.index64] & (~board.attackState[defenderColor][kingAreaSquare.index64]);
 /*
         String attackerStr = visualizeAttackState(attackState[attackerColor][kingAreaSquare.index64]);
         String defenderStr = visualizeAttackState(attackState[defenderColor][kingAreaSquare.index64]);
@@ -1513,13 +1502,13 @@ public class SimpleEvaluator implements BoardEvaluator {
     for (i = 0; i < KING_STAGING_AREA[defenderColor][kingSquare.index64].length; i++) {
       kingAreaSquare = KING_STAGING_AREA[defenderColor][kingSquare.index64][i];
       if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
+        attackerState = board.attackState[attackerColor][kingAreaSquare.index64] & (~board.attackState[defenderColor][kingAreaSquare.index64]);
         //int attackerState = board.calculateAttackState(attackerColor, kingAreaSquare.index64);
 /*
         String attackerStr = visualizeAttackState(attackState[attackerColor][kingAreaSquare.index64]);
         String defenderStr = visualizeAttackState(attackState[defenderColor][kingAreaSquare.index64]);
 */
-        stagingScore += attackScores[attackerState] >> 1;
+        stagingScore += attackScores[attackerState] >> 2;
         if (smallestAttacker[board.attackState[defenderColor][kingAreaSquare.index64]] != Piece.PAWN) {
           defendedStagingCount--;
         }
@@ -1813,7 +1802,7 @@ public class SimpleEvaluator implements BoardEvaluator {
 
   // Material Values
   private static double MATERIAL_DIVISOR = 31D;
-  private static int TRADE_WHEN_LOSING_VALUE = 40;
+  private static int TRADE_WHEN_LOSING_VALUE = 20;
   private static int TRADE_WHEN_UP_PAWNS_VALUE = 30;
 
   // Opening values

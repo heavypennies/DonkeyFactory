@@ -12,6 +12,7 @@ import chess.engine.search.SimpleEvaluator;
  */
 public final class Move
 {
+  public static final int CHECK_SCORE = (ABSearch.INFINITY - 30000);
   public static final int CAPTURE_SCORE = (ABSearch.INFINITY - 40000);
   public static final int PROMOTE_SCORE = (ABSearch.INFINITY - 55000);
   public boolean check;

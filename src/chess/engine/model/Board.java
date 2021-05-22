@@ -761,8 +761,8 @@ public class Board {
 
     public String toString() {
       return "Stats: castling (" + (whiteCastleFlag == 1 ? "O-O" : (whiteCastleFlag == 2 ? "O-O-O" : (whiteKingsideRookMoves == 0 && whiteQueensideRookMoves == 0 && whitePieceMoves[Piece.KING] == 0 ? "WAIT" : "CEN"))) + " v " + (blackCastleFlag == 1 ? "O-O" : (blackCastleFlag == 2 ? "O-O-O" : (blackKingsideRookMoves == 0 && blackQueensideRookMoves == 0 && blackPieceMoves[Piece.KING] == 0 ? "WAIT" : "CEN"))) + ")" +
-              "\n  whitePieceMoves: " + whitePieceMoves + "\n" +
-              "\n  whitePieceMoves: " + blackPieceMoves + "\n";
+              "\n  whitePieceMoves: " + Arrays.toString(whitePieceMoves) + "\n" +
+              "\n  whitePieceMoves: " + Arrays.toString(blackPieceMoves) + "\n";
     }
   }
 

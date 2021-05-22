@@ -65,12 +65,10 @@ public class IterativeSearchTest //extends TestCase
     searchBoard.turn = 1;
 */
 
-/*
     Board searchBoard = new Board("8/pR4pk/1b6/2p5/N1p5/8/PP1r2PP/6K1"); // b - - bm Rxb2; id MATS005;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 0;
-*/
 
 /*
     Board searchBoard = new Board("8/pR4pk/1b1r4/2p5/N1p5/6PP/PP6/5K2"); // b - - bm Rxb2; id MATS005;
@@ -346,10 +344,13 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.turn = 1;
 */
 
+/*
     Board searchBoard = new Board("8/5pk1/8/1P5p/2P3p1/p1K5/P4R1P/1r6");
     searchBoard.stats.whiteCastleFlag = 2;
     searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 1;
+*/
+
 /*
     Board searchBoard = new Board("r3kbnr/pp1b1ppp/8/2p1q3/8/N1P1B3/PP3PPP/R2QKB1R");
     searchBoard.stats.whiteCastleFlag = 0;

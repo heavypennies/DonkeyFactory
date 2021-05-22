@@ -6,3 +6,5 @@ out/*
 .idea/*
 build/*
 testdonkeyfactory.sh
+DonkeyFactory.ipr
+DonkeyFactory.iws

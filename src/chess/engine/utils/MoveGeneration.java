@@ -457,7 +457,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       else {
         moves[index++].reset(piece.square, square, piece);
-        moves[index-1].score = Move.CAPTURE_SCORE - index;
+        moves[index-1].score = Move.CHECK_SCORE - index;
       }
       moves[index-1].check = true;
     }
@@ -481,7 +481,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       else {
         moves[index++].reset(piece.square, square, piece);
-        moves[index-1].score = Move.CAPTURE_SCORE - index;
+        moves[index-1].score = Move.CHECK_SCORE - index;
       }
       moves[index-1].check = true;
     }
@@ -504,7 +504,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       }
       else {
         moves[index++].reset(piece.square, square, piece);
-        moves[index-1].score = Move.CAPTURE_SCORE - index;
+        moves[index-1].score = Move.CHECK_SCORE - index;
       }
       moves[index-1].check = true;
     }

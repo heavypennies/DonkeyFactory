@@ -364,7 +364,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
             movesToMate /= 2;
             complexity += (movesToMate / 2) - 1;
 
-            String boardURL = "http://www.eddins.net/steve/chess/ChessImager/ChessImager.php?fen=" + fen.substring(0, fen.indexOf(" "));
+            String boardURL = "http://www.fen-to-image.com/image/36/double/" + fen.substring(0, fen.indexOf(" "));
             String tinyUrl = getTinyUrl(boardURL);
 
             if (tinyUrl != null && !tinyUrl.equals("Error") && complexity + TWEET_SOFT > TWEET_MAX && movesToMate > 1) {
