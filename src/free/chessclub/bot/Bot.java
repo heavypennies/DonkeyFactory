@@ -60,7 +60,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
   private BoardEvaluator eval = new SimpleEvaluator(moveGeneration);
   private ABSearch search = new ABSearch(moveGeneration, eval);
   private Move[] availableMoves = Move.createMoves(100);
-  private IterativeSearch iterativeSearch = new IterativeSearch(search, moveGeneration, eval);
+  private IterativeSearch iterativeSearch = new IterativeSearch(search, moveGeneration, eval, new DefaultSearchWatcher());
   private Thread searchThread;
   private int lastScore = 0;
 
@@ -308,18 +308,22 @@ public class Bot extends JinFreechessConnection implements GameListener {
       lastScore = searcher.getPV()[0].score;
       connection.sendCommand(searcher.getPV()[0].toFICSString());
       if (foundMate) {
-        maybeTweetMatePuzzle();
+        Move[] pv = searcher.getPV();
+        Move[] matePv = new Move[128];
+        for(int i = 0;i < 128;i++) {
+          matePv[i] = new Move();
+          matePv[i].reset(pv[i]);
+        }
+        maybeTweetMatePuzzle(matePv);
       }
       searcher.stop();
     }
 
-    private void maybeTweetMatePuzzle() {
+    private void maybeTweetMatePuzzle(Move[] pv) {
       if (!talkedMate) {
-        talkedMate = true;
         new Thread(new Runnable() {
           @Override
           public void run() {
-            Move[] pv = searcher.getPV();
             int movesToMate = 1;
             int color = pv[0].moved.color;
             int movedType = pv[0].moved.type;
@@ -368,11 +372,14 @@ public class Bot extends JinFreechessConnection implements GameListener {
             String tinyUrl = getTinyUrl(boardURL);
 
             if (tinyUrl != null && !tinyUrl.equals("Error") && complexity + TWEET_SOFT > TWEET_MAX && movesToMate > 1) {
+              talkedMate = true;
               // New DonkeyFactory Chess position
               // Tweet
               final String tweet = (complexity < TWEET_MAX ? "@heavypennies " : "" ) + (color == 1 ? "White" : "Black") + " mates in " + movesToMate + " (DF-" + complexity + ") -> " + tinyUrl + " - solution in next tweet!  #donkeyfactory #chess";
+              final String mateLine = Move.toString(pv);
               System.err.println("Tiny URL: " + tinyUrl);
               System.err.println("Full URL: " + boardURL);
+              System.err.println("Mate Line: " + mateLine);
               System.err.println(tweet);
               tweet(tweet);
 
@@ -381,7 +388,6 @@ public class Bot extends JinFreechessConnection implements GameListener {
               final int movesToMateX = movesToMate;
               final int complexityX = complexity;
               final String tinyUrlX = tinyUrl;
-              final String mateLine = Move.toString(pv);
 
               try {
                 Thread.sleep(1000 * 60 * 5);
@@ -458,7 +464,7 @@ public class Bot extends JinFreechessConnection implements GameListener {
             (JinFreechessConnection.InternalGameData) ongoingGamesData.get(gameNumber);
 
     search = new ABSearch(moveGeneration, eval);
-    iterativeSearch = new IterativeSearch(search, moveGeneration, eval);
+    iterativeSearch = new IterativeSearch(search, moveGeneration, eval, new DefaultSearchWatcher());
 
     gameBoard = new Board();
     //((SimpleEvaluator)eval).pawnHash.clear();

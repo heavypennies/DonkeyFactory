@@ -176,9 +176,6 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
-  </component>
   <component name="ExportToHTMLSettings">
     <option name="PRINT_LINE_NUMBERS" value="false" />
     <option name="OPEN_IN_BROWSER" value="false" />
@@ -325,6 +322,7 @@
     </group>
   </component>
   <component name="ProjectCodeStyleConfiguration">
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
     <code_scheme name="Project" version="173">
       <ADDITIONAL_INDENT_OPTIONS fileType="haml">
         <option name="INDENT_SIZE" value="2" />

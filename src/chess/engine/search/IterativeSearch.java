@@ -13,6 +13,7 @@ import chess.engine.utils.MoveGeneration;
 public class IterativeSearch implements Searcher
 {
   private Searcher search;
+  private SearchWatcher searchWatcher;
   private MoveGeneration moveGeneration;
   private BoardEvaluator eval;
   private SearchStats stats;
@@ -34,11 +35,12 @@ public class IterativeSearch implements Searcher
   }
 
 
-  public IterativeSearch(Searcher search, MoveGeneration moveGeneration, BoardEvaluator eval)
+  public IterativeSearch(Searcher search, MoveGeneration moveGeneration, BoardEvaluator eval, SearchWatcher searchWatcher)
   {
     this.search = search;
     this.moveGeneration = moveGeneration;
     this.eval = eval;
+    this.searchWatcher = searchWatcher;
 
     done = true;
   }
@@ -49,7 +51,7 @@ public class IterativeSearch implements Searcher
   }
 
 
-  public synchronized int search(Board board, int maxDepth)
+  public int search(Board board, int maxDepth)
   {
     done = false;
     running = true;
@@ -59,45 +61,34 @@ public class IterativeSearch implements Searcher
 
     // check EGTBs
 
-    
-    int currentDepth = 0;
     score = -INFINITY;
 
     stats = new SearchStats();
-
     search.setStats(stats);
-    search.reset();
 
     board.stats.originalMaterial = eval.getMaterial(board);
     board.stats.originalMaterialDifference = eval.getMaterialDifference(board);
 
-    long start = System.currentTimeMillis();
+    stats.startTime = System.currentTimeMillis();
 
-    while(currentDepth < maxDepth && !done)
+    for(int currentDepth = 1; currentDepth < maxDepth + 1 && !done; currentDepth++)
     {
+      stats.currentDepth = currentDepth;
+
       int maybeScore = search.search(board, currentDepth);
       if(maybeScore > -MATE && maybeScore < MATE)
       {
         score = maybeScore;
       }
-      long time = System.currentTimeMillis() - start;
 
-      stats.time = (double) time / 1000;
+      stats.score = score;
 
-      if(currentDepth > 0 && time > 10)
-      {
-        System.err.println(new StringBuilder("d[").append(currentDepth).append("] Stats: ").append(search.getStats()));
-        System.err.println(new StringBuilder("Best: ").append(Move.toString(search.getPV())).toString());
-        System.err.println("Score: " + maybeScore);
-      }
-//      System.err.println("LineScore: " + new LineScorer(moveGeneration, eval).scoreLine(board, search.getPV()) + "\n");
+      searchWatcher.searchInfo(stats, getPV());
 
       if(done)
       {
         break;
       }
-
-      currentDepth++;
     }
     done = true;
     search.stop();
@@ -120,6 +111,7 @@ public class IterativeSearch implements Searcher
 
   public void reset() {
     done = true;
+    search.stop();
     search.reset();
   }
 
@@ -128,3 +120,4 @@ public class IterativeSearch implements Searcher
     return search.isResearchAtRoot();
   }
 }
+

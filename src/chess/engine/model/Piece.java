@@ -11,6 +11,8 @@ import chess.engine.utils.MoveGeneration;
 public final class Piece implements Cloneable, Comparable<Piece> {
   public static final boolean DEBUG = false;
 
+  public static String[] PIECE_NAMES = { "p", "n", "b", "r", "q", "k" };
+
   public static final int PAWN = 0;
   public static final int KNIGHT = 1;
   public static final int BISHOP = 2;
@@ -38,7 +40,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
           ~(3), ~(3 << ATTACKER_SHIFT_KNIGHT), ~(3 << ATTACKER_SHIFT_BISHOP), ~(3 << ATTACKER_SHIFT_ROOK), ~(3 << ATTACKER_SHIFT_QUEEN), ~(3 << ATTACKER_SHIFT_KING)
   };
 
-  public static int[] TYPE_VALUES = {100, 311, 323, 500, 900, 10000};
+  public static int[] TYPE_VALUES = {100, 303, 323, 500, 900, 10000};
   public static int[] MATERIAL_VALUES = {1, 3, 3, 5, 9, 0};
   public static int[] MASKS = {1, 2, 4, 8, 16, 32};
   public static boolean[][] TYPE_INDEX =
@@ -126,7 +128,7 @@ public final class Piece implements Cloneable, Comparable<Piece> {
   public static String toString(int type, int color) {
     switch (type) {
       case PAWN: {
-        return color == 1 ? "1" : "0";
+        return color == 1 ? "P" : "p";
       }
       case KNIGHT: {
         return color == 1 ? "N" : "n";
@@ -159,11 +161,11 @@ public final class Piece implements Cloneable, Comparable<Piece> {
     attackerUmask = ATTACKER_UMASK[type];
     while (attacks != 0) {
       int squareIndex = Long.numberOfTrailingZeros(attacks);
-      Square attackSquare = Board.SQUARES[squareIndex];
-      attacks &= attackSquare.mask_off;
+      mask = ~(1L << squareIndex);
+      attacks &= mask;
       board.squareAttackers[squareIndex] &= square.mask_off;
       if((board.squareAttackers[squareIndex] & board.pieceBoards[color][Board.ALL_PIECES]) == 0) {
-        board.attacks[color] &= attackSquare.mask_off;
+        board.attacks[color] &= mask;
       }
 
       int attackerCount = (board.attackState[color][squareIndex] >> attackerShift) & 3;
@@ -172,11 +174,12 @@ public final class Piece implements Cloneable, Comparable<Piece> {
                       ((attackerCount == 0 ? 0 : attackerCount - 1) << attackerShift);
     }
     this.attacks = 0;
+
     long rams = this.rams;
     while (rams != 0) {
       int squareIndex = Long.numberOfTrailingZeros(rams);
-      Square attackSquare = Board.SQUARES[squareIndex];
-      rams &= attackSquare.mask_off;
+      mask = ~(1L << squareIndex);
+      rams &= mask;
       board.squareRammers[squareIndex] &= square.mask_off;
       int attackerCount = (board.attackState[color][squareIndex] >> attackerShift) & 3;
       board.attackState[color][squareIndex] =

@@ -20,8 +20,6 @@ public class ProgressiveMoveGenTest //extends TestCase
 
     MoveGeneration moveGen = new MoveGeneration();
     Board board = new Board("6k1/6qp/8/8/8/7Q/K7/7R");
-    board.stats.whiteCastleFlag = 1;
-    board.stats.blackCastleFlag = 1;
     board.turn = 0;
     System.out.println(new Date());
 

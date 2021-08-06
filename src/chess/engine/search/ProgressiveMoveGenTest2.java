@@ -21,8 +21,6 @@ public class ProgressiveMoveGenTest2 //extends TestCase
 
     MoveGeneration moveGen = new MoveGeneration();
     Board board = new Board();
-    board.stats.whiteCastleFlag = 1;
-    board.stats.blackCastleFlag = 1;
     board.turn = 1;
 
     System.err.println(new Date());

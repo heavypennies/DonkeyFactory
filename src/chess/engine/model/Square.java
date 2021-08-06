@@ -66,4 +66,10 @@ public enum Square
 
     assert (~mask_off) == mask_on;
   }
+
+  private static final String[] fileNames = { "a", "b", "c", "d", "e", "f", "g", "h" };
+
+  public String toAlgebraicString() {
+    return fileNames[file] + (rank+1);
+  }
 }

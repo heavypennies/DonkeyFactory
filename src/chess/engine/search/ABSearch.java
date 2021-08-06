@@ -15,28 +15,31 @@ import chess.engine.utils.MoveGeneration;
  */
 public class ABSearch implements Searcher
 {
-  private static final int EXTEND_THREAT_EXTENSION = 250;
-  private static final int EXTEND_NULL_MATE_THREAT = 125;
-  private static final int EXTEND_CHECK = 150;
-  private static final int EXTEND_RECAPTURE = 125;
-  private static final int EXTEND_PAWN_PUSH = 225;
   private static final int PLY_SIZE = 250;
 
+  private static final int EXTEND_THREAT_EXTENSION = 150;
+  private static final int EXTEND_NULL_MATE_THREAT = 125;
+  private static final int EXTEND_CHECK = 125;
+  private static final int EXTEND_RECAPTURE = 125;
+  private static final int EXTEND_PAWN_PUSH = 125;
+
+  private static final int Q_CHECK_DEPTH = 2;
+
+  private static final boolean REDUCE = true;
   private static final int REDUCE_PRUNE = -1000;
-  private static final int REDUCE_FUTILE = -300;
-  private static final int REDUCE_DEFAULT = -150;
-  private static final int REDUCE_BORING = -75;
+  private static final int REDUCE_FUTILE = -500;
+  private static final int REDUCE_DEFAULT = -250;
+  private static final int REDUCE_BORING = -50;
 
   private static final int MAX_EXTENSIONS = 12;
   private static final int MAX_REDUCTIONS = 12;
-  private static final int THREAT_INDICATOR = 120;
-  private static final int THREAT_IMPLIED = 35;
-  private static boolean REDUCE = true;
+  private static final int THREAT_INDICATOR = 150;
+  private static final int THREAT_IMPLIED = 70;
 
-  private static boolean debug = false;
-  private BoardEvaluator eval;
-  private MoveGeneration moveGeneration;
-  private PositionHashtable abHashtable = new PositionHashtable();
+  private static final boolean debug = false;
+  private final BoardEvaluator eval;
+  private final MoveGeneration moveGeneration;
+  private final PositionHashtable abHashtable = new PositionHashtable();
 
   public int searchExtensions;
   public int searchReductions;
@@ -88,7 +91,7 @@ public class ABSearch implements Searcher
       killer2[i].reset(killer2[i-2]);
       killer3[i].reset(killer3[i-2]);
     }
-    done = false;
+    done = true;
   }
 
   public SearchStats getStats()
@@ -107,7 +110,7 @@ public class ABSearch implements Searcher
   public volatile boolean done = true;
   public volatile boolean researchAtRoot = false;
   /* read only please */
-  public Move[][] pv = new Move[128][128];
+  public volatile Move[][] pv = new Move[128][128];
   /* read only please */
   private Move[] currentLine = Move.createMoves(128);
 
@@ -162,12 +165,10 @@ public class ABSearch implements Searcher
 
     ply = 0;
     inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
+    updateKingSafety(board);
+
     int score = rootSearch(-MATE, MATE, depth * PLY_SIZE, board);
     researchAtRoot = false;
-
-    long time = System.currentTimeMillis() - start;
-
-    stats.time = (double) time / 1000;
 
     running = false;
 
@@ -182,22 +183,9 @@ public class ABSearch implements Searcher
       return -INFINITY;
     }
 
-    if(board.pieceBoards[0][Piece.QUEEN] != 0) {
-      kingSafety[0][ply] = eval.scoreAttackingPieces(board, board.whiteKing.square, 0);
-    }
-    else {
-      kingSafety[0][ply] = 0;
-    }
-    if(board.pieceBoards[1][Piece.QUEEN] != 0) {
-      kingSafety[1][ply] = eval.scoreAttackingPieces(board, board.blackKing.square, 1);
-    }
-    else {
-      kingSafety[1][ply] = 0;
-    }
-
-    if (depth < 0)
+    if (depth <= 0)
     {
-      return quiescenceSearch(2, alpha, beta, board);
+      return quiescenceSearch(board.isEndgame() ? 0 : Q_CHECK_DEPTH, alpha, beta, board);
     }
 
     ++stats.nodes;
@@ -215,7 +203,7 @@ public class ABSearch implements Searcher
 
     if(hashEntry != null)
     {
-      if(hashEntry.depth >= depth / PLY_SIZE)
+      if(hashEntry.depth >= depth)
       {
         switch (hashEntry.type)
         {
@@ -224,7 +212,7 @@ public class ABSearch implements Searcher
             if (hashEntry.score >= beta)
             {
               ++stats.hardHashHits;
-              return hashEntry.score;
+              return beta;
             }
             break;
           }
@@ -233,7 +221,7 @@ public class ABSearch implements Searcher
             if (hashEntry.score < alpha)
             {
               ++stats.hardHashHits;
-              return hashEntry.score;
+              return alpha;
             }
             break;
           }
@@ -263,11 +251,17 @@ public class ABSearch implements Searcher
       inPawnEnding = true;
       searchExtensions += 3;
       ++stats.endgameExtensions;
-      score = abSearch(alpha, beta, depth + (3 * PLY_SIZE), board, false);
-      abHashtable.putEntry(depth / PLY_SIZE + 3, pv[ply][ply].moved == null ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+      score = rootSearch(alpha, beta, depth + (3 * PLY_SIZE), board);
       searchExtensions -= 3;
       inPawnEnding = false;
       return score;
+    }
+
+    // IID
+    if(hashEntry == null && depth > (2 * PLY_SIZE))
+    {
+      rootSearch(alpha, beta, depth - (2 * PLY_SIZE), board);
+      hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
 
     boolean pvFound = false;
@@ -289,7 +283,7 @@ public class ABSearch implements Searcher
 
     for (int moveIndex = 0; moveIndex < movesGenerated; ++moveIndex)
     {
-      nextMove(board, moveList, moveIndex, hashEntry);
+      nextMove(board, moveList, moveIndex, movesGenerated, hashEntry);
 
 //      System.out.print("Root: " + move + "("+moveList[moveIndex].score+")");
 
@@ -315,34 +309,34 @@ public class ABSearch implements Searcher
       ++ply;
       pv[ply][ply].moved = null;
 
-      if(board.pieceBoards[0][Piece.QUEEN] != 0) {
-        kingSafety[0][ply] = eval.scoreAttackingPieces(board, board.whiteKing.square, 0);
-      }
-      else {
-        kingSafety[0][ply] = 0;
-      }
-      if(board.pieceBoards[1][Piece.QUEEN] != 0) {
-        kingSafety[1][ply] = eval.scoreAttackingPieces(board, board.blackKing.square, 1);
-      }
-      else {
-        kingSafety[1][ply] = 0;
-      }
-
       int extend = 0;
       inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
+      if(!inCheck[ply]) {
+          updateKingSafety(board);
+      }
       if (searchExtensions < MAX_EXTENSIONS && extensions[move.fromSquare.index64][move.toSquare.index64] == 0)
       {
         // Extend Check
-        if (inCheck[ply - 1])
+        if (inCheck[ply])
         {
           extend += EXTEND_CHECK;
           ++stats.checkExtensions;
+        }
+        // Extend recapture
+        else if(ply > 1 && move.taken != null &&
+                currentLine[ply - 2].taken != null &&
+                (move.toSquare.index64 == currentLine[ply - 2].takenSquare.index64) &&
+                move.taken.materialValue >= -currentLine[ply - 2].taken.materialValue)
+
+        {
+          extend += EXTEND_RECAPTURE;
+          ++stats.recaptureExtensions;
         }
         // Extend mate threat from null-move
         else if(mateThreat)
         {
           extend += EXTEND_NULL_MATE_THREAT;
-          ++stats.threatExtensions;
+          ++stats.nullThreatExtensions;
         }
         // Extend pawn push
         else if(((board.squareAttackers[move.toSquare.index64] & board.pieceBoards[board.turn][Board.ALL_PIECES]) == 0) &&
@@ -352,7 +346,7 @@ public class ABSearch implements Searcher
           extend += EXTEND_PAWN_PUSH;
           ++stats.pawnPushExtensions;
         }
-        else if(kingSafety[board.turn][ply] > kingSafety[board.turn][ply-1] + THREAT_INDICATOR) {
+        else if(kingSafety[board.turn^1][ply] > kingSafety[board.turn^1][ply-1] + THREAT_INDICATOR) {
           extend += EXTEND_THREAT_EXTENSION;
           ++stats.threatExtensions;
         }
@@ -400,11 +394,17 @@ public class ABSearch implements Searcher
 
       if (score > alpha && !done)
       {
-        move.score = score;
+        pv[ply][ply].reset(move);
+        int t = ply + 1;
+        pv[ply][t].reset(pv[ply + 1][t]);
+        while (pv[ply + 1][t++].moved != null)
+        {
+          pv[ply][t].reset(pv[ply + 1][t]);
+        }
 
         if (score >= beta)
         {
-          abHashtable.putEntry(depth / PLY_SIZE, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
+          abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
 
           if (score > MATE - 300)
           {
@@ -423,15 +423,6 @@ public class ABSearch implements Searcher
             moveHistory[move.moved.type][move.toSquare.index64] ++;
           }
           return score;
-        }
-
-        pv[ply][ply].reset(move);
-
-        int t = ply + 1;
-        pv[ply][t].reset(pv[ply + 1][t]);
-        while (pv[ply + 1][t++].moved != null)
-        {
-          pv[ply][t].reset(pv[ply + 1][t]);
         }
 
         alpha = score;
@@ -464,7 +455,7 @@ public class ABSearch implements Searcher
       }
       else
       {
-        abHashtable.putEntry(depth / PLY_SIZE, !pvFound ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+        abHashtable.putEntry(depth, !pvFound ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
       }
       pv[ply][ply].score = alpha;
     }
@@ -499,9 +490,9 @@ public class ABSearch implements Searcher
       return -INFINITY;
     }
 
-    if (depth < PLY_SIZE)
+    if (depth <= 0)
     {
-      return quiescenceSearch(board.isEndgame() ? 0 : 2, alpha, beta, board);
+      return quiescenceSearch(board.isEndgame() ? 0 : Q_CHECK_DEPTH, alpha, beta, board);
     }
 
     ++stats.nodes;
@@ -547,7 +538,7 @@ public class ABSearch implements Searcher
 
     if(hashEntry != null)
     {
-      if(hashEntry.depth >= depth / PLY_SIZE)
+      if(hashEntry.depth >= depth)
       {
         switch (hashEntry.type)
         {
@@ -556,7 +547,7 @@ public class ABSearch implements Searcher
             if (hashEntry.score >= beta)
             {
               ++stats.hardHashHits;
-              return hashEntry.score;
+              return beta;
             }
             break;
           }
@@ -565,7 +556,7 @@ public class ABSearch implements Searcher
             if (hashEntry.score < alpha)
             {
               ++stats.hardHashHits;
-              return hashEntry.score;
+              return alpha;
             }
             break;
           }
@@ -588,7 +579,6 @@ public class ABSearch implements Searcher
     }
 
     int score;
-    int best = -INFINITY;
     // Pawn Ending Extension
     if(board.pieceValues == 0 && !inPawnEnding)
     {
@@ -596,7 +586,6 @@ public class ABSearch implements Searcher
       searchExtensions += 3;
       ++stats.endgameExtensions;
       score = abSearch(alpha, beta, depth + (3 * PLY_SIZE), board, false);
-      abHashtable.putEntry(depth / PLY_SIZE + 3, pv[ply][ply].moved == null ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
       searchExtensions -= 3;
       inPawnEnding = false;
       return score;
@@ -613,6 +602,7 @@ public class ABSearch implements Searcher
       board.repetitionTable[board.moveIndex] = 1;
       ++ply;
       inCheck[ply] = false;
+      kingSafety[board.turn][ply] = kingSafety[board.turn][ply-1];
       score = -abSearch(-beta, 1-beta, (depth - nullMoveReduction) - PLY_SIZE, board, false);
       ply--;
       board.turn ^= 1;
@@ -635,20 +625,18 @@ public class ABSearch implements Searcher
       }
       if (score >= beta)
       {
-        abHashtable.putEntry(depth / PLY_SIZE, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
+        abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, mateThreat);
         pv[ply][ply].moved = null;
         return score;
       }
     }
 
     // IID
-/*
     if(hashEntry == null && depth > (2 * PLY_SIZE))
     {
       abSearch(alpha, beta, depth - (2 * PLY_SIZE), board, false);
       hashEntry = abHashtable.getEntry(whiteToMove ? board.hash1 : ~board.hash1);
     }
-*/
 
     final Move[] moveList = moveLists[ply];
     int movesGenerated = 0;
@@ -671,7 +659,7 @@ public class ABSearch implements Searcher
 
     for (int moveIndex = 0; moveIndex < movesGenerated; ++moveIndex)
     {
-      nextMove(board, moveList, moveIndex, hashEntry);
+      nextMove(board, moveList, moveIndex, movesGenerated, hashEntry);
 
       // make the move
       final Move move = moveList[moveIndex];
@@ -695,25 +683,15 @@ public class ABSearch implements Searcher
       ++ply;
       pv[ply][ply].moved = null;
 
-      if(board.pieceBoards[0][Piece.QUEEN] != 0) {
-        kingSafety[0][ply] = eval.scoreAttackingPieces(board, board.whiteKing.square, 0);
-      }
-      else {
-        kingSafety[0][ply] = 0;
-      }
-      if(board.pieceBoards[1][Piece.QUEEN] != 0) {
-        kingSafety[1][ply] = eval.scoreAttackingPieces(board, board.blackKing.square, 1);
-      }
-      else {
-        kingSafety[1][ply] = 0;
-      }
-
       int extend = 0;
       inCheck[ply] = board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1);
+      if(!inCheck[ply]) {
+          updateKingSafety(board);
+      }
       if (searchExtensions < MAX_EXTENSIONS && extensions[move.fromSquare.index64][move.toSquare.index64] == 0)
       {
         // Extend Check
-        if (inCheck[ply - 1])
+        if (inCheck[ply])
         {
           extend += EXTEND_CHECK;
           ++stats.checkExtensions;
@@ -722,7 +700,7 @@ public class ABSearch implements Searcher
         else if(ply > 1 && move.taken != null &&
                            currentLine[ply - 2].taken != null &&
                            (move.toSquare.index64 == currentLine[ply - 2].takenSquare.index64) &&
-                           move.taken.materialValue == -currentLine[ply - 2].taken.materialValue)
+                           move.taken.materialValue >= -currentLine[ply - 2].taken.materialValue)
 
         {
           extend += EXTEND_RECAPTURE;
@@ -732,7 +710,7 @@ public class ABSearch implements Searcher
         else if(mateThreat)
         {
           extend += EXTEND_NULL_MATE_THREAT;
-          ++stats.threatExtensions;
+          ++stats.nullThreatExtensions;
         }
         // Extend pawn push
         else if(((board.squareAttackers[move.toSquare.index64] & board.pieceBoards[board.turn][Board.ALL_PIECES]) == 0) &&
@@ -742,17 +720,18 @@ public class ABSearch implements Searcher
           extend += EXTEND_PAWN_PUSH;
           ++stats.pawnPushExtensions;
         }
-        else if(kingSafety[board.turn][ply] > kingSafety[board.turn][ply-1] + THREAT_INDICATOR) {
+        else if(kingSafety[board.turn^1][ply] > kingSafety[board.turn^1][ply-1] + THREAT_INDICATOR) {
           extend += EXTEND_THREAT_EXTENSION;
           ++stats.threatExtensions;
         }
       }
 
       reduce = 0;
-      if(beta - alpha == 1 && (reduce = canBeReducedOrPruned(board, depth, alpha, move, hashEntry, moveCount, extend)) < 0)
+      if((reduce = canBeReducedOrPruned(board, depth, alpha, move, hashEntry, moveCount, extend)) < 0)
       {
         if(depth + reduce <= 0)
         {
+          ++stats.reducePrune;
           ply--;
           board.unmake(move);
           continue;
@@ -784,15 +763,14 @@ public class ABSearch implements Searcher
       // unmake move
       board.unmake(move);
 
-      if (score > best && !done)
+      if (score > alpha && !done)
       {
-        best = score;
-
+        alpha = score;
         pv[ply][ply].reset(move);
 
         if (score >= beta)
         {
-          abHashtable.putEntry(depth / PLY_SIZE, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
+          abHashtable.putEntry(depth, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, move, mateThreat);
 
           if (score > MATE - 300)
           {
@@ -813,7 +791,7 @@ public class ABSearch implements Searcher
           return score;
         }
       }
-      else
+      else if(score < alpha - 100 && move.taken == null)
       {
         moveHistory[move.moved.type][move.toSquare.index64] --;
       }
@@ -829,23 +807,23 @@ public class ABSearch implements Searcher
       {
         if (inCheck[ply])
         {
-          best = -MATE + ply;
+          alpha = -MATE + ply;
         }
         else
         {
-          best = 0;
+          alpha = 0;
         }
         pv[ply][ply].reset(NULL_MOVE);
-        abHashtable.putEntry(1000000, PositionHashtable.EXACT_VALUE, best, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+        abHashtable.putEntry(1000000, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
       }
       else
       {
-        abHashtable.putEntry(depth / PLY_SIZE,PositionHashtable.UPPER_BOUND , best, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
+        abHashtable.putEntry(depth,PositionHashtable.UPPER_BOUND , alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], mateThreat);
       }
-      pv[ply][ply].score = best;
+      pv[ply][ply].score = alpha;
     }
 
-    return best;
+    return alpha;
   }
 
   private final int canBeReducedOrPruned(Board board, int depth, int alpha, Move move, PositionHashtable.HashEntry hashEntry, int moveCount, int extend)
@@ -856,12 +834,12 @@ public class ABSearch implements Searcher
 
     if(ply > 0 &&
        !inCheck[ply] &&
-       !inCheck[ply-1] &&
        move.promoteTo != Piece.QUEEN &&
 //       move.moved.type != Piece.PAWN &&
        move.castledRook == null &&
        move.taken == null &&
-//       alpha > mateDistance &&
+       alpha > -MATE + ply &&
+      (hashEntry != null && !hashEntry.mateThreat) &&
        moveCount > depth / PLY_SIZE/* &&
        move.score <= 0*/
             ) {
@@ -909,10 +887,9 @@ public class ABSearch implements Searcher
 
       if(alpha > scoreEstimate + swap + (threat >> 1) + MARGIN[depth / PLY_SIZE]) {
         if(depth < (3 * PLY_SIZE) && alpha > scoreEstimate + swap + threat + FUTILITY_TABLE[depth / PLY_SIZE]) {
-          ++stats.reducePrune;
           return REDUCE_PRUNE;
         }
-        if(alpha > scoreEstimate + swap + (threat) + MARGIN[depth / PLY_SIZE]) {
+        if(alpha > scoreEstimate + swap + threat + MARGIN[depth / PLY_SIZE]) {
           ++stats.reduceFutile;
           return REDUCE_FUTILE;
         }
@@ -948,8 +925,7 @@ public class ABSearch implements Searcher
     ++stats.nodes;
     ++stats.qNodes;
 
-    int score;
-    int best = -INFINITY;
+    int score = INFINITY;
 
     boolean whiteToMove = board.turn == 1;
     if (ply > 0 && board.isApproachingDraw())
@@ -992,7 +968,7 @@ public class ABSearch implements Searcher
           {
             pv[ply][ply].reset(hashEntry.move);
             pv[ply][ply+1].moved = null;
-            return hashEntry.score;
+            return beta;
           }
           break;
         }
@@ -1002,7 +978,7 @@ public class ABSearch implements Searcher
           {
             pv[ply][ply].reset(hashEntry.move);
             pv[ply][ply+1].moved = null;
-            return hashEntry.score;
+            return alpha;
           }
           break;
         }
@@ -1025,13 +1001,11 @@ public class ABSearch implements Searcher
     int extend = 0;
     boolean foundScore = false;
 
-
     if(!inCheck[ply])
     {
 
       ++stats.evals;
-      score = best = eval.scorePosition(board, alpha, beta);
-      //abHashtable.putEntry(-100, PositionHashtable.EXACT_VALUE, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
+      score = eval.scorePosition(board, alpha, beta);
       //if(debug) System.err.println("S: " + (board.turn == 1 ? score : -score)+ " - " + Move.toString(currentLine));
 
       if (score > alpha)
@@ -1039,7 +1013,7 @@ public class ABSearch implements Searcher
         if (score >= beta)
         {
         //if(debug) System.err.println("QSearch Initial Cut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
-          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
+          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, NULL_MOVE, false);
           return score;
         }
         alpha = score;
@@ -1054,22 +1028,15 @@ public class ABSearch implements Searcher
     else
     {
       movesGenerated = moveGeneration.generateEvasions(movesGenerated, moveList, board);
-      if(checkDepth > 0) {
-        if(movesGenerated == 2) {
-          checkDepth ++;
-          extend = 1;
-          ++stats.checkExtensions;
-        }
-        else if(movesGenerated == 1 && moveList[0].moved.type == Piece.KING) {
-          checkDepth += 2;
-          extend = 2;
-          stats.doubleCheckExtensions += 2;
-        }
+      if(movesGenerated == 1 && moveList[0].moved.type == Piece.KING) {
+        checkDepth = Q_CHECK_DEPTH;
+        extend = 1;
+        stats.doubleCheckExtensions += 1;
       }
 
       if(movesGenerated == 0) {
-        // mate?
-        int x = 0;
+        // mate
+        abHashtable.putEntry(9999, PositionHashtable.EXACT_VALUE, mateDistance, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
         return mateDistance;
       }
 
@@ -1081,37 +1048,24 @@ public class ABSearch implements Searcher
 
     int moveCount = 0;
 
-    if(board.pieceBoards[0][Piece.QUEEN] != 0) {
-      kingSafety[0][ply] = eval.scoreAttackingPieces(board, board.whiteKing.square, 0);
-    }
-    else {
-      kingSafety[0][ply] = 0;
-    }
-    if(board.pieceBoards[1][Piece.QUEEN] != 0) {
-      kingSafety[1][ply] = eval.scoreAttackingPieces(board, board.blackKing.square, 1);
-    }
-    else {
-      kingSafety[1][ply] = 0;
-    }
     Move move;
     for (int moveIndex = 0; moveIndex < movesGenerated; ++moveIndex)
     {
-      nextMove(board, moveList, moveIndex, hashEntry);
+      nextMove(board, moveList, moveIndex, movesGenerated, hashEntry);
       move = moveList[moveIndex];
 
-/*
-      final int staticSwap = SimpleEvaluator.swap[board.turn][move.moved.type][board.attackState[1][move.toSquare.index64]][board.attackState[0][move.toSquare.index64]] +
-                (move.taken != null ? Piece.TYPE_VALUES[move.taken.type] : 0);
-
-*/
       if(!move.check &&
          !inCheck[ply] &&
          move.taken != null &&
-         move.promoteTo != Piece.QUEEN &&
-         ((board.materialScore + board.positionScore + kingSafety[1][ply] - kingSafety[0][ply]) * (whiteToMove ? 1 : -1) +
-                 move.score < alpha))
+         move.promoteTo != Piece.QUEEN)
       {
-        continue;
+        final int staticSwap = swap(board, move, board.turn ^ 1);
+
+        if (score + staticSwap < alpha + 50) {
+
+          continue;
+        }
+
       }
 
       // make the move
@@ -1141,25 +1095,9 @@ public class ABSearch implements Searcher
       board.unmake(move);
       currentLine[ply].check = move.check = inCheck[ply+1];
 
-      if (score > best)
+      if (score > alpha)
       {
         pv[ply][ply].reset(move);
-
-        best = score;
-        if (score >= beta)
-        {
-//          if(debug) System.err.println("QSearch BCut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
-          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, score, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
-          searchExtensions -= extend;
-          return score;
-        }
-
-        //if(debug) System.err.println("QSearch[" + ply + "] PV(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine) + " - " + Move.toString(pv[ply], ply));
-
-        if(score > alpha) {
-          foundScore = true;
-          alpha = score;
-        }
 
         int t = ply + 1;
         pv[ply][t].reset(pv[ply + 1][t]);
@@ -1167,22 +1105,49 @@ public class ABSearch implements Searcher
         {
           pv[ply][t].reset(pv[ply + 1][t]);
         }
+
+        if (score >= beta)
+        {
+//          if(debug) System.err.println("QSearch BCut(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine));
+          abHashtable.putEntry(-100, PositionHashtable.LOWER_BOUND, beta, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+          searchExtensions -= extend;
+          return score;
+        }
+
+        //if(debug) System.err.println("QSearch[" + ply + "] PV(" + (whiteToMove ? score : -score)+ "): " + Move.toString(currentLine) + " - " + Move.toString(pv[ply], ply));
+
+        alpha = score;
+        foundScore = true;
       }
     }
 
     if(moveCount == 0 && inCheck[ply])
     {
-      best = -MATE + ply;
-      foundScore = true;
-      abHashtable.putEntry(9999, PositionHashtable.EXACT_VALUE, best, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+      alpha = -MATE + ply;
+      abHashtable.putEntry(9999, PositionHashtable.EXACT_VALUE, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
     }
     else {
-      abHashtable.putEntry(-100, !foundScore ? PositionHashtable.UPPER_BOUND : PositionHashtable.EXACT_VALUE, best, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
+      abHashtable.putEntry(-100, foundScore ? PositionHashtable.EXACT_VALUE : PositionHashtable.UPPER_BOUND, alpha, whiteToMove ? board.hash1 : ~board.hash1, pv[ply][ply], false);
     }
 //    if(debug) System.out.println("QSearch Return(" + (whiteToMove ? alpha : -alpha)+ "): " + Move.toString(currentLine));
 
     searchExtensions -= extend;
-    return best;
+    return alpha;
+  }
+
+  private void updateKingSafety(Board board) {
+    if(board.pieceBoards[0][Piece.QUEEN] != 0) {
+      kingSafety[0][ply] = eval.scoreAttackingPieces(board, board.whiteKing.square, 0);
+    }
+    else {
+      kingSafety[0][ply] = 0;
+    }
+    if(board.pieceBoards[1][Piece.QUEEN] != 0) {
+      kingSafety[1][ply] = eval.scoreAttackingPieces(board, board.blackKing.square, 1);
+    }
+    else {
+      kingSafety[1][ply] = 0;
+    }
   }
 
 
@@ -1197,7 +1162,7 @@ public class ABSearch implements Searcher
   {
     swapIndex = 1;
     attackers = move.fromSquare.mask_off & (board.squareAttackers[move.toSquare.index64] | (board.squareAttackers[move.fromSquare.index64] & board.squareRammers[move.toSquare.index64]));
-    rammers = board.squareRammers[move.toSquare.index64] & ~(board.squareAttackers[move.fromSquare.index64] &  board.squareRammers[move.toSquare.index64]);
+    rammers = board.squareRammers[move.toSquare.index64] & ~(board.squareAttackers[move.fromSquare.index64] & board.squareRammers[move.toSquare.index64]);
 
     swapScores[0] = move.taken != null ? Piece.TYPE_VALUES[move.taken.type] : 0;
     attackedPiece = Piece.TYPE_VALUES[/*move.promoteTo != -1 ? move.promoteTo : */move.moved.type];
@@ -1269,12 +1234,12 @@ public class ABSearch implements Searcher
     return (swapScores[0]);
   }
 
-  public final void nextMove(Board board, Move[] moves, int moveIndex, PositionHashtable.HashEntry hashEntry)
+  public final void nextMove(Board board, Move[] moves, int moveIndex, int movesGenerated, PositionHashtable.HashEntry hashEntry)
   {
     int bestIndex = -1;
     int best = -Searcher.INFINITY;
 
-    for(int index = moveIndex;moves[index].moved != null;++index)
+    for(int index = moveIndex;index < movesGenerated;++index)
     {
       if(moveIndex == 0) {
         if (hashEntry != null && moves[index].matches(hashEntry.move))
@@ -1308,13 +1273,14 @@ public class ABSearch implements Searcher
         else if(moves[index].check)
         {
           // let the score ride
+          moves[index].score = INFINITY - 20003;
         }
         else if(moves[index].taken != null)
         {
           if(moves[index].score - Move.CAPTURE_SCORE < 50)
           {
             int swapScore = swap(board, moves[index], board.turn ^ 1);
-            if(swapScore <= -50) {
+            if(swapScore < 0) {
               moves[index].score = swapScore;
             }
             else
@@ -1360,7 +1326,6 @@ public class ABSearch implements Searcher
 
   public void stop()
   {
-    System.err.println("ABSearch stopping!");
     done = true;
   }
 

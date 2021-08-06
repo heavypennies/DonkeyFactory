@@ -32,27 +32,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/lib/twitter4j-async-4.0.7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/twitter4j-core-4.0.7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/twitter4j-examples-4.0.7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/twitter4j-stream-4.0.7.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/donkey-uci.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/chess/controller/DonkeyUCI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/chess/engine/search/DefaultSearchWatcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchWatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DonkeyFactory.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DonkeyFactory.iws" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DonkeyFactory.jar" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Square.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Square.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/PawnHashtable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/twitter4j-async-3.0.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/twitter4j-core-3.0.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/twitter4j-examples-3.0.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/twitter4j-media-support-3.0.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/twitter4j-stream-3.0.3.jar" beforeDir="false" />
     </list>
     <list id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
     <list id="3b10a3ad-2cd0-4b08-b5df-deb7fcf90fe8" name="ignore" comment="" />
@@ -65,6 +66,9 @@
     <leftPanel />
     <rightPanel />
     <splitter proportion="0.5" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -227,6 +231,14 @@
         </PATH_ELEMENT>
       </PATH>
     </subPane>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -865,7 +877,6 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="RunManagerConfig.compileBeforeRunning" value="true" />
     <property name="RunManagerConfig.showSettingsBeforeRunnig" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -887,6 +898,7 @@
     <property name="cvs_file_history_treeWidth2" value="375" />
     <property name="cvs_file_history_treeWidth3" value="375" />
     <property name="dynamic.classpath" value="false" />
+    <property name="extract.method.default.visibility" value="private" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="options.lastSelected" value="reference.settingsdialog.project.gant" />
     <property name="options.searchVisible" value="true" />
@@ -895,10 +907,13 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="recentsLimit" value="5" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="chess.engine.search" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\WORK\DonkeyFactory\src\lib" />
       <recent name="C:\WORK\DonkeyFactory\src" />
@@ -915,7 +930,7 @@
       <recent name="chess.engine.search" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TwitterManager">
+  <component name="RunManager" selected="Application.IterativeSearchTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -933,11 +948,24 @@
       <Host>localhost</Host>
       <Port>5050</Port>
     </configuration>
+    <configuration name="DonkeyUCI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="chess.controller.DonkeyUCI" />
+      <module name="DonkeyFactory" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage" runner="emma">
+        <pattern>
+          <option name="PATTERN" value="chess.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="IterativeSearchTest" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="chess.engine.search.IterativeSearchTest" />
       <module name="DonkeyFactory" />
       <option name="VM_PARAMETERS" value="-Xms256m -Xmx4096m" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <extension name="coverage" runner="emma" />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="1858" />
@@ -1049,15 +1077,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1075,15 +1101,16 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Live DonkeyFactory" />
       <item itemvalue="Application.IterativeSearchTest" />
+      <item itemvalue="Application.Live DonkeyFactory" />
+      <item itemvalue="Application.DonkeyUCI" />
       <item itemvalue="Application.ProgressiveMoveGenTest" />
       <item itemvalue="Application.ProgressiveMoveGenTest2" />
       <item itemvalue="Application.TwitterManager" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TwitterManager" />
+        <item itemvalue="Application.DonkeyUCI" />
       </list>
     </recent_temporary>
   </component>
@@ -1146,7 +1173,14 @@
       <option name="presentableId" value="Default" />
       <updated>1269136412524</updated>
       <workItem from="1620495322601" duration="12910000" />
-      <workItem from="1621697081980" duration="20515000" />
+      <workItem from="1621697081980" duration="62424000" />
+      <workItem from="1625162137673" duration="13000" />
+      <workItem from="1625226296795" duration="6000" />
+      <workItem from="1627834947984" duration="20980000" />
+      <workItem from="1627865040984" duration="24287000" />
+      <workItem from="1628005384729" duration="40227000" />
+      <workItem from="1628170311894" duration="799000" />
+      <workItem from="1628191235333" duration="11628000" />
     </task>
     <task id="LOCAL-00001" summary="Failed commit: Default">
       <changelist id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
@@ -1256,6 +1290,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -1315,54 +1350,62 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/free/freechess/Style12Struct.java</url>
-          <line>209</line>
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>496</line>
+          <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java</url>
-          <line>114</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>499</line>
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/model/Board.java</url>
-          <line>1132</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/free/chessclub/bot/Bot.java</url>
-          <line>944</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/model/Board.java</url>
-          <line>812</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java</url>
-          <line>733</line>
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1442</line>
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java</url>
-          <line>343</line>
-          <option name="timeStamp" value="56" />
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1483</line>
+          <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/free/chessclub/bot/TwitterManager.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="59" />
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1466</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1480</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1439</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1318</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
+          <line>1258</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="this.stats" language="JAVA" />
+        <watch expression="this.stats" />
+        <watch expression="Move.toString(this.currentLine)" />
+        <watch expression="move" />
+        <watch expression="eval.scoreAttackingPieces(board, board.blackKing.square, 1)" />
+        <watch expression="extend" />
+        <watch expression="kingSafety" />
+        <watch expression="((DonkeyUCI)this).gameBoard" custom="chess.controller.DonkeyUCI" />
+        <watch expression="kingAreaSquare" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

@@ -113,6 +113,8 @@ public class PositionHashtable
     {
       DEPTH_FIRST_HASH[t].reset();
       ALWAYS_STORE_HASH[t].reset();
+      DEPTH_FIRST_HASH[t].depth = -99;
+      ALWAYS_STORE_HASH[t].depth = -101;
     }
   }
 
@@ -120,7 +122,7 @@ public class PositionHashtable
   {
     for(int t = 0;t < HASH_SIZE;t++)
     {
-      DEPTH_FIRST_HASH[t].depth = -101;
+      DEPTH_FIRST_HASH[t].depth = -99;
       ALWAYS_STORE_HASH[t].depth = -101;
       if(Math.abs(DEPTH_FIRST_HASH[t].score) < Searcher.MATE - 300)
       {

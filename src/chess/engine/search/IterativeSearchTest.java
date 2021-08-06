@@ -65,10 +65,7 @@ public class IterativeSearchTest //extends TestCase
     searchBoard.turn = 1;
 */
 
-    Board searchBoard = new Board("8/pR4pk/1b6/2p5/N1p5/8/PP1r2PP/6K1"); // b - - bm Rxb2; id MATS005;
-    searchBoard.stats.whiteCastleFlag = 1;
-    searchBoard.stats.blackCastleFlag = 1;
-    searchBoard.turn = 0;
+    // Board searchBoard = new Board("8/pR4pk/1b6/2p5/N1p5/8/PP1r2PP/6K1 b - -"); // b - - bm Rxb2; id MATS005;
 
 /*
     Board searchBoard = new Board("8/pR4pk/1b1r4/2p5/N1p5/6PP/PP6/5K2"); // b - - bm Rxb2; id MATS005;
@@ -415,20 +412,10 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 */
 
     // can't see mate?
-/*
-    Board searchBoard = new Board("4rrk1/3b1p1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R");
-    searchBoard.turn = 0;
-    searchBoard.stats.whiteCastleFlag = 1;
-    searchBoard.stats.blackCastleFlag = 2;
-*/
+    Board searchBoard = new Board("4rrk1/3b1p1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R b - -");
 
     // can't see mate 3
-/*
-    Board searchBoard = new Board("r4r1k/pppb1p1p/1bq1pP1Q/4P3/3p1n2/P2P3P/1PP4N/R3KBR1");
-    searchBoard.turn = 0;
-    searchBoard.stats.whiteCastleFlag = 0;
-    searchBoard.stats.blackCastleFlag = 1;
-*/
+    // Board searchBoard = new Board("r4r1k/pppb1p1p/1bq1pP1Q/4P3/3p1n2/P2P3P/1PP4N/R3KBR1 b KQ -");
 
     // up a pawn, no breakthru
 /*
@@ -448,12 +435,10 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     searchBoard.stats.blackCastleFlag = 2;
 */
     // can't see mate? 2
-/*
-    Board searchBoard = new Board("2b2b2/1p2qnk1/7r/Q3p3/2P1Ppp1/1N1B4/PP3PP1/3R1RK1");
-    searchBoard.turn = 1;
-    searchBoard.stats.whiteCastleFlag = 1;
-    searchBoard.stats.blackCastleFlag = 1;
-*/
+
+    // Board searchBoard = new Board("2b2b2/1p2qnk1/7r/Q3p3/2P1Ppp1/1N1B4/PP3PP1/3R1RK1 w");
+    // Board searchBoard = new Board("1r4k1/6p1/3R3p/3PP1n1/2p2p2/1NPb4/P4RPP/7K w - -");
+//    Board searchBoard = new Board("q2r2k1/5pp1/bR1p2np/p1pPp2n/4P3/2P1B3/P1QN1PPP/1R4K1 w - -");
 
     // Fifty move draw
 /*
@@ -526,10 +511,22 @@ searchBoard.stats.blackCastleFlag = 1;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
 */
+    // NC2?
+
+
+/*
+    Board searchBoard = new Board("r3k2r/pp2b1pp/1q1P1pb1/2p5/5B2/2Q2NP1/PP3PBP/n2R2K1");
+    searchBoard.turn = 0;
+    searchBoard.stats.whiteCastleFlag = 1;
+    searchBoard.stats.blackCastleFlag = 0;
+*/
+
+
+//    Board searchBoard = new Board("2k5/8/pQ4P1/P2r4/1p1r1p2/2p2P2/5K2/5N2 b");
 
     // stonewall - no progress
 /*
-    Board searchBoard = new Board("2b1k3/2p1n3/p1Pp1p1p/P2BpP1P/1P2K1P1/8/1R6/8");
+    Board searchBoard = new Board("2b1k3/2p1n3/p1Pp1p1p/P2BpP1P/1P2K1P1/8/1R6/8 w");
     searchBoard.turn = 1;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 1;
@@ -537,7 +534,7 @@ searchBoard.stats.blackCastleFlag = 1;
 
     // Mate in 7
 /*
-    Board searchBoard = new Board("5Q2/p2k2r1/3P4/p1p1p3/2q5/8/5P2/4K3");
+    Board searchBoard = new Board("5Q2/p2k2r1/3P4/p1p1p3/2q5/8/5P2/4K3 b");
     searchBoard.turn = 0;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 2;
@@ -545,7 +542,7 @@ searchBoard.stats.blackCastleFlag = 1;
 
     // sac rook?
 /*
-    Board searchBoard = new Board("5r2/3k2p1/ppp5/3p1rbp/1P1Pp3/PN2P2P/2R1RPP1/6K1");
+    Board searchBoard = new Board("5r2/3k2p1/ppp5/3p1rbp/1P1Pp3/PN2P2P/2R1RPP1/6K1 b");
     searchBoard.turn = 0;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 2;
@@ -734,16 +731,10 @@ searchBoard.stats.blackCastleFlag = 1;
     searchBoard.turn = 1;
 */
     // Mate in 7
-
-/*
-    Board searchBoard = new Board("1k2q2r/pp4pp/2br1p2/2p4P/P1P5/2B5/1Q3Pp1/1R4K1");
-    searchBoard.stats.whiteCastleFlag = 1;
-    searchBoard.stats.blackCastleFlag = 1;
-    searchBoard.turn = 0;
-*/
+    //Board searchBoard = new Board("1k2q2r/pp4pp/2br1p2/2p4P/P1P5/2B5/1Q3Pp1/1R4K1 b -");
 
     // Mate in 8
-//    Board searchBoard = new Board("r1bqk2r/p1pp1ppp/1p6/3Np3/2B1P1n1/5Q2/PPP3PP/R1B1b2K");
+    // Board searchBoard = new Board("r1bqk2r/p1pp1ppp/1p6/3Np3/2B1P1n1/5Q2/PPP3PP/R1B1b2K w");
 
     // Dead black king
 /*
@@ -907,7 +898,7 @@ searchBoard.stats.blackCastleFlag = 1;
     System.err.println(searchBoard);
 
     ABSearch search = new ABSearch(moveGen, eval);
-    IterativeSearch iterativeSearch = new IterativeSearch(search, moveGen, eval);
+    IterativeSearch iterativeSearch = new IterativeSearch(search, moveGen, eval, new DefaultSearchWatcher());
 
     int score = iterativeSearch.search(searchBoard,100);
 

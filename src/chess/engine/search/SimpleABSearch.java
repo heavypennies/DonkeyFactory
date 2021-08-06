@@ -66,13 +66,7 @@ public class SimpleABSearch implements Searcher
   {
     stats = new SearchStats();
 
-    long start = System.currentTimeMillis();
-
     int score = simpleABSearch(-MATE, MATE, depth, board);
-
-    long time = System.currentTimeMillis() - start;
-
-    stats.time = (double)time / 1000;
 
     done = false;
 

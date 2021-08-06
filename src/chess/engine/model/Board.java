@@ -16,6 +16,7 @@ import java.io.*;
  * @version $Revision$ $Name$ $Date$
  */
 public class Board {
+  public static final String initialFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
   public static final int APPROACHING_FIFTY_MOVE_THRESHOLD = 40;
   public Piece whiteKing;
   public Piece blackKing;
@@ -106,7 +107,7 @@ public class Board {
                                 (pieceHash[pieceType][squareIndex] & PositionHashtable.HASH_MASK) == 0)
                         ) {
                   pieceHash[pieceType][squareIndex] = random.nextLong();
-                  System.out.println("Bad zobrist...");
+                  System.err.println("Bad zobrist...");
                   continue outer;
                 }
               }
@@ -119,7 +120,7 @@ public class Board {
     }
 
     try {
-      System.out.println("Reading hash key data: ");
+      System.err.println("Reading hash key data");
       ObjectInputStream zobristDataInputStream = new ObjectInputStream(new FileInputStream(zobristData));
       pieceHash = (long[][]) zobristDataInputStream.readObject();
 
@@ -135,7 +136,7 @@ public class Board {
                                 (pieceHash[pieceType][squareIndex] & PositionHashtable.HASH_MASK) == 0)
                         ) {
                   pieceHash[pieceType][squareIndex] = random.nextLong();
-                  System.out.println("Bad zobrist...");
+                  System.err.println("Bad zobrist...");
                   continue outer;
                 }
               }
@@ -258,13 +259,88 @@ public class Board {
            (square.file < 7 ? SQUARES[square.index64 + 1].mask_on : 0);
   }
 
-  public void setEPDPosition(String epd) {
+
+  public String getFENPosition() {
+    StringBuffer fen = new StringBuffer();
+    Square passentSquare = null;
+    for(int rank = 7; rank > -1; rank --) {
+      int empty = 0;
+      for(int file = 0;file < 8;file++) {
+        int squareIndex = (rank * 8) + file;
+        Square square = SQUARES[squareIndex];
+        BoardSquare boardSquare = boardSquares[square.index128];
+        if(boardSquare.enPassentInfo[moveIndex]) {
+          passentSquare = square;
+        }
+        Piece piece = boardSquare.piece;
+        if(piece == null) {
+          empty++;
+        }
+        else {
+          if(empty > 0) {
+            fen.append(empty);
+          }
+          fen.append(piece);
+          empty = 0;
+        }
+      }
+      if(empty > 0) {
+        fen.append(empty);
+      }
+
+      if(rank > 0) {
+        fen.append("/");
+      }
+    }
+    
+    fen.append(" ").append(turn == 1 ? "w" : "b").append(" ");
+    boolean castling = false;
+    if(stats.whiteKingMoves == 0) {
+      if(stats.whiteKingsideRookMoves == 0) {
+        fen.append("K");
+        castling = true;
+      }
+      if(stats.whiteQueensideRookMoves == 0) {
+        fen.append("Q");
+        castling = true;
+      }
+    }
+    if(stats.blackKingMoves == 0) {
+      if(stats.blackKingsideRookMoves == 0) {
+        fen.append("k");
+        castling = true;
+      }
+      if(stats.blackQueensideRookMoves == 0) {
+        fen.append("q");
+        castling = true;
+      }
+    }
+    if(!castling) {
+      fen.append("- ");
+    }
+    else {
+      fen.append(" ");
+    }
+
+    if(passentSquare != null) {
+      fen.append(passentSquare.toAlgebraicString());
+    }
+    else {
+      fen.append("- ");
+    }
+
+    return fen.toString();
+  }
+
+  public void setEPDPosition(String epdOriginal) {
 
     for (int color = 0; color < 2; color++) {
       for (int pieceType = 0; pieceType < 7; pieceType++) {
         pieceBoards[color][pieceType] = 0;
       }
     }
+    String[] epdParts = epdOriginal.split(" ");
+    String epd = epdParts[0];
 
     int epdIndex = 0;
     int pieceIndex = 0;
@@ -334,7 +410,47 @@ public class Board {
         }
       }
     }
+
+    // parse turn
+    if(epdParts.length > 1) {
+      if(epdParts[1].equals("w")) {
+        turn = 1;
+      }
+      else {
+        turn = 0;
+      }
+    }
+    // parse castle rights
+    if(epdParts.length > 2) {
+      if(!epdParts[2].contains("K")) {
+        stats.whiteKingsideRookMoves = 1;
+      }
+      if(!epdParts[2].contains("Q")) {
+        stats.whiteQueensideRookMoves = 1;
+      }
+      if(!epdParts[2].contains("k")) {
+        stats.blackKingsideRookMoves = 1;
+      }
+      if(!epdParts[2].contains("q")) {
+        stats.blackQueensideRookMoves = 1;
+      }
+      if(stats.whiteKingsideRookMoves != 0 && stats.whiteQueensideRookMoves != 0) {
+        stats.whiteKingMoves = 1;
+      }
+      if(stats.blackKingsideRookMoves != 0 && stats.blackQueensideRookMoves != 0) {
+        stats.blackKingMoves = 1;
+      }
+    }
+    else {
+      stats.whiteKingMoves = 1;
+      stats.blackKingMoves = 1;
+    }
+
+    // TODO en passent square
+
+    // TODO 50 move draw
   }
+
   long attackers = 0;
   Square pieceSquare;
   Piece attackingPiece;
@@ -353,38 +469,39 @@ public class Board {
     pieceBoards[piece.color][ALL_PIECES] |= square.mask_on;
     pieceBoards[piece.color][piece.type] |= square.mask_on;
 
-    hash1 ^= pieceHash[piece.type + (piece.color == 1 ? 0 : 6)][square.index64];
+    boolean whiteToMove = piece.color == 1;
+    hash1 ^= pieceHash[piece.type + (whiteToMove ? 0 : 6)][square.index64];
     switch(piece.type) {
       case Piece.PAWN : {
-        pawnHash ^= pieceHash[piece.type + (piece.color == 1 ? 0 : 6)][square.index64];
+        pawnHash ^= pieceHash[piece.type + (whiteToMove ? 0 : 6)][square.index64];
         allPawns |= square.mask_on;
         allPawnsRR45 |= square.mask_on_rr45;
         allPawnsRL45 |= square.mask_on_rl45;
         allPawnsRL90 |= square.mask_on_rl90;
-        positionScore += piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        positionScore += whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
         break;
       }
       case Piece.KNIGHT : {
-        pieceValues += piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore += piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] += piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues += whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore += whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] += whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.BISHOP : {
         pieceBoards[piece.color][QUEENS_BISHOPS] |= square.mask_on;
         pieceBoards[piece.color][QUEENS_BISHOPS_RL_45] |= square.mask_on_rl45;
         pieceBoards[piece.color][QUEENS_BISHOPS_RR_45] |= square.mask_on_rr45;
-        pieceValues += piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore += piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] += piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues += whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore += whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] += whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.ROOK : {
         pieceBoards[piece.color][QUEENS_ROOKS] |= square.mask_on;
         pieceBoards[piece.color][QUEENS_ROOKS_RL_90] |= square.mask_on_rl90;
-        pieceValues += piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore += piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] += piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues += whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore += whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] += whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.QUEEN : {
@@ -393,8 +510,8 @@ public class Board {
         pieceBoards[piece.color][QUEENS_BISHOPS_RR_45] |= square.mask_on_rr45;
         pieceBoards[piece.color][QUEENS_ROOKS] |= square.mask_on;
         pieceBoards[piece.color][QUEENS_ROOKS_RL_90] |= square.mask_on_rl90;
-        pieceValues += piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        materialValue[piece.color] += piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues += whiteToMove ? piece.materialValue : -piece.materialValue;
+        materialValue[piece.color] += whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
     }
@@ -424,38 +541,39 @@ public class Board {
     pieceBoards[piece.color][ALL_PIECES] &= square.mask_off;
     pieceBoards[piece.color][piece.type] &= square.mask_off;
 
-    hash1 ^= pieceHash[piece.type + (piece.color == 1 ? 0 : 6)][square.index64];
+    boolean whiteToMove = piece.color == 1;
+    hash1 ^= pieceHash[piece.type + (whiteToMove ? 0 : 6)][square.index64];
     switch(piece.type) {
       case Piece.PAWN : {
-        pawnHash ^= pieceHash[piece.type + (piece.color == 1 ? 0 : 6)][square.index64];
+        pawnHash ^= pieceHash[piece.type + (whiteToMove ? 0 : 6)][square.index64];
         allPawns &= square.mask_off;
         allPawnsRR45 &= square.mask_off_rr45;
         allPawnsRL45 &= square.mask_off_rl45;
         allPawnsRL90 &= square.mask_off_rl90;
-        positionScore -= piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        positionScore -= whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
         break;
       }
       case Piece.KNIGHT : {
-        pieceValues -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore -= piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues -= whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore -= whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] -= whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.BISHOP : {
         pieceBoards[piece.color][QUEENS_BISHOPS] &= square.mask_off;
         pieceBoards[piece.color][QUEENS_BISHOPS_RL_45] &= square.mask_off_rl45;
         pieceBoards[piece.color][QUEENS_BISHOPS_RR_45] &= square.mask_off_rr45;
-        pieceValues -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore -= piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues -= whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore -= whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] -= whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.ROOK : {
         pieceBoards[piece.color][QUEENS_ROOKS] &= square.mask_off;
         pieceBoards[piece.color][QUEENS_ROOKS_RL_90] &= square.mask_off_rl90;
-        pieceValues -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        positionScore -= piece.color == 1 ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
-        materialValue[piece.color] -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues -= whiteToMove ? piece.materialValue : -piece.materialValue;
+        positionScore -= whiteToMove ? BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64] : -BoardEvaluator.PIECE_VALUE_TABLES[piece.color][piece.type][square.index64];
+        materialValue[piece.color] -= whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
       case Piece.QUEEN : {
@@ -464,8 +582,8 @@ public class Board {
         pieceBoards[piece.color][QUEENS_BISHOPS_RR_45] &= square.mask_off_rr45;
         pieceBoards[piece.color][QUEENS_ROOKS] &= square.mask_off;
         pieceBoards[piece.color][QUEENS_ROOKS_RL_90] &= square.mask_off_rl90;
-        pieceValues -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
-        materialValue[piece.color] -= piece.color == 1 ? piece.materialValue : -piece.materialValue;
+        pieceValues -= whiteToMove ? piece.materialValue : -piece.materialValue;
+        materialValue[piece.color] -= whiteToMove ? piece.materialValue : -piece.materialValue;
         break;
       }
     }
@@ -584,19 +702,6 @@ public class Board {
 
       // make castling
       if (move.castledRook != null) {
-        if (move.toSquare.file > Constants.FILE_E) {
-          if (move.moved.color == 1) {
-            stats.whiteCastleFlag = Stats.O_O;
-          } else {
-            stats.blackCastleFlag = Stats.O_O;
-          }
-        } else {
-          if (move.moved.color == 1) {
-            stats.whiteCastleFlag = Stats.O_O_O;
-          } else {
-            stats.blackCastleFlag = Stats.O_O_O;
-          }
-        }
         removePieceFromSquare(move.castledRook, move.castleFromSquare);
         setPieceOnSquare(move.castledRook, move.castleToSquare);
       }
@@ -658,12 +763,6 @@ public class Board {
       if (move.castledRook != null) {
         removePieceFromSquare(move.castledRook, move.castleToSquare);
         setPieceOnSquare(move.castledRook, move.castleFromSquare);
-
-        if (move.moved.color == 1) {
-          stats.whiteCastleFlag = 0;
-        } else {
-          stats.blackCastleFlag = 0;
-        }
       }
     } else if (move.moved.type == Piece.ROOK) {
       if (move.moved.color == 1) {
@@ -738,9 +837,6 @@ public class Board {
     public int whiteKingMoves = 0;
     public int blackKingMoves = 0;
 
-    public int whiteCastleFlag = 0;
-    public int blackCastleFlag = 0;
-
     public int whiteKingsideRookMoves = 0;
     public int whiteQueensideRookMoves = 0;
     public int blackKingsideRookMoves = 0;
@@ -760,7 +856,7 @@ public class Board {
     public int originalPawnsDifference = 0;
 
     public String toString() {
-      return "Stats: castling (" + (whiteCastleFlag == 1 ? "O-O" : (whiteCastleFlag == 2 ? "O-O-O" : (whiteKingsideRookMoves == 0 && whiteQueensideRookMoves == 0 && whitePieceMoves[Piece.KING] == 0 ? "WAIT" : "CEN"))) + " v " + (blackCastleFlag == 1 ? "O-O" : (blackCastleFlag == 2 ? "O-O-O" : (blackKingsideRookMoves == 0 && blackQueensideRookMoves == 0 && blackPieceMoves[Piece.KING] == 0 ? "WAIT" : "CEN"))) + ")" +
+      return "Stats: castling (" + (whiteKingMoves == 0 ? (whiteKingsideRookMoves == 0 ? "K": "") + (whiteQueensideRookMoves == 0 ? "Q" : "") + (blackKingsideRookMoves == 0 ? "k" : "") : "") + (blackKingMoves == 0 ? (blackQueensideRookMoves == 0 ? "q" : "") : "") + ")" +
               "\n  whitePieceMoves: " + Arrays.toString(whitePieceMoves) + "\n" +
               "\n  whitePieceMoves: " + Arrays.toString(blackPieceMoves) + "\n";
     }
