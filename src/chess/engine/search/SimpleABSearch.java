@@ -84,7 +84,7 @@ public class SimpleABSearch implements Searcher
 
     if(depth == 0)
     {
-      pv[index][index].moved = null;
+      pv[index][index].unset();
       stats.evals++;
       return eval.scorePosition(board, alpha, beta);
     }
@@ -110,7 +110,7 @@ public class SimpleABSearch implements Searcher
         continue;
       }
       currentLine[index] = move;
-      currentLine[index+1].moved = null;
+      currentLine[index+1].unset();
       // if no check, count this move, and then recurse
       moveCount++;
 
@@ -155,12 +155,12 @@ public class SimpleABSearch implements Searcher
     {
       if(board.isSquareCheckedByColor(board.turn == 1 ? board.whiteKing.square : board.blackKing.square, board.turn ^ 1))
       {
-        pv[index][index].moved = null;
+        pv[index][index].unset();
         return -(MATE - index);
       }
       else
       {
-        pv[index][index].moved = null;
+        pv[index][index].unset();
         return 0;
       }
     }

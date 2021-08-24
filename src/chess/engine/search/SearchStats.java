@@ -13,11 +13,11 @@ public class SearchStats {
 
   public int score;
   public long startTime;
-  public int nodes;
-  public int pvNodes;
-  public int zwNodes;
-  public int qNodes;
-  public int evals;
+  public long nodes;
+  public long pvNodes;
+  public long zwNodes;
+  public long qNodes;
+  public long evals;
   public int reduceBoring;
 
   public int hashMisses;
@@ -35,6 +35,7 @@ public class SearchStats {
   public int recaptureExtensions;
   public int nullThreatExtensions;
   public int threatExtensions;
+  public int miniThreatExtensions;
   public int reduceFutile;
   public int currentDepth;
 
@@ -85,6 +86,7 @@ public class SearchStats {
             .append("   RX: ").append(pad(recaptureExtensions, 8))
             .append("  NTX: ").append(pad(nullThreatExtensions, 8))
             .append("   TX: ").append(pad(threatExtensions, 8))
+            .append("  MTX: ").append(pad(miniThreatExtensions, 8))
             .append("\nReductions  |   B: ").append(pad(reduceBoring, 8))
             .append("    M: ").append(pad(reduceMargin, 8))
             .append("    P: ").append(pad(reducePrune, 8))

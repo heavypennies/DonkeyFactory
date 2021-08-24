@@ -35,6 +35,7 @@ public class MoveGeneration implements MoveGenerationConstants {
    * </code>
    */
   public static long[][][] attackVectors = new long[2][9][64];
+  public static long[][][] kingTropism = new long[2][9][64];
   public static boolean[][][][] attacksFromTo = new boolean[2][9][64][64];
   public static long[][] rook_attacks_r0 = new long[64][64];
   public static long[][] rook_attacks_rl90 = new long[64][64];
@@ -370,7 +371,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-    moves[index].moved = null;
+    moves[index].unset();
     return index;
   }
 
@@ -392,7 +393,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-    moves[index].moved = null;
+    moves[index].unset();
     return index;
   }
 
@@ -458,7 +459,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       else {
         moves[index++].reset(piece.square, square, piece);
       }
-      moves[index-1].score = Move.CHECK_SCORE - index;
+      moves[index-1].score = Move.CHECK_SCORE + piece.materialValue;
       moves[index-1].check = true;
     }
     return index - originalIndex;
@@ -482,7 +483,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       else {
         moves[index++].reset(piece.square, square, piece);
       }
-      moves[index-1].score = Move.CHECK_SCORE - index;
+      moves[index-1].score = Move.CHECK_SCORE + piece.materialValue;
       moves[index-1].check = true;
     }
     return index - originalIndex;
@@ -505,7 +506,7 @@ public class MoveGeneration implements MoveGenerationConstants {
       else {
         moves[index++].reset(piece.square, square, piece);
       }
-      moves[index-1].score = Move.CHECK_SCORE - index;
+      moves[index-1].score = Move.CHECK_SCORE + piece.materialValue;
       moves[index-1].check = true;
     }
     return index - originalIndex;
@@ -600,7 +601,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-    moves[index].moved = null;
+    moves[index].unset();
     return index;
   }
 
@@ -616,10 +617,10 @@ public class MoveGeneration implements MoveGenerationConstants {
       if ((board.allPieces & squareMask) == 0) {
         // Promote
         if ((squareMask & Constants.RANK_8_MASK) != 0) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.QUEEN);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.ROOK);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.BISHOP);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.KNIGHT);
         } else {
           moves[index++].reset(piece.square, toSquare.square, piece);
         }
@@ -691,15 +692,15 @@ public class MoveGeneration implements MoveGenerationConstants {
         if ((toSquare.square.mask_on & Constants.RANK_8_MASK) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
-          moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
+          moves[index1++].reset(piece.square, toSquare.square, piece, Piece.QUEEN);
           index += index1 - originalIndex1;
         }
-        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_7_MASK | Constants.RANK_6_MASK)) != 0) {
+/*        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_7_MASK)) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece);
           index += index1 - originalIndex1;
-        }
+        }*/
       }
     }
 
@@ -793,10 +794,10 @@ public class MoveGeneration implements MoveGenerationConstants {
       if ((board.allPieces & squareMask) == 0) {
         // Promote
         if ((squareMask & Constants.RANK_1_MASK) != 0) {
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.ROOK);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.BISHOP);
-          moves[index++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.KNIGHT);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.QUEEN);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.ROOK);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.BISHOP);
+          moves[index++].reset(piece.square, toSquare.square, piece, Piece.KNIGHT);
         } else {
           moves[index++].reset(piece.square, toSquare.square, piece);
         }
@@ -863,15 +864,15 @@ public class MoveGeneration implements MoveGenerationConstants {
         if ((squareMask & Constants.RANK_1_MASK) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
-          moves[index1++].reset(piece.square, toSquare.square, piece, toSquare.square, toSquare.piece, Piece.QUEEN);
+          moves[index1++].reset(piece.square, toSquare.square, piece, Piece.QUEEN);
           index += index1 - originalIndex1;
         }
-        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_2_MASK | Constants.RANK_3_MASK)) != 0) {
+/*        else if (board.isEndgame() && (toSquare.square.mask_on & (Constants.RANK_2_MASK)) != 0) {
           int index1 = index;
           int originalIndex1 = index1;
           moves[index1++].reset(piece.square, toSquare.square, piece);
           index += index1 - originalIndex1;
-        }
+        }*/
       }
     }
 
@@ -1212,6 +1213,22 @@ public class MoveGeneration implements MoveGenerationConstants {
                 moves[index++].reset(moved.square, savingSquare, savingSquare, moved, taken);
               }
             }
+            else {
+              if((moved.color == 1 && savingSquare.index64 == moved.square.index64 + 8) ||
+                  (moved.color == 0 && savingSquare.index64 == moved.square.index64 - 8)) {
+                if (savingSquare.rank == 7 || savingSquare.rank == 0) {
+                  int index1 = index;
+                  int originalIndex = index1;
+                  moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, Piece.QUEEN);
+                  moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, Piece.ROOK);
+                  moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, Piece.BISHOP);
+                  moves[index1++].reset(moved.square, board.boardSquares[savingSquare.index128].square, moved, Piece.KNIGHT);
+                  index += index1 - originalIndex;
+                } else {
+                  moves[index++].reset(moved.square, savingSquare, moved);
+                }
+              }
+            }
           } else if (moved.type == Piece.KING) {
             continue;
           } else {
@@ -1303,7 +1320,7 @@ public class MoveGeneration implements MoveGenerationConstants {
     }
 
     // generate enpassent moves
-    moves[index].moved = null;
+    moves[index].unset();
 
     return index;
   }
@@ -1355,7 +1372,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-    moves[index].moved = null;
+    moves[index].unset();
 
     return index;
   }
@@ -1600,6 +1617,12 @@ public class MoveGeneration implements MoveGenerationConstants {
       pieces ^= pieceSquare.mask_on;
       Piece piece = board.boardSquares[pieceSquare.index128].piece;
 
+/*
+      if(piece == null || piece.square == null) {
+        int x = 0;
+      }
+*/
+
       if (piece.type == Piece.PAWN) {
         if (piece.color == 1) {
           index += generateFullWhitePawnQMoves(index, moves, board, piece);
@@ -1624,7 +1647,7 @@ public class MoveGeneration implements MoveGenerationConstants {
         }
       }
     }
-    moves[index].moved = null;
+    moves[index].unset();
 
     return index;
   }

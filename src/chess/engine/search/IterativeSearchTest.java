@@ -19,9 +19,9 @@ public class IterativeSearchTest //extends TestCase
 
     MoveGeneration moveGen = new MoveGeneration();
  // MATS
+    // Board searchBoard = new Board("2r1k2r/pp2bp1p/1q3pp1/3P1b2/4N3/2Qp1N2/PP3PPP/R3R1K1 w k"); // w k - bm d6; id MATS001;
 
 /*
-    Board searchBoard = new Board("2r1k2r/pp2bp1p/1q3pp1/3P1b2/4N3/2Qp1N2/PP3PPP/R3R1K1"); // w k - bm d6; id MATS001;
     searchBoard.stats.whiteCastleFlag = 1;
     searchBoard.stats.blackCastleFlag = 0;
     searchBoard.stats.blackQueensideRookMoves++;
@@ -218,14 +218,10 @@ Board searchBoard = new Board("4r1k1/pppb1pp1/1n6/3P4/2PN4/3B4/P1P4P/K5R1"); // 
     searchBoard.turn = 0;
 
  */
-/*
-    Board searchBoard = new Board("4r1k1/1p3p1p/4b1p1/3p4/3P1P2/6P1/4B2P/2R3K1"); // b - - bm Bd7; id MATS019;
-    searchBoard.turn = 0;
-*/
+//    Board searchBoard = new Board("4r1k1/1p3p1p/4b1p1/3p4/3P1P2/6P1/4B2P/2R3K1 b"); // b - - bm Bd7; id MATS019;
+//    Board searchBoard = new Board("2kr3r/pp1n4/2pb2q1/3pp2p/2P5/1B1P1R2/PP1NQ1PP/5RK1"); // b - - bm e4; id MATS022;
 /*
 Board searchBoard = new Board("2r1k2r/5ppp/p1pRp3/8/8/4P3/PPP3PP/2KR4"); // b k - bm h5; id MATS020;
-Board searchBoard = new Board("r3kb1r/2p3pp/p1n1p3/1pn1P3/8/1BPq4/P2N1PPP/R1BQ1RK1"); // w kq - bm Bc2; id MATS021;
-Board searchBoard = new Board("2kr3r/pp1n4/2pb2q1/3pp2p/2P5/1B1P1R2/PP1NQ1PP/5RK1"); // b - - bm e4; id MATS022;
     searchBoard.turn = 0;
 Board searchBoard = new Board("r1bq1rk1/ppp2pbp/6p1/8/4p3/BP2P3/P1P1BPPP/R2QK2R"); // w KQ - am Bxf8; id MATS023;
 Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK2R"); // b KQkq - bm Nc5; id MATS024;
@@ -267,14 +263,9 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
     Board searchBoard = new Board("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR");
     searchBoard.turn = 0;
 */
-/*
-    Board searchBoard = new Board("8/8/3K4/8/3Bk3/4P3/p7/8"); // b - - bm e4; id MATS022;
-        searchBoard.turn = 0;
-*/
-/*
-    Board searchBoard = new Board("rn6/p4kpp/2P5/8/4r3/1p3P2/1B3K1P/1N3B1R"); // b - - bm e4; id MATS022;
-        searchBoard.turn = 0;
-*/
+//    Board searchBoard = new Board("8/8/3K4/8/3Bk3/4P3/p7/8 b"); // b - - bm e4; id MATS022;
+
+//    Board searchBoard = new Board("rn6/p4kpp/2P5/8/4r3/1p3P2/1B3K1P/1N3B1R b"); // b - - bm e4; id MATS022;
 /*
     Board searchBoard = new Board("rn2kbnr/5ppp/bqp5/pp1pP3/3P1P2/5N2/PP2B1PP/RNBQ1RK1");
     searchBoard.stats.whiteCastleFlag = 1;
@@ -413,9 +404,11 @@ Board searchBoard = new Board("r3k2r/1ppnqppp/p1pb4/4p3/4P3/P2P1P1P/1PPBNP2/R2QK
 
     // can't see mate?
     Board searchBoard = new Board("4rrk1/3b1p1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R b - -");
+    // Board searchBoard = new Board("5rk1/3brp1p/2nqp3/p2pN1Pp/1ppP1P1Q/2P2P2/PP1NBK2/7R w - -");
+    // e5c4 d6b8 e2d3 f8c8 h4h5 g8f8 h5h6 f8e8 h6h7 e8d8 h7g8 d7e8
 
     // can't see mate 3
-    // Board searchBoard = new Board("r4r1k/pppb1p1p/1bq1pP1Q/4P3/3p1n2/P2P3P/1PP4N/R3KBR1 b KQ -");
+//    Board searchBoard = new Board("r4r1k/pppb1p1p/1bq1pP1Q/4P3/3p1n2/P2P3P/1PP4N/R3KBR1 b Q -");
 
     // up a pawn, no breakthru
 /*
@@ -533,12 +526,8 @@ searchBoard.stats.blackCastleFlag = 1;
 */
 
     // Mate in 7
-/*
-    Board searchBoard = new Board("5Q2/p2k2r1/3P4/p1p1p3/2q5/8/5P2/4K3 b");
-    searchBoard.turn = 0;
-    searchBoard.stats.whiteCastleFlag = 1;
-    searchBoard.stats.blackCastleFlag = 2;
-*/
+
+//     Board searchBoard = new Board("5Q2/p2k2r1/3P4/p1p1p3/2q5/8/5P2/4K3 b");
 
     // sac rook?
 /*

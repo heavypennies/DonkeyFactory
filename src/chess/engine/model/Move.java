@@ -33,6 +33,8 @@ public final class Move
 
   public int score;
 
+  public long hash = 0;
+
   public Move()
   {
   }
@@ -62,6 +64,7 @@ public final class Move
     this.enPassentSquare = null;
     this.score = 0;
     this.check = false;
+    this.hash = 0;
   }
 
   public void reset(Move move)
@@ -78,6 +81,8 @@ public final class Move
     this.enPassentSquare = move.enPassentSquare;
     this.score = move.score;
     this.check = move.check;
+
+    hash();
   }
 
 
@@ -95,6 +100,7 @@ public final class Move
     this.enPassentSquare = null;
     this.score = SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][toSquare.index64] - SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][fromSquare.index64];
     this.check = false;
+    hash();
   }
 
   public void reset(Square fromSquare, Square toSquare, Piece moved, Square enPassentSquare)
@@ -111,6 +117,8 @@ public final class Move
     this.enPassentSquare = enPassentSquare;
     this.score = SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][toSquare.index64] - SimpleEvaluator.PIECE_VALUE_TABLES[moved.color][moved.type][fromSquare.index64];
     this.check = false;
+    hash();
+
   }
 
   public void reset(Square fromSquare, Square toSquare, Square takenSquare, Piece moved, Piece taken)
@@ -127,6 +135,7 @@ public final class Move
     this.enPassentSquare = null;
     this.score = CAPTURE_SCORE + (Piece.TYPE_VALUES[taken.type] - Piece.TYPE_VALUES[moved.type]);
     this.check = false;
+    hash();
   }
 
   public void reset(Square fromSquare, Square toSquare, Piece moved, Piece castledRook, Square castleFromSquare, Square castleToSquare)
@@ -143,6 +152,7 @@ public final class Move
     this.enPassentSquare = null;
     this.score = 500;
     this.check = false;
+    hash();
   }
 
   public void reset(Square fromSquare, Square toSquare, Piece moved, int promoteTo)
@@ -159,6 +169,7 @@ public final class Move
     this.enPassentSquare = null;
     this.score = PROMOTE_SCORE + Piece.TYPE_VALUES[promoteTo];
     this.check = false;
+    hash();
   }
 
   public void reset(Square fromSquare, Square toSquare, Piece moved, Square takenSquare, Piece taken, int promoteTo)
@@ -175,6 +186,16 @@ public final class Move
     this.enPassentSquare = null;
     this.score = PROMOTE_SCORE + Piece.TYPE_VALUES[promoteTo];
     this.check = false;
+    hash();
+  }
+
+  public void hash() {
+    hash = (moved == null ? 0 : (this.fromSquare == null ? 0L : fromSquare.index64 & 255L) |
+            (this.toSquare == null ? 0L : toSquare.index64 & 255L) << 8 |
+            (this.takenSquare == null ? 0L : takenSquare.index64 & 255L) << 16 |
+            (this.promoteTo == -1 ? 0L : promoteTo & 255L) << 24 |
+            (this.moved.type & 255L) << 32 |
+            (this.taken == null ? 0L : this.taken.type & 255L) << 40);
   }
 
   public String toString()
@@ -213,6 +234,15 @@ public final class Move
          .append(promoteTo != -1 ? "=" + Piece.toString(promoteTo, moved.color) : "")
          .append(check ? "+" : "").toString()
          /*+ " (" + score + ")"*/;
+
+
+/*
+    return new StringBuffer(fromSquare.toString().toLowerCase())
+            .append(toSquare.toString().toLowerCase())
+            .append(promoteTo != -1 ? Piece.toString(promoteTo, moved.color) : "")
+            .toString();
+*/
+
   }
 
   public String toFICSString()
@@ -280,11 +310,12 @@ public final class Move
 
   public boolean matches(Move move)
   {
-    return moved == move.moved &&
-           fromSquare == move.fromSquare &&
-           toSquare == move.toSquare &&
-           taken == move.taken &&
-           promoteTo == move.promoteTo;
+    return move.hash == hash;
+  }
+
+  public void unset() {
+    moved = null;
+    hash = 0;
   }
 
 /*

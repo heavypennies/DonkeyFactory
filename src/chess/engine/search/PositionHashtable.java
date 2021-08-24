@@ -34,7 +34,7 @@ public class PositionHashtable
       type = -1;
       score = 0;
       mateThreat = false;
-      move.moved = null;
+      move.unset();
     }
   }
 
@@ -86,11 +86,7 @@ public class PositionHashtable
       depthFirstEntry.score = score;
       depthFirstEntry.type = type;
       depthFirstEntry.mateThreat = mateThreat;
-      depthFirstEntry.move.moved = move.moved;
-      depthFirstEntry.move.fromSquare = move.fromSquare;
-      depthFirstEntry.move.toSquare = move.toSquare;
-      depthFirstEntry.move.taken = move.taken;
-      depthFirstEntry.move.promoteTo = move.promoteTo;
+      depthFirstEntry.move.reset(move);
       return;
     }
 
@@ -100,11 +96,7 @@ public class PositionHashtable
     alwaysStoreEntry.score = score;
     alwaysStoreEntry.type = type;
     alwaysStoreEntry.mateThreat = mateThreat;
-    alwaysStoreEntry.move.moved = move.moved;
-    alwaysStoreEntry.move.fromSquare = move.fromSquare;
-    alwaysStoreEntry.move.toSquare = move.toSquare;
-    alwaysStoreEntry.move.taken = move.taken;
-    alwaysStoreEntry.move.promoteTo = move.promoteTo;
+    alwaysStoreEntry.move.reset(move);
   }
 
   public void clear()

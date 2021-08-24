@@ -22,6 +22,11 @@ public class SimpleEvaluator implements BoardEvaluator {
 
   public PawnHashtable pawnHash = new PawnHashtable();
   int i;
+  int centerScoreMax = -Searcher.INFINITY;
+  int centerScoreMin = Searcher.INFINITY;
+
+  int pieceValueScoreMax = -Searcher.INFINITY;
+  int pieceValueScoreMin = Searcher.INFINITY;
 
   public SimpleEvaluator(MoveGeneration moveGeneration) {
     this.moveGeneration = moveGeneration;
@@ -36,6 +41,13 @@ public class SimpleEvaluator implements BoardEvaluator {
           int nearSquareIndex = Long.numberOfTrailingZeros(kingNearArea);
           kingNearArea ^= 1L << nearSquareIndex;
 
+          MoveGeneration.kingTropism[color][Piece.PAWN][square] |= MoveGeneration.attackVectors[color][Piece.PAWN][nearSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.KNIGHT][square] |= MoveGeneration.attackVectors[color][Piece.KNIGHT][nearSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.BISHOP][square] |= MoveGeneration.attackVectors[color][Piece.BISHOP][nearSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.ROOK][square] |= MoveGeneration.attackVectors[color][Piece.ROOK][nearSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.QUEEN][square] |= MoveGeneration.attackVectors[color][Piece.QUEEN][nearSquareIndex];
+          MoveGeneration.kingTropism[color][Board.ALL_PIECES][square] |= MoveGeneration.attackVectors[color][Board.ALL_PIECES][nearSquareIndex];
+
           squareList.add(Board.SQUARES[nearSquareIndex]);
         }
         KING_NEAR_AREA[color][square] = squareList.toArray(new Square[0]);
@@ -44,10 +56,17 @@ public class SimpleEvaluator implements BoardEvaluator {
         long kingPawnArea = Board.getPawnKingArea(Board.SQUARES[square], color);
 
         while (kingPawnArea != 0) {
-          int PawnSquareIndex = Long.numberOfTrailingZeros(kingPawnArea);
-          kingPawnArea ^= 1L << PawnSquareIndex;
+          int pawnSquareIndex = Long.numberOfTrailingZeros(kingPawnArea);
+          kingPawnArea ^= 1L << pawnSquareIndex;
 
-          squareList.add(Board.SQUARES[PawnSquareIndex]);
+          MoveGeneration.kingTropism[color][Piece.PAWN][square] |= MoveGeneration.attackVectors[color][Piece.PAWN][pawnSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.KNIGHT][square] |= MoveGeneration.attackVectors[color][Piece.KNIGHT][pawnSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.BISHOP][square] |= MoveGeneration.attackVectors[color][Piece.BISHOP][pawnSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.ROOK][square] |= MoveGeneration.attackVectors[color][Piece.ROOK][pawnSquareIndex];
+          MoveGeneration.kingTropism[color][Piece.QUEEN][square] |= MoveGeneration.attackVectors[color][Piece.QUEEN][pawnSquareIndex];
+          MoveGeneration.kingTropism[color][Board.ALL_PIECES][square] |= MoveGeneration.attackVectors[color][Board.ALL_PIECES][pawnSquareIndex];
+
+          squareList.add(Board.SQUARES[pawnSquareIndex]);
         }
         KING_PAWN_AREA[color][square] = squareList.toArray(new Square[0]);
 
@@ -81,20 +100,20 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
     }
 
-    for (int pawns = 0; pawns < 2; pawns++) {
-      for (int knights = 0; knights < 2; knights++) {
-        for (int bishops = 0; bishops < 2; bishops++) {
-          for (int rooks = 0; rooks < 2; rooks++) {
-            for (int queens = 0; queens < 2; queens++) {
+    for (int pawns = 0; pawns < 3; pawns++) {
+      for (int knights = 0; knights < 3; knights++) {
+        for (int bishops = 0; bishops < 3; bishops++) {
+          for (int rooks = 0; rooks < 3; rooks++) {
+            for (int queens = 0; queens < 3; queens++) {
               for (int king = 0; king < 2; king++) {
 
                 int pieces = (pawns + (bishops + knights) + rooks + king);
                 int piecesAndQueens = pieces + queens;
-                int pawnValue = (20 * pawns * max(0, piecesAndQueens - pawns)) + (3 * pawns);
-                int minorValue = (55 * bishops * max(0, piecesAndQueens - bishops)) + (5 * bishops);
-                minorValue += (45 * knights * max(0, piecesAndQueens - knights)) + (3 * knights);
-                int rookValue = (70 * rooks * piecesAndQueens) + (5 * rooks);
-                int queenValue = (180 * queens * pieces) + (9 * queens);
+                int pawnValue = (10 * pawns * max(0, min(piecesAndQueens - pawns, 1)));
+                int minorValue = (35 * bishops * max(0, min(piecesAndQueens - bishops, 2)));
+                minorValue += (30 * knights * max(0, min(piecesAndQueens - knights, 2)));
+                int rookValue = (50 * rooks * max(0, min(piecesAndQueens, 2)));
+                int queenValue = (220 * queens * pieces);
 
 /*
                 return pawnValue + minorValue + rookValue + queenValue + king;
@@ -112,7 +131,9 @@ public class SimpleEvaluator implements BoardEvaluator {
                         (rooks << Piece.ATTACKER_SHIFT_ROOK) |
                         (queens << Piece.ATTACKER_SHIFT_QUEEN) |
                         (king << Piece.ATTACKER_SHIFT_KING);
+
                 attackScores[index] = pawnValue + minorValue + rookValue + queenValue + king;
+                stagingAttackScores[index] = pawnValue + minorValue + rookValue;
 
                 attackerCount[index] = piecesAndQueens;
                 smallestAttacker[index] = pawns > 0 ? Piece.PAWN :
@@ -120,7 +141,7 @@ public class SimpleEvaluator implements BoardEvaluator {
                                 (bishops > 0 ? Piece.BISHOP :
                                         (rooks > 0 ? Piece.ROOK :
                                                 (queens > 0 ? Piece.QUEEN :
-                                                        (king > 0 ? Piece.KING : 99999)))));
+                                                        (king > 0 ? Piece.KING : Piece.KING)))));
               }
             }
           }
@@ -328,6 +349,21 @@ public class SimpleEvaluator implements BoardEvaluator {
       if ((WHITE_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[0][Piece.PAWN]) == 0) {
         pieceValueScore += PIECE_VALUE_TABLES[1][Piece.PAWN][squareIndex]; // KNIGHT_OUTPOST_VALUE + (2 * (Board.rank(squareIndex) - 4));
       }
+/*
+        if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value - Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // BLACK KNIGHT
@@ -353,6 +389,21 @@ public class SimpleEvaluator implements BoardEvaluator {
       if ((BLACK_KNIGHT_OUTPOST_MASK[squareIndex] & board.pieceBoards[1][Piece.PAWN]) == 0) {
         pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.PAWN][squareIndex];//KNIGHT_OUTPOST_VALUE + (2 * (4 - Board.rank(squareIndex)));
       }
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value + Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // WHITE BISHOP
@@ -373,10 +424,10 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
 */
 
-      if (square == Square.A7 && (board.pieceBoards[0][Piece.PAWN] & Square.B6.mask_on & board.attacks[0]) != 0) {
+      if (square == Square.A7 && (board.pieceBoards[0][Piece.PAWN] & Square.B6.mask_on & board.attacks[0] & ~board.attacks[1]) != 0) {
         score -= 200;
       }
-      if (square == Square.H7 && (board.pieceBoards[0][Piece.PAWN] & Square.G6.mask_on & board.attacks[0]) != 0) {
+      if (square == Square.H7 && (board.pieceBoards[0][Piece.PAWN] & Square.G6.mask_on & board.attacks[0] & ~board.attacks[1]) != 0) {
         score -= 200;
       }
 
@@ -398,11 +449,26 @@ public class SimpleEvaluator implements BoardEvaluator {
         pieceValueScore += 10;
       }
       if ((pinBoard & board.pieceBoards[0][Piece.QUEEN]) != 0) {
-        pieceValueScore += 7;
+        pieceValueScore += 15;
       }
       if ((pinBoard & board.pieceBoards[0][Piece.KING]) != 0) {
-        pieceValueScore += 10;
+        pieceValueScore += 20;
       }
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value - Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // BLACK BISHOP
@@ -423,10 +489,10 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
 */
 
-      if (square == Square.A2 && (board.pieceBoards[1][Piece.PAWN] & Square.B3.mask_on & board.attacks[1]) != 0) {
+      if (square == Square.A2 && (board.pieceBoards[1][Piece.PAWN] & Square.B3.mask_on & board.attacks[1] & ~board.attacks[0]) != 0) {
         score += 200;
       }
-      if (square == Square.H2 && (board.pieceBoards[1][Piece.PAWN] & Square.G3.mask_on & board.attacks[1]) != 0) {
+      if (square == Square.H2 && (board.pieceBoards[1][Piece.PAWN] & Square.G3.mask_on & board.attacks[1] & ~board.attacks[0]) != 0) {
         score += 200;
       }
 
@@ -448,11 +514,26 @@ public class SimpleEvaluator implements BoardEvaluator {
         pieceValueScore -= 10;
       }
       if ((pinBoard & board.pieceBoards[1][Piece.QUEEN]) != 0) {
-        pieceValueScore -= 7;
+        pieceValueScore -= 15;
       }
       if ((pinBoard & board.pieceBoards[1][Piece.KING]) != 0) {
-        pieceValueScore -= 10;
+        pieceValueScore -= 20;
       }
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value + Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // WHITE ROOK
@@ -481,9 +562,13 @@ public class SimpleEvaluator implements BoardEvaluator {
         pieceValueScore += 25;
       }
 
-      if (squareIndex == Square.A1.index64 && board.whiteKing.square.index64 == Square.B1.index64) {
+      if (squareIndex == Square.A1.index64 &&
+              board.whiteKing.square.index64 == Square.B1.index64 &&
+              (board.pieceBoards[1][Piece.PAWN] & Square.A2.mask_on) != 0) {
         pieceValueScore -= TRAPPED_ROOK_VALUE;
-      } else if (squareIndex == Square.H1.index64 && board.whiteKing.square.index64 == Square.G1.index64) {
+      } else if (squareIndex == Square.H1.index64 &&
+              board.whiteKing.square.index64 == Square.G1.index64 &&
+              (board.pieceBoards[1][Piece.PAWN] & Square.H2.mask_on) != 0) {
         pieceValueScore -= TRAPPED_ROOK_VALUE;
       }
 
@@ -503,14 +588,23 @@ public class SimpleEvaluator implements BoardEvaluator {
       if ((piece.attacks & board.pieceBoards[1][Piece.ROOK]) != 0) {
         pieceValueScore += ROOK_ON_HALF_OPEN_FILE;
       }
-/*
-      else if (((Board.SQUARES[square].mask_on & pawnFlags.lockedFiles) != 0))
-      {
-        pieceValueScore -= ROOK_ON_OPEN_FILE;
-      }
-*/
       //pieceValueScore -= (undevelopedWhitePieces == 0 ? 1 : 2 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount;
 
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value - Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // BLACK ROOK
@@ -540,9 +634,13 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
 
 
-      if (squareIndex == Square.A8.index64 && board.blackKing.square.index64 == Square.B8.index64) {
+      if (squareIndex == Square.A8.index64 &&
+              board.blackKing.square.index64 == Square.B8.index64 &&
+              (board.pieceBoards[0][Piece.PAWN] & Square.A7.mask_on) != 0) {
         pieceValueScore += TRAPPED_ROOK_VALUE;
-      } else if (squareIndex == Square.H8.index64 && board.blackKing.square.index64 == Square.G8.index64) {
+      } else if (squareIndex == Square.H8.index64 &&
+              board.blackKing.square.index64 == Square.G8.index64 &&
+              (board.pieceBoards[0][Piece.PAWN] & Square.H7.mask_on) != 0) {
         pieceValueScore += TRAPPED_ROOK_VALUE;
       }
 
@@ -566,6 +664,22 @@ public class SimpleEvaluator implements BoardEvaluator {
         pieceValueScore -= ROOK_ON_HALF_OPEN_FILE;
       }
 
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value + Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
+
       //pieceValueScore += Math.min(30, (undevelopedBlackPieces == 0 ? 1 : 2 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount);
     }
 
@@ -573,7 +687,9 @@ public class SimpleEvaluator implements BoardEvaluator {
     pieces = board.pieceBoards[1][Piece.QUEEN];
     while (pieces != 0) {
       squareIndex = Long.numberOfTrailingZeros(pieces);
-      pieces &= ~(1L << squareIndex);
+      square = Board.SQUARES[squareIndex];
+      pieces &= square.mask_off;
+      piece = board.boardSquares[square.index128].piece;
 
 /*
       if((board.squareAttackers[squareIndex] & board.pieceBoards[0][Board.ALL_PIECES]) != 0 &&
@@ -589,13 +705,30 @@ public class SimpleEvaluator implements BoardEvaluator {
         pieceValueScore += PIECE_VALUE_TABLES[1][Piece.QUEEN][squareIndex];
       }
       //pieceValueScore -= Math.min(30, (undevelopedWhitePieces == 0 ? 1 : 2 + board.boardSquares[square.index128].piece.moveCount) * board.boardSquares[square.index128].piece.moveCount);
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value - Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
     // BLACK QUEEN
     pieces = board.pieceBoards[0][Piece.QUEEN];
     while (pieces != 0) {
       squareIndex = Long.numberOfTrailingZeros(pieces);
-      pieces &= ~(1L << squareIndex);
+      square = Board.SQUARES[squareIndex];
+      pieces &= square.mask_off;
+      piece = board.boardSquares[square.index128].piece;
 
 /*
       if((board.squareAttackers[squareIndex] & board.pieceBoards[1][Board.ALL_PIECES]) != 0 &&
@@ -610,15 +743,34 @@ public class SimpleEvaluator implements BoardEvaluator {
         blackMobility += board.rookMobility(squareIndex);
         pieceValueScore -= PIECE_VALUE_TABLES[0][Piece.QUEEN][squareIndex];
       }
+/*
+      if(board.turn != piece.color) {
+        int attackState = board.attackState[piece.color ^ 1][squareIndex];
+        int defendState = board.attackState[piece.color][squareIndex];
+        int smallest = smallestAttacker[attackState];
+        if(attackState > 0) {
+          if(defendState == 0) {
+            score -= piece.value;
+          }
+          else if(Piece.MATERIAL_VALUES[smallest] < piece.materialValue)  {
+            score -= piece.value + Piece.TYPE_VALUES[smallest];
+          }
+        }
+      }
+*/
     }
 
 
     score += pieceValueScore;
+    pieceValueScoreMax = max(pieceValueScore, pieceValueScoreMax);
+    pieceValueScoreMin = min(pieceValueScore, pieceValueScoreMin);
+
     if (whiteMobility > blackMobility) {
       score += MOBILITY[whiteMobility - blackMobility];
     } else if (blackMobility > whiteMobility) {
       score -= MOBILITY[blackMobility - whiteMobility];
     }
+
 
 /*
     score += pawnFlags.endgameScore * (pawnFlags.endgameScore > 0 ?  blackMaterialRatio : whiteMaterialRatio);
@@ -653,45 +805,47 @@ public class SimpleEvaluator implements BoardEvaluator {
       }
     }
 
-    score += centerScore;
-
     if (undevelopedWhitePieces != 0 || undevelopedBlackPieces != 0) {
       // Develop pieces
-      score += ((Long.bitCount(undevelopedBlackPieces) - Long.bitCount(undevelopedWhitePieces)) * DEVELOPMENT_VALUE);
+      centerScore += ((Long.bitCount(undevelopedBlackPieces) - Long.bitCount(undevelopedWhitePieces)) * DEVELOPMENT_VALUE);
 
       // Don't move the queen too much too early
       if (board.stats.whiteKingsideRookMoves == 0 && board.stats.whiteQueensideRookMoves == 0 && board.pieceBoards[1][Piece.QUEEN] != 0 && board.stats.whitePieceMoves[Piece.QUEEN] > 1) {
-        score -= QUEEN_TOO_EARLY_VALUE;
+        centerScore -= QUEEN_TOO_EARLY_VALUE;
       }
       if (board.stats.blackKingsideRookMoves == 0 && board.stats.blackQueensideRookMoves == 0  && board.pieceBoards[0][Piece.QUEEN] != 0 && board.stats.blackPieceMoves[Piece.QUEEN] > 1) {
-        score += QUEEN_TOO_EARLY_VALUE;
+        centerScore += QUEEN_TOO_EARLY_VALUE;
       }
 
       if ((board.pieceBoards[1][Piece.PAWN] & Square.E2.mask_on) != 0) {
-        score -= UNMOVED_CENTER_PAWN;
+        centerScore -= UNMOVED_CENTER_PAWN;
         if ((board.pieceBoards[1][Board.ALL_PIECES] & Square.E3.mask_on) != 0) {
-          score -= UNMOVED_CENTER_PAWN_BLOCKED;
+          centerScore -= UNMOVED_CENTER_PAWN_BLOCKED;
         }
       }
       if ((board.pieceBoards[1][Piece.PAWN] & Square.D2.mask_on) != 0) {
-        score -= UNMOVED_CENTER_PAWN;
+        centerScore -= UNMOVED_CENTER_PAWN;
         if ((board.pieceBoards[1][Board.ALL_PIECES] & Square.D3.mask_on) != 0) {
-          score -= UNMOVED_CENTER_PAWN_BLOCKED;
+          centerScore -= UNMOVED_CENTER_PAWN_BLOCKED;
         }
       }
       if ((board.pieceBoards[0][Piece.PAWN] & Square.E7.mask_on) != 0) {
-        score += UNMOVED_CENTER_PAWN;
+        centerScore += UNMOVED_CENTER_PAWN;
         if ((board.pieceBoards[0][Board.ALL_PIECES] & Square.E6.mask_on) != 0) {
-          score += UNMOVED_CENTER_PAWN_BLOCKED;
+          centerScore += UNMOVED_CENTER_PAWN_BLOCKED;
         }
       }
       if ((board.pieceBoards[0][Piece.PAWN] & Square.D7.mask_on) != 0) {
-        score += UNMOVED_CENTER_PAWN;
+        centerScore += UNMOVED_CENTER_PAWN;
         if ((board.pieceBoards[0][Board.ALL_PIECES] & Square.D6.mask_on) != 0) {
-          score += UNMOVED_CENTER_PAWN_BLOCKED;
+          centerScore += UNMOVED_CENTER_PAWN_BLOCKED;
         }
       }
     }
+
+    score += centerScore;
+    centerScoreMax = max(centerScore, centerScoreMax);
+    centerScoreMin = min(centerScore, centerScoreMin);
 
     // Don't trade when down material
     if (board.stats.originalMaterialDifference < 0 && board.materialValue[0] > board.materialValue[1]) {
@@ -1412,12 +1566,15 @@ public class SimpleEvaluator implements BoardEvaluator {
   int adjacentScore = 0;
   int stagingScore = 0;
   int safeSquareCount = 0;
-  int defendedAdjacentCount = 1;
   int defendedStagingCount = 1;
   Square kingAreaSquare;
   int defenderColor;
   int attackerState;
   int defenderAttackState;
+  int maxAttackerCount;
+  int maxDefenderCount;
+  long kingAttackers;
+  long kingDefenders;
 
   public final int scoreAttackingPieces(Board board,
                                         Square kingSquare,
@@ -1425,105 +1582,83 @@ public class SimpleEvaluator implements BoardEvaluator {
     adjacentScore = 0;
     stagingScore = 0;
     defenderColor = attackerColor ^ 1;
-    defendedAdjacentCount = 3;
     safeSquareCount = 0;
-    defendedStagingCount =  8;
-
-    for (i = 0; i < KING_NEAR_AREA[defenderColor][kingSquare.index64].length; i++) {
-      kingAreaSquare = KING_NEAR_AREA[defenderColor][kingSquare.index64][i];
-      if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
-        defenderAttackState = board.attackState[defenderColor][kingAreaSquare.index64];
-        int attackScore = attackScores[attackerState];
-        if (smallestAttacker[defenderAttackState] == Piece.KING) {
-          // undefended square in the near area
-          adjacentScore += attackScore;
-        } else if (smallestAttacker[attackerState] <= smallestAttacker[defenderAttackState] &&
-                   attackerCount[attackerState] > attackerCount[defenderAttackState]) {
-          adjacentScore += attackScore >> 1;
-        } else {
-          adjacentScore += attackScore >> 2;
-        }
-      } else {
-        if (board.boardSquares[kingAreaSquare.index128].piece == null ||
-                board.boardSquares[kingAreaSquare.index128].piece.color != defenderColor) {
-          safeSquareCount++;
-        }
-      }
-    }
-
-    for (i = 0; i < KING_PAWN_AREA[defenderColor][kingSquare.index64].length; i++) {
-      kingAreaSquare = KING_PAWN_AREA[defenderColor][kingSquare.index64][i];
-      if (((board.pieceBoards[defenderColor][Piece.PAWN]) &
-              FILES[kingAreaSquare.file] &
-              (defenderColor == 0 ? WHITE_HALF[kingAreaSquare.index64] : BLACK_HALF[kingSquare.index64])) == 0) {
-        stagingScore += KING_ON_HALF_OPEN_FILE;
-        defendedStagingCount -= 1;
-      }
-      if (((board.pieceBoards[attackerColor][Piece.PAWN]) &
-              FILES[kingAreaSquare.file]) == 0) {
-        stagingScore += KING_ON_HALF_OPEN_FILE;
-        defendedStagingCount -= 2;
-      }
-      else if (((board.pieceBoards[attackerColor][Piece.PAWN]) &
-              FILES[kingAreaSquare.file] &
-              (defenderColor == 0 ? WHITE_HALF[kingAreaSquare.index64] : BLACK_HALF[kingSquare.index64])) == 0) {
-        stagingScore += KING_ON_HALF_OPEN_FILE >> 2;
-        defendedStagingCount -= 1;
-      }
-      if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
-        defenderAttackState = board.attackState[defenderColor][kingAreaSquare.index64];
-        int attackScore = attackScores[attackerState];
-
-        if (smallestAttacker[defenderAttackState] == Piece.KING) {
-          // undefended square in the near area
-          adjacentScore += attackScore;
-        } else if (smallestAttacker[attackerState] <= smallestAttacker[defenderAttackState] &&
-                   attackerCount[attackerState] > attackerCount[defenderAttackState]) {
-          adjacentScore += attackScore >> 1;
-        } else {
-          adjacentScore += attackScore >> 2;
-        }
-      } else {
-        if (board.boardSquares[kingAreaSquare.index128].piece == null ||
-                board.boardSquares[kingAreaSquare.index128].piece.color != defenderColor) {
-          safeSquareCount++;
-        }
-      }
-    }
-
-    if (safeSquareCount == 0 && board.attackState[attackerColor][kingSquare.index64] > 0) {
-      return ABSearch.MATE;
-    }
+    defendedStagingCount =  3;
+    maxAttackerCount = 0;
+    maxDefenderCount = 0;
+    kingAttackers = 0;
+    kingDefenders = 0;
 
 
     for (i = 0; i < KING_STAGING_AREA[defenderColor][kingSquare.index64].length; i++) {
+      int squareScore = 0;
       kingAreaSquare = KING_STAGING_AREA[defenderColor][kingSquare.index64][i];
-      if ((board.squareAttackers[kingAreaSquare.index64] & board.pieceBoards[attackerColor][Board.ALL_PIECES]) != 0) {
-        attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
-        //int attackerState = board.calculateAttackState(attackerColor, kingAreaSquare.index64);
+      attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
+      if (attackerState != 0) {
+        defenderAttackState = board.attackState[defenderColor][kingAreaSquare.index64];
 /*
         String attackerStr = visualizeAttackState(attackState[attackerColor][kingAreaSquare.index64]);
         String defenderStr = visualizeAttackState(attackState[defenderColor][kingAreaSquare.index64]);
 */
         if (smallestAttacker[board.attackState[defenderColor][kingAreaSquare.index64]] != Piece.PAWN) {
           defendedStagingCount--;
-          stagingScore += attackScores[attackerState] >> 2;
+          squareScore += stagingAttackScores[attackerState] >> 3;
+        }
+        else if (smallestAttacker[attackerState] <= smallestAttacker[defenderAttackState] &&
+                attackerCount[attackerState] > attackerCount[defenderAttackState]) {
+          defendedStagingCount--;
+          squareScore += stagingAttackScores[attackerState] >> 4;
         }
       }
-      if (smallestAttacker[attackerState] <= smallestAttacker[board.attackState[defenderColor][kingAreaSquare.index64]] &&
-            attackerCount[attackerState] > attackerCount[board.attackState[defenderColor][kingAreaSquare.index64]]) {
-        defendedStagingCount--;
-        stagingScore += attackScores[attackerState] >> 2;
+      stagingScore = max(stagingScore, squareScore);
+    }
+
+    for (i = 0; i < KING_NEAR_AREA[defenderColor][kingSquare.index64].length; i++) {
+      kingAreaSquare = KING_NEAR_AREA[defenderColor][kingSquare.index64][i];
+      if((board.pieceBoards[defenderColor][Board.ALL_PIECES] & kingAreaSquare.mask_on) == 0) {
+        safeSquareCount++;
       }
+      scoreKingAdjacentAttacks(board, attackerColor, 1);
     }
 
-    if (safeSquareCount == 0 && board.attackState[attackerColor][kingSquare.index64] > 0) {
-      return ABSearch.MATE;
+    for (i = 0; i < KING_PAWN_AREA[defenderColor][kingSquare.index64].length; i++) {
+      kingAreaSquare = KING_PAWN_AREA[defenderColor][kingSquare.index64][i];
+      if ((board.pieceBoards[defenderColor][Piece.PAWN] & kingAreaSquare.mask_on) == 0) {
+        if (((board.pieceBoards[defenderColor][Piece.PAWN]) &
+                FILES[kingAreaSquare.file] &
+                (defenderColor == 1 ? WHITE_HALF[kingAreaSquare.index64] : BLACK_HALF[kingSquare.index64])) == 0) {
+          stagingScore += KING_ON_HALF_OPEN_FILE;
+          defendedStagingCount--;
+        }
+        else {
+          stagingScore += KING_ON_HALF_OPEN_FILE >> 2;
+        }
+      }
+      int divisor = 1;
+      if(((attackerColor == 1 ? BLACK_PASSED_MASK[kingAreaSquare.index64] : WHITE_PASSED_MASK[kingAreaSquare.index64]) & board.pieceBoards[attackerColor][Piece.KING]) == 0) {
+        divisor = 2;
+      }
+      if (((board.pieceBoards[attackerColor][Piece.PAWN]) &
+              FILES[kingAreaSquare.file]) == 0) {
+        stagingScore += KING_ON_HALF_OPEN_FILE >> divisor;
+      }
+      else if (((board.pieceBoards[attackerColor][Piece.PAWN]) &
+              FILES[kingAreaSquare.file] &
+              (defenderColor == 0 ? WHITE_HALF[kingAreaSquare.index64] : BLACK_HALF[kingSquare.index64])) == 0) {
+        stagingScore += KING_ON_HALF_OPEN_FILE >> (divisor+1);
+      }
+      if((board.pieceBoards[defenderColor][Board.ALL_PIECES] & kingAreaSquare.mask_on) == 0) {
+        safeSquareCount++;
+      }
+      scoreKingAdjacentAttacks(board, attackerColor, max(1, safeSquareCount));
     }
 
-    return (adjacentScore /  max(1, safeSquareCount)) + (stagingScore / max(1, defendedStagingCount));
+    int attackerCount = Long.bitCount(kingAttackers);
+    int defenderCount = Long.bitCount(kingDefenders);
+    int defenderBalance = max(0, defenderCount - attackerCount);
+
+    return (adjacentScore / (max(1, safeSquareCount - PIECE_VALUE_TABLES[defenderColor][Piece.KING][kingSquare.index64])))
+            + (stagingScore / (max(1, defendedStagingCount) + defenderBalance));
 
 
 /*
@@ -1538,6 +1673,60 @@ public class SimpleEvaluator implements BoardEvaluator {
 
     return totalScore;
 */
+  }
+
+  private void scoreKingAdjacentAttacks(Board board, int attackerColor, int divisor) {
+    int squareScore = 0;
+    kingAttackers |= (board.squareAttackers[kingAreaSquare.index64] |
+                      board.squareRammers[kingAreaSquare.index64]) &
+            board.pieceBoards[attackerColor][Board.ALL_PIECES] ;
+    kingDefenders |= (board.squareAttackers[kingAreaSquare.index64] |
+                      board.squareRammers[kingAreaSquare.index64]) &
+            board.pieceBoards[defenderColor][Board.ALL_PIECES]
+            & ~board.pieceBoards[defenderColor][Piece.KING];
+    attackerState = board.attackState[attackerColor][kingAreaSquare.index64];
+    defenderAttackState = board.attackState[defenderColor][kingAreaSquare.index64];
+    int squareAttackerCount = attackerCount[attackerState];
+    int squareDefenderCount = attackerCount[defenderAttackState];
+    if (attackerState != 0) {
+      int attackScore = attackScores[attackerState];
+
+      if((board.pieceBoards[attackerColor][Board.ALL_PIECES] & kingAreaSquare.mask_on) == 0) {
+        if (smallestAttacker[defenderAttackState] == Piece.KING) {
+          // undefended square in adjacent to the king
+          squareScore += attackScore;
+        } else {
+          squareScore += min(attackScore, 30);
+        }
+      }
+      else if((board.pieceBoards[attackerColor][Piece.QUEEN] & kingAreaSquare.mask_on) != 0 ||
+              (board.pieceBoards[attackerColor][Piece.ROOK] & kingAreaSquare.mask_on) != 0) {
+        if (smallestAttacker[defenderAttackState] == Piece.KING) {
+          // undefended square in adjacent to the king
+          squareScore += attackScore;
+        } else {
+          squareScore += min(attackScore, 30);
+        }
+      }
+      else if((board.pieceBoards[attackerColor][Piece.PAWN] & kingAreaSquare.mask_on) != 0) {
+        squareScore += min(attackScore, 30);
+      }
+      else {
+        if (smallestAttacker[defenderAttackState] == Piece.KING) {
+          // undefended square in adjacent to the king
+          squareScore += attackScore >> 2;
+        } else {
+          squareScore += min(attackScore, 30);
+        }
+      }
+
+      safeSquareCount--;
+      if(squareScore > adjacentScore) {
+        adjacentScore = squareScore;
+        maxAttackerCount = squareAttackerCount;
+        maxDefenderCount = squareDefenderCount;
+      }
+    }
   }
 
   private static long getKingAreaA1H8(Square square) {
@@ -1793,6 +1982,7 @@ public class SimpleEvaluator implements BoardEvaluator {
   private static int CENTER_CHECK_BALANCE = 12;
 
   public static final int[] attackScores = new int[8191];
+  public static final int[] stagingAttackScores = new int[8191];
   public static final int[] attackerCount = new int[8191];
   public static final int[] smallestAttacker = new int[8191];
 //  public static int[][][][] swap = new int[2][6][8191][8191];
@@ -1854,7 +2044,7 @@ public class SimpleEvaluator implements BoardEvaluator {
   private static final int ENDGAME_KING_PAWN_RACE = 30;
   private static int KING_NO_CASTLE_VALUE = 12;
   private static int KING_FORFEIT_CASTLE_VALUE = 45;
-  private static int KING_ON_OPEN_FILE = 40;
+  private static int KING_ON_OPEN_FILE = 45;
   private static int KING_ON_HALF_OPEN_FILE = 20;
   private static int WAITING_TO_CASTLE_VALUE = 8;
   private static int KING_OPEN_FILE = 23;

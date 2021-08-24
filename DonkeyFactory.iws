@@ -31,29 +31,19 @@
     <option name="USER" value="" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/donkey-uci.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chess/controller/DonkeyUCI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chess/engine/search/DefaultSearchWatcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchWatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DonkeyFactory.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.ipr" afterDir="false" />
+    <list default="true" id="2a08b820-464f-49e1-b5fc-ff0f0b2c5840" name="Default" comment="Latest Donkeyfactory">
       <change beforePath="$PROJECT_DIR$/DonkeyFactory.iws" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.iws" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DonkeyFactory.jar" beforeDir="false" afterPath="$PROJECT_DIR$/DonkeyFactory.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/donkey-uci.sh" beforeDir="false" afterPath="$PROJECT_DIR$/donkey-uci.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Square.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Square.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chess/engine/model/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/model/Move.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ABSearch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/IterativeSearchTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/PositionHashtable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/ProgressiveMoveGenTest2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SearchStats.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleABSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/free/chessclub/bot/Bot.java" afterDir="false" />
     </list>
     <list id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
     <list id="3b10a3ad-2cd0-4b08-b5df-deb7fcf90fe8" name="ignore" comment="" />
@@ -261,6 +251,9 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="SORT_ALPHABETICALLY" value="false" />
     <option name="HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED" value="false" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/src.zip!/java/lang/Enum.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
@@ -1077,13 +1070,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -1180,7 +1175,8 @@
       <workItem from="1627865040984" duration="24287000" />
       <workItem from="1628005384729" duration="40227000" />
       <workItem from="1628170311894" duration="799000" />
-      <workItem from="1628191235333" duration="11628000" />
+      <workItem from="1628191235333" duration="78472000" />
+      <workItem from="1629080482236" duration="56785000" />
     </task>
     <task id="LOCAL-00001" summary="Failed commit: Default">
       <changelist id="b7294816-1864-4f50-925f-e657920b6048" name="Failed commit: Default" comment="" />
@@ -1280,6 +1276,16 @@
     <option name="CUSTOMIZE_VIEW" value="true" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="true" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -1351,48 +1357,53 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>496</line>
+          <line>520</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>499</line>
+          <line>538</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1442</line>
-          <option name="timeStamp" value="55" />
+          <url>file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java</url>
+          <line>1621</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java</url>
+          <line>1227</line>
+          <option name="timeStamp" value="235" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/utils/MoveGeneration.java</url>
+          <line>1219</line>
+          <option name="timeStamp" value="236" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/chess/engine/search/ABSearch.java</url>
+          <line>464</line>
+          <option name="timeStamp" value="322" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1483</line>
-          <option name="timeStamp" value="59" />
+          <line>430</line>
+          <option name="timeStamp" value="323" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1466</line>
-          <option name="timeStamp" value="64" />
+          <line>427</line>
+          <option name="timeStamp" value="324" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1480</line>
-          <option name="timeStamp" value="66" />
+          <line>492</line>
+          <option name="timeStamp" value="325" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1439</line>
-          <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1318</line>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/chess/engine/search/SimpleEvaluator.java</url>
-          <line>1258</line>
-          <option name="timeStamp" value="75" />
+          <line>495</line>
+          <option name="timeStamp" value="326" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1402,10 +1413,8 @@
         <watch expression="Move.toString(this.currentLine)" />
         <watch expression="move" />
         <watch expression="eval.scoreAttackingPieces(board, board.blackKing.square, 1)" />
-        <watch expression="extend" />
-        <watch expression="kingSafety" />
-        <watch expression="((DonkeyUCI)this).gameBoard" custom="chess.controller.DonkeyUCI" />
-        <watch expression="kingAreaSquare" language="JAVA" />
+        <watch expression="board.getAllSquaresInBitboard(attackers)" language="JAVA" />
+        <watch expression="board.getAllSquaresInBitboard(rammers)" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

@@ -88,7 +88,7 @@ public class Board {
   static {
     File zobristData = new File("hashKeys.dat");
 
-    if (true || !zobristData.exists()) {
+    if (!zobristData.exists()) {
       Random random = new Random(124353460892475679L);
       for (int pieceType = 0; pieceType < 12; pieceType++) {
         for (int squareIndex = 0; squareIndex < 64; squareIndex++) {
@@ -174,8 +174,8 @@ public class Board {
     }
   }
 
-  static final long initialHashValue = (long)(Math.random() * Long.MAX_VALUE);
-  static final long initialPawnHashValue = (long)(Math.random() * Long.MAX_VALUE);
+  static final long initialHashValue = 0;//(long)(Math.random() * Long.MAX_VALUE);
+  static final long initialPawnHashValue = 0;//(long)(Math.random() * Long.MAX_VALUE);
 
   public Board() {
     hash1 = initialHashValue;
@@ -1226,7 +1226,6 @@ public class Board {
           System.err.println(square + " rammers: " + getAllSquaresInBitboard(squareRammers[square.index64] & pieceBoards[color][ALL_PIECES]));
           System.err.println(square + " r" + visualizeAttackState(attackState[color][square.index64]));
           System.err.println(square + " c" + visualizeAttackState(calculateAttackState(color, square.index64)));
-          int x = 0;
           calculateAttackState(color, square.index64);
           allAttackers = MoveGeneration.getAllAttackers(this, square, 0) | MoveGeneration.getAllAttackers(this, square, 1);
         }
